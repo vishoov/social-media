@@ -1,38 +1,26 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { AIInput } from "../../ReuseableComponents/AIInput";
 import { AIButton } from "../../ReuseableComponents/AIButton";
 import { useForm } from "react-hook-form";
-import { useUserVerificationForgotPassword } from "../apis/userAPIs";
-import { useDispatch, useSelector } from "react-redux";
-import { USER_DETAILS, USER_NOT_FOUND } from "../../redux/AuthSlice";
+import { useSelector } from "react-redux";
+import { useGenerateLink } from "../apis/userAPIs";
 
 export const AIAuthUserNameForgotPassword = () => {
   // use Form hook
   const { register, handleSubmit } = useForm();
 
-  const [user, setUser] = useState(null);
+  // const [user, setUser] = useState("");
 
-  const { data, isLoading, error, refetch } =
-    useUserVerificationForgotPassword(user);
+  // const { data, error, mutate } = useUserVerificationForgotPassword();
 
-  const dispatch = useDispatch();
-
-  const submit = (data) => {
-    setUser(data.searchField);
-    refetch();
-  };
-
-  useEffect(() => {
-    try {
-      if (data?.data?.data !== null || data?.data?.data !== undefined) {
-        dispatch(USER_DETAILS(data));
-      }
-    } catch (err) {
-      dispatch(USER_NOT_FOUND(err));
-    }
-  }, [data, isLoading, error, dispatch]);
+  const { mutate } = useGenerateLink();
 
   const auth = useSelector((state) => state.auth);
+
+  const submit = (data) => {
+    // setUser(data.searchField);
+    mutate(data);
+  };
 
   return (
     <>
@@ -67,7 +55,7 @@ export const AIAuthUserNameForgotPassword = () => {
             }}
           />
           <AIButton
-            content="submit"
+            content="send a link"
             type="submit"
             style={{
               width: "50%",

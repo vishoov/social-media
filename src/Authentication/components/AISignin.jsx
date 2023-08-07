@@ -8,12 +8,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { DO_SIGNIN, SIGNIN_ERROR } from "../../redux/AuthSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
+import { useCookies } from "react-cookie";
 
 export const AISignin = () => {
   // useForm Hook
   const { register, handleSubmit } = useForm();
 
+  // useNavigate hook
   const navigate = useNavigate();
+
+  const [cookies, setCookie] = useCookies([""]);
 
   // useVerifyUserData Hook
   const { data, isError, isLoading, error, mutate } = useVerifyUserData();
@@ -37,12 +41,24 @@ export const AISignin = () => {
 
         dispatch(SIGNIN_ERROR(null));
 
-        localStorage.setItem("84d90fg7h4_token", data?.data?.data?.jwtToken);
+        setCookie("avt_token", data?.data?.data?.jwtToken, {
+          expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+        });
 
         navigate("/home");
       }
     }
-  }, [data, isError, isLoading, dispatch, error, navigate, auth]);
+  }, [
+    data,
+    isError,
+    isLoading,
+    dispatch,
+    error,
+    navigate,
+    auth,
+    setCookie,
+    cookies,
+  ]);
 
   return (
     <>
@@ -85,7 +101,7 @@ export const AISignin = () => {
             )}
             <AIInput
               inputName="userName"
-              label="userName"
+              label="username"
               register={register}
               type="text"
               style={{
@@ -133,10 +149,7 @@ export const AISignin = () => {
             }}
           >
             do you need help?
-            <Link
-              style={{ marginLeft: 10 }}
-              to="/authUserNameVerificationForgotPassword"
-            >
+            <Link style={{ marginLeft: 10 }} to="/forgotPassword/auth">
               forgot password
             </Link>
           </div>

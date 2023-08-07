@@ -8,6 +8,7 @@ import { DO_SIGNUP, SIGNUP_ERROR } from "../../redux/AuthSlice";
 import { useAddUserData } from "../apis/userAPIs";
 import { Link, useNavigate } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
+import { useCookies } from "react-cookie";
 
 export const AISignup = () => {
   // use form hook
@@ -17,6 +18,9 @@ export const AISignup = () => {
 
   // useNavigate hook
   const navigate = useNavigate();
+
+  // useCookies hook
+  const [cookies, setCookie] = useCookies([""]);
 
   // useAddUserData hook
   const { isLoading, isError, isSuccess, error, data, mutate } =
@@ -38,12 +42,25 @@ export const AISignup = () => {
 
         dispatch(SIGNUP_ERROR(null));
 
-        localStorage.setItem("84d90fg7h4_token", data?.data?.data?.jwtToken);
+        setCookie("avt_token", data?.data?.data?.token, {
+          expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+        });
 
         navigate("/home");
       }
     }
-  }, [isSuccess, isError, data, isLoading, error, dispatch, navigate, auth]);
+  }, [
+    isSuccess,
+    isError,
+    data,
+    isLoading,
+    error,
+    dispatch,
+    navigate,
+    auth,
+    cookies,
+    setCookie,
+  ]);
 
   return (
     <>
@@ -138,7 +155,7 @@ export const AISignup = () => {
             <AIButton
               content="signup"
               type="submit"
-              style={{ width: "20%", marginTop: 10, marginLeft: 300 }}
+              style={{ width: "20%", marginTop: 10, marginLeft: 340 }}
             />
           </form>
           <div

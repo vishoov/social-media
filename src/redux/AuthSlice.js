@@ -34,6 +34,9 @@ export const AuthSlice = createSlice({
     USER_DETAILS: (state, action) => {
       state.value.userDetails = action.payload;
     },
+    OTHER_ERROR: (state, action) => {
+      state.value.otherError = action.payload;
+    }
   },
 });
 
@@ -44,5 +47,6 @@ export const {
   SIGNIN_ERROR,
   USER_NOT_FOUND,
   USER_DETAILS,
+  OTHER_ERROR
 } = AuthSlice.actions;
 export default AuthSlice.reducer;
