@@ -37,16 +37,16 @@ export const AISignup = () => {
     if (error?.response?.data?.error === "USER_ALREADY_EXIST") {
       dispatch(SIGNUP_ERROR("email already in use"));
     } else {
-      if (data !== null && data !== undefined) {
+      if (data?.data?.data !== null && data?.data?.data !== undefined) {
         dispatch(DO_SIGNUP(data?.data?.data));
 
         dispatch(SIGNUP_ERROR(null));
 
-        setCookie("avt_token", data?.data?.data?.token, {
+        setCookie("avt_token", data?.data?.data?.jwtToken, {
           expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
         });
 
-        navigate("/home");
+        navigate("/environment/home");
       }
     }
   }, [
@@ -165,7 +165,7 @@ export const AISignup = () => {
             }}
           >
             Already have an account?
-            <Link style={{ marginLeft: 10 }} to="/signin">
+            <Link style={{ marginLeft: 10 }} to="/environment/signin">
               Signin
             </Link>
           </div>

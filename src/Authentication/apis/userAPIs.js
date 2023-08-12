@@ -88,7 +88,7 @@ export const useGenerateLink = () => {
           }
         );
 
-        navigate("/wait/reset");
+        navigate("/environment/wait/reset");
       }
     },
     onError: (error) => {
@@ -122,7 +122,7 @@ export const useChangePassword = () => {
             path: "/",
             maxAge: 0,
           });
-          navigate("/signin");
+          navigate("/environment/signin");
         }
       }
     },

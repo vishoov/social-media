@@ -45,7 +45,7 @@ export const AISignin = () => {
           expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
         });
 
-        navigate("/home");
+        navigate("/environment/home");
       }
     }
   }, [
@@ -138,7 +138,7 @@ export const AISignin = () => {
             }}
           >
             don't have an account?
-            <Link style={{ marginLeft: 10 }} to="/signup">
+            <Link style={{ marginLeft: 10 }} to="/environment/signup">
               Signup
             </Link>
           </div>
@@ -149,7 +149,10 @@ export const AISignin = () => {
             }}
           >
             do you need help?
-            <Link style={{ marginLeft: 10 }} to="/forgotPassword/auth">
+            <Link
+              style={{ marginLeft: 10 }}
+              to="/environment/reset/password/auth"
+            >
               forgot password
             </Link>
           </div>

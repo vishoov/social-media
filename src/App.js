@@ -1,34 +1,74 @@
-import { Route, Routes } from "react-router-dom";
-import { AISignup } from "./Authentication/components/AISignup";
-import { AIHome } from "./Authentication/components/AIHome";
-import { Index } from "./Authentication/components/Index";
-import { AISignin } from "./Authentication/components/AISignin";
-import { AIAuthUserNameForgotPassword } from "./Authentication/components/AIAuthUserNameForgotPassword";
-import { AIChangePassword } from "./Authentication/components/AIChangePassword";
-import { WaitAuthentication } from "./Authentication/components/WaitAuthentication";
-import { AIAuthentication } from "./Authentication/components/AIAuthentication";
+import { Routes } from "./Routes";
 
 function App() {
-  return (
-    <div>
-      <Routes>
-        {/* public routes */}
-        <Route path="/" element={<Index />} />
-        <Route path="/signup" element={<AISignup />} />
-        <Route path="/signin" element={<AISignin />} />
-        <Route
-          path="/forgotPassword/auth"
-          element={<AIAuthUserNameForgotPassword />}
-        />
-        <Route path="/reset/password" element={<AIChangePassword />} />
-        <Route path="/wait/reset" element={<WaitAuthentication />} />
+  // let element = useRoutes([
+  //   {
+  //     path: "environment/",
+  //     element: <Index />,
+  //     children: [
+  //       {
+  //         path: "signup",
+  //         element: <AISignup />,
+  //       },
+  //       {
+  //         path: "signin",
+  //         element: <AISignin />,
+  //       },
+  //       {
+  //         path: "forgotPassword/auth",
+  //         element: <AIAuthUserNameForgotPassword />,
+  //       },
+  //       {
+  //         path: "reset/password",
+  //         element: <AIChangePassword />,
+  //       },
+  //       {
+  //         path: "wait/reset",
+  //         element: <WaitAuthentication />,
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     element: <AIAuthentication />,
+  //     children: [
+  //       {
+  //         path: "/home",
+  //         element: <AIHome />,
+  //       },
+  //       {
+  //         path: "/environment/socialMedia/activate",
+  //         element: <SocialMediaActivationInterface />,
+  //       },
+  //     ],
+  //   },
+  // ]);
 
-        {/* private routes */}
-        <Route element={<AIAuthentication />}>
-          <Route path="/home" element={<AIHome />} />
-        </Route>
-      </Routes>
-    </div>
+  // return element;
+  return (
+    //   <div>
+    //     <Routes>
+    //       {/* public routes */}
+    //       <Route path="/" element={<Index />} />
+    //       <Route path="/signup" element={<AISignup />} />
+    //       <Route path="/signin" element={<AISignin />} />
+    //       <Route
+    //         path="/reset/password/auth"
+    //         element={<AIAuthUserNameForgotPassword />}
+    //       />
+    //       <Route path="/reset/password" element={<AIChangePassword />} />
+    //       <Route path="/wait/reset" element={<WaitAuthentication />} />
+
+    //       {/* private routes */}
+    //       <Route element={<AIAuthentication />}>
+    //         <Route path="/home" element={<AIHome />} />
+    //         <Route
+    //           path="/environment/socialMedia/activate"
+    //           element={<SocialMediaActivationInterface />}
+    //         />
+    //       </Route>
+    //     </Routes>
+    //   </div>
+    <Routes />
   );
 }
 
