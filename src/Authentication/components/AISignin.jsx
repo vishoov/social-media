@@ -42,7 +42,7 @@ export const AISignin = () => {
         dispatch(SIGNIN_ERROR(null));
 
         setCookie("avt_token", data?.data?.data?.jwtToken, {
-          expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+          // expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
         });
 
         navigate("/environment/home");

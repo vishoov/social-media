@@ -1,5 +1,5 @@
 import React from "react";
-import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Index } from "./Authentication/components/Index";
 import { AISignup } from "./Authentication/components/AISignup";
 import { AISignin } from "./Authentication/components/AISignin";
@@ -11,6 +11,8 @@ import { AIAuthentication } from "./Authentication/components/AIAuthentication";
 import { SocialMediaHome } from "./SocialMedia/components/SocialMediaHome";
 import { SocialMediaActivationInterface } from "./SocialMedia/components/SocialMediaActivationInterface";
 import { AICheckSession } from "./Authentication/components/AICheckSession";
+import { AISocialMediaProfileInterface } from "./SocialMedia/components/profileComponent/AISocialMediaProfileInterface";
+import { AISocialMediaEditProfile } from "./SocialMedia/components/profileComponent/AISocialMediaEditProfile";
 
 export const Routes = ({ children }) => {
   const routes = createBrowserRouter([
@@ -57,6 +59,14 @@ export const Routes = ({ children }) => {
           path: "socialMedia",
           children: [
             {
+              path: "activate",
+              element: (
+                <AIAuthentication>
+                  <SocialMediaActivationInterface />
+                </AIAuthentication>
+              ),
+            },
+            {
               path: "home",
               element: (
                 <AIAuthentication>
@@ -65,10 +75,18 @@ export const Routes = ({ children }) => {
               ),
             },
             {
-              path: "activate",
+              path: "profile",
               element: (
                 <AIAuthentication>
-                  <SocialMediaActivationInterface />
+                  <AISocialMediaProfileInterface />
+                </AIAuthentication>
+              ),
+            },
+            {
+              path: "profile/edit/",
+              element: (
+                <AIAuthentication>
+                  <AISocialMediaEditProfile />
                 </AIAuthentication>
               ),
             },
@@ -81,9 +99,7 @@ export const Routes = ({ children }) => {
   return (
     <>
       <React.Fragment>
-        <RouterProvider router={routes}>
-          <Outlet /> {children}
-        </RouterProvider>
+        <RouterProvider router={routes}>{children}</RouterProvider>
       </React.Fragment>
     </>
   );

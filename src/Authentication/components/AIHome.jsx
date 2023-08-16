@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import { AIButton } from "../../ReuseableComponents/AIButton";
 import { AIVoiceAssist } from "../../ReuseableComponents/AIVoiceAssist";
 import { useSelector } from "react-redux";
-import { useAddActivationKey } from "../apis/IntermediateAPIs";
-import { useCookies } from "react-cookie";
-import { CircularProgress } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export const AIHome = () => {
   // state variable
@@ -13,44 +11,19 @@ export const AIHome = () => {
   // use selector hook
   const auth = useSelector((state) => state.auth);
 
-  const { mutate, isLoading, isError } = useAddActivationKey();
-
-  const [cookies] = useCookies(["avt_token"]);
+  // use navigate hook
+  const navigate = useNavigate();
 
   // useEffect hook
   useEffect(() => {
     setFirstName(auth?.value?.signupData?.firstName);
   }, [auth]);
 
-  // route handler
-  const routeHandler = () => {
-    const data = {
-      Authorization: cookies?.avt_token,
-      data: {
-        activatedInterface: "SOCIAL_MEDIA_INTERFACE",
-      },
-    };
-
-    mutate(data);
-  };
-
   return (
     <>
       <div>
         <h1 style={{ textAlign: "center" }}>Home</h1>
       </div>
-      {isLoading && !isError && (
-        <CircularProgress
-          style={{
-            alignItems: "center",
-            justifyContent: "center",
-            position: "fixed",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-          }}
-        />
-      )}
 
       {firstName && <AIVoiceAssist name={firstName} />}
       <AIButton
@@ -67,7 +40,9 @@ export const AIHome = () => {
           fontSize: "15px",
           fontWeight: "bold",
         }}
-        onClick={routeHandler}
+        onClick={() => {
+          navigate("/environment/socialMedia/activate");
+        }}
       />
     </>
   );

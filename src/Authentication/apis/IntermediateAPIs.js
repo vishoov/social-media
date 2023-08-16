@@ -1,8 +1,5 @@
 import axios from "axios";
-import { useMutation } from "react-query";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { activationKeyFailure } from "../../redux/IntermediateSlice";
+import { useQuery } from "react-query";
 
 const URLs = () => {
   return axios.create({
@@ -11,34 +8,38 @@ const URLs = () => {
   });
 };
 
-const initiateIntermediateInterface = (data) => {
-  return URLs().post("/addactivationkey", data?.data, {
+const getActivationKey = (userData) => {
+  return URLs().get("/get/requesteduser", {
+    params: {
+      userId: userData?.user_id,
+    },
     headers: {
       "Content-Type": "application/json",
-      Authorization: "Bearer " + data?.Authorization,
+      Authorization: "Bearer " + userData?.Authorization,
     },
   });
 };
 
-// hooks
-
-export const useAddActivationKey = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  return useMutation(initiateIntermediateInterface, {
-    onSuccess: (data) => {
-      if (data?.data?.data?.socialMediaActivationKey !== null) {
-        localStorage.setItem(
-          "soc_ak_code",
-          data?.data?.data?.socialMediaActivationKey
-        );
-
-        navigate("/environment/socialMedia/activate");
-      }
-    },
-    onError: (data) => {
-      dispatch(activationKeyFailure(data?.data?.error));
-    },
-  });
+export const useGetActivationKey = (userData) => {
+  return useQuery(
+    ["getActivationKey", userData],
+    () => getActivationKey(userData),
+    {
+      refetchOnMount: false,
+      enabled: !!userData,
+      retry: 5,
+      retryDelay: 1000,
+      onSuccess: (data) => {
+        if (data?.status === 200) {
+          localStorage.setItem(
+            "soc_ak_code",
+            data?.data?.data?.socialMediaActivationKey
+          );
+        }
+      },
+      onError: (error) => {
+        console.log(error);
+      },
+    }
+  );
 };

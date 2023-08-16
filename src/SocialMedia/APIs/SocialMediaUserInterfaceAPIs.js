@@ -34,6 +34,8 @@ export const useAddSocialMediaUser = () => {
         data?.data?.data?.socialMediaUserId !== undefined
       ) {
         dispatch(setSocialMediaUserData(data?.data?.data));
+
+        localStorage.setItem("sm_user_id", data?.data?.data?.socialMediaUserId);
         navigate("/environment/socialMedia/home");
       } else {
         dispatch(setSocialMediaUserError("invalid credentials"));

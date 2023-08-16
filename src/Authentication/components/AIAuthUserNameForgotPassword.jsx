@@ -9,10 +9,6 @@ export const AIAuthUserNameForgotPassword = () => {
   // use Form hook
   const { register, handleSubmit } = useForm();
 
-  // const [user, setUser] = useState("");
-
-  // const { data, error, mutate } = useUserVerificationForgotPassword();
-
   const { mutate } = useGenerateLink();
 
   const auth = useSelector((state) => state.auth);

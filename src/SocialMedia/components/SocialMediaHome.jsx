@@ -1,9 +1,12 @@
 import React from "react";
+import { AISideBar } from "../../ReuseableComponents/AISideBar";
 
 export const SocialMediaHome = () => {
   return (
     <>
-      <div>Social Media home page home page</div>
+      <div>
+        <AISideBar />
+      </div>
     </>
   );
 };

@@ -20,7 +20,7 @@ export const AISignup = () => {
   const navigate = useNavigate();
 
   // useCookies hook
-  const [cookies, setCookie] = useCookies([""]);
+  const [cookies, setCookie] = useCookies(["avt_token"]);
 
   // useAddUserData hook
   const { isLoading, isError, isSuccess, error, data, mutate } =
@@ -45,7 +45,6 @@ export const AISignup = () => {
         setCookie("avt_token", data?.data?.data?.jwtToken, {
           expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
         });
-
         navigate("/environment/home");
       }
     }

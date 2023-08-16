@@ -1,11 +1,12 @@
 import { Avatar, Card } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import salvare from "../../static/images/avatar/salvare.jpeg";
 import { AIInput } from "../../ReuseableComponents/AIInput";
 import { useForm } from "react-hook-form";
 import { AIButton } from "../../ReuseableComponents/AIButton";
 import { useAddSocialMediaUser } from "../APIs/SocialMediaUserInterfaceAPIs";
 import { useCookies } from "react-cookie";
+import { useGetActivationKey } from "../../Authentication/apis/IntermediateAPIs";
 
 export const SocialMediaActivationInterface = () => {
   // useForm hook
@@ -17,13 +18,29 @@ export const SocialMediaActivationInterface = () => {
 
   const { mutate } = useAddSocialMediaUser();
 
+  const [userId, setUserId] = useState(null);
+
+  const { refetch } = useGetActivationKey(userId);
+
   // submit handler function
-  const submit = (data) => {
+  const submit = (userdata) => {
     const user = {
       Authorization: cookies.avt_token,
-      data: data,
+      data: userdata,
     };
     mutate(user);
+
+    var user_id = localStorage.getItem("sm_user_id");
+
+    const activationData = {
+      user_id: user_id,
+      Authorization: cookies?.avt_token,
+    };
+
+    if (user_id !== null && user_id !== undefined) {
+      setUserId(activationData);
+      refetch();
+    }
   };
 
   return (
@@ -113,9 +130,9 @@ export const SocialMediaActivationInterface = () => {
           <form onSubmit={handleSubmit(submit)}>
             <div>
               <AIInput
-                inputName="userName"
+                inputName="email"
                 register={register}
-                label="Enter your username"
+                label="Enter your email"
                 style={{
                   marginLeft: 10,
                   width: 400,
