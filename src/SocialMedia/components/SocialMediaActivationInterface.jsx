@@ -1,4 +1,4 @@
-import { Avatar, Card } from "@mui/material";
+import { Avatar, Card, CircularProgress } from "@mui/material";
 import React, { useState } from "react";
 import salvare from "../../static/images/avatar/salvare.jpeg";
 import { AIInput } from "../../ReuseableComponents/AIInput";
@@ -16,7 +16,7 @@ export const SocialMediaActivationInterface = () => {
 
   const [cookies] = useCookies(["avt_token"]);
 
-  const { mutate } = useAddSocialMediaUser();
+  const { mutate, isLoading } = useAddSocialMediaUser();
 
   const [userId, setUserId] = useState(null);
 
@@ -46,6 +46,18 @@ export const SocialMediaActivationInterface = () => {
   return (
     <>
       <>
+        {isLoading ? (
+          <CircularProgress
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              position: "fixed",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+            }}
+          />
+        ) : null}
         <table
           border={0}
           width="100%"

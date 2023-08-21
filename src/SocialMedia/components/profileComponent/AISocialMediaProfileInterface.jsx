@@ -1,13 +1,14 @@
 import React from "react";
 import { AISideBar } from "../../../ReuseableComponents/AISideBar";
 import { AIUpBar } from "../../../ReuseableComponents/AIUpBar";
-import { Avatar, Box, Button, Stack, Tooltip, Typography } from "@mui/material";
+import { Avatar, Box, Stack, Typography } from "@mui/material";
 import jenPic1 from "../../../static/images/avatar/jen1.webp";
 import jenPic2 from "../../../static/images/avatar/jen2.jpeg";
 import jenPic3 from "../../../static/images/avatar/jen3.webp";
 import jenPic4 from "../../../static/images/avatar/jen4.jpeg";
 import { AddAPhotoRounded } from "@mui/icons-material";
 import { AvatarFileInput } from "../../../ReuseableComponents/AvatarFileInput";
+import AICreateMemoryModel from "../../../ReuseableComponents/Profile/AICreateMemoryModel";
 
 export const AISocialMediaProfileInterface = () => {
   return (
@@ -164,15 +165,7 @@ export const AISocialMediaProfileInterface = () => {
           </Typography>
         </span>
         <span>
-          <Tooltip
-            title="Add"
-            arrow
-            sx={{
-              marginLeft: 105,
-            }}
-          >
-            <Button>share your first memory</Button>
-          </Tooltip>
+          <AICreateMemoryModel />
         </span>
       </div>
     </>

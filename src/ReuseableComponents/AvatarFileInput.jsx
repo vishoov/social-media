@@ -30,8 +30,10 @@ export const AvatarFileInput = () => {
         caches.open("my-cache").then((cache) => {
           // Store data in the cache
           const jsonData = {
-            profilePicUrl: data?.data?.data?.urls?.[0],
+            profilePicUrl: data?.data?.data?.urls,
           };
+
+          console.log("json data :", jsonData);
           const json = JSON.stringify(jsonData);
           cache.put("/profilePics.json", new Response(json));
         });
@@ -45,7 +47,7 @@ export const AvatarFileInput = () => {
                 const jsonData = {
                   profilePicUrl: data?.profilePicUrl,
                 };
-                setSelectedImage(jsonData?.profilePicUrl);
+                setSelectedImage(jsonData?.profilePicUrl?.[0]);
               });
             }
           });
@@ -80,7 +82,6 @@ export const AvatarFileInput = () => {
         }}
         style={{
           margin: 15,
-          // marginLeft: 1500,
         }}
         onClick={handleAvatarClick}
       />

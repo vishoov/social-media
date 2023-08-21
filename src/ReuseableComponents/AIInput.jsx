@@ -10,6 +10,7 @@ export const AIInput = ({
   inputName,
   style,
   onChange,
+  onClick,
 }) => {
   return (
     <TextField
@@ -22,6 +23,7 @@ export const AIInput = ({
       style={style}
       onChange={onChange}
       {...register(inputName, { required: true })}
+      onClick={onClick}
     />
   );
 };
