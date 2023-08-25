@@ -19,9 +19,7 @@ export const ShowMemoryBar = () => {
   const random = localStorage.getItem("random");
 
   useEffect(() => {
-    console.log("hello");
     if (localStorage.getItem("done") === "false") {
-      console.log("done12211");
       const memoryData = {
         Authorization: cookies?.avt_token,
         userId: localStorage.getItem("sm_user_id"),
