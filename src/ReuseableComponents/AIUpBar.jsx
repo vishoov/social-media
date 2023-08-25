@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { AIButton } from "./AIButton";
 import { SettingsSuggestRounded } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import AICreateMemoryModel from "./Profile/AICreateMemoryModel";
 
 export const AIUpBar = () => {
   const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleModelClose = () => {
+    setIsOpen(false);
+  };
 
   return (
     <>
@@ -74,10 +80,13 @@ export const AIUpBar = () => {
         </span>
         <span>
           <AIButton
-            content="View Profile"
+            content="Share Memory"
             style={{
               marginLeft: 40,
               marginTop: 10,
+            }}
+            onClick={() => {
+              setIsOpen(true);
             }}
           />
         </span>
@@ -87,6 +96,13 @@ export const AIUpBar = () => {
               marginLeft: 40,
               marginTop: 14,
             }}
+          />
+        </span>
+        <span>
+          <AICreateMemoryModel
+            isEmpty={true}
+            isOpen={isOpen}
+            isClose={handleModelClose}
           />
         </span>
       </div>

@@ -17,13 +17,6 @@ export const AISideBar = () => {
 
   return (
     <>
-      {/* <div
-        style={{
-          flexDirection: "row",
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      > */}
       <span
         style={{
           flexDirection: "row",
@@ -192,7 +185,6 @@ export const AISideBar = () => {
           </ButtonGroup>
         </span>
       </span>
-      {/* </div> */}
     </>
   );
 };

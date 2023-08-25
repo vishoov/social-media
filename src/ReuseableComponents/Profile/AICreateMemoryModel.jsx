@@ -1,24 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button, Container, Modal, Tooltip } from "@mui/material";
 import { AIButton } from "../AIButton";
 import { AICreateMemoryUpBar } from "./AICreateMemoryUpBar";
 import { CropEasy } from "./CropEasy";
 
-// import Demo from "../../ReuseableComponents/Profile/Demo";
-
-export default function AICreateMemoryModel() {
+export default function AICreateMemoryModel({ isEmpty, isOpen, isClose }) {
   const [open, setOpen] = useState(false);
   const [firstStep, setFirstStep] = useState(false);
   const [file, setFile] = useState(null);
 
-  // const [selectedFiles, setSelectedFiles] = useState([]);
-
-  // const handleFilesAdded = (files) => {
-  //   setSelectedFiles([...selectedFiles, ...files]);
-  // };
-
   const handleClose = () => {
     setOpen(false);
+    isClose();
   };
   const handleSteps = () => {
     document.getElementById("image-input").click();
@@ -42,95 +35,102 @@ export default function AICreateMemoryModel() {
     setFirstStep(false);
   };
 
+  useEffect(() => {
+    if (isOpen) {
+      handleClickOpen();
+    }
+  }, [isOpen]);
+
   return (
     <div>
-      <Tooltip
-        title="Add"
-        arrow
-        sx={{
-          marginLeft: 105,
-        }}
-      >
-        <Button onClick={handleClickOpen}>share your first memory</Button>
-      </Tooltip>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Container
+      {isEmpty ? null : (
+        <Tooltip
+          title="Add"
+          arrow
           sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            flexDirection: "column",
+            marginLeft: 60,
           }}
         >
-          <Box
+          <Button onClick={handleClickOpen}>share your first memory</Button>
+        </Tooltip>
+      )}
+
+      {open ? (
+        <Modal
+          open={open}
+          onClose={handleClose}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Container
             sx={{
-              width: 800,
-              height: 750,
-              bgcolor: "background.paper",
-              boxShadow: 24,
-              p: 2,
-              borderRadius: 3,
               display: "flex",
-              flexDirection: "column",
+              justifyContent: "center",
               alignItems: "center",
+              flexDirection: "column",
             }}
           >
-            {!firstStep ? (
-              <>
-                <AICreateMemoryUpBar
-                  justifyContent="center"
-                  renderMessage="Make new memory"
-                />
-                <Box
-                  sx={{
-                    marginTop: 45,
-                  }}
-                >
-                  {/* <Demo onFilesAdded={handleFilesAdded} />
-                  {selectedFiles.map((file, index) => (
-                    <div key={index}>{file.name}</div>
-                  ))} */}
-                  <input
-                    type="file"
-                    id="image-input"
-                    accept="image/*"
-                    style={{ display: "none" }}
-                    onChange={handleImageChange1}
+            <Box
+              sx={{
+                width: 800,
+                height: 750,
+                bgcolor: "background.paper",
+                boxShadow: 24,
+                p: 2,
+                borderRadius: 3,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              {!firstStep ? (
+                <>
+                  <AICreateMemoryUpBar
+                    justifyContent="center"
+                    renderMessage="Make new memory"
                   />
-                  <AIButton
-                    content="select from your device"
-                    onClick={handleSteps}
+                  <Box
+                    sx={{
+                      marginTop: 45,
+                    }}
+                  >
+                    <input
+                      type="file"
+                      id="image-input"
+                      accept="image/jpeg"
+                      style={{ display: "none" }}
+                      onChange={handleImageChange1}
+                    />
+                    <AIButton
+                      content="select from your device"
+                      onClick={handleSteps}
+                    />
+                  </Box>
+                </>
+              ) : (
+                <Box>
+                  <CropEasy
+                    uploadedFile={file}
+                    upBar={
+                      <AICreateMemoryUpBar
+                        justifyContent="space-between"
+                        backArrow={false}
+                        nextButton={false}
+                        renderMessage=""
+                        backArrowOnClick={handleUpBarClick}
+                        visibility="hidden"
+                      />
+                    }
                   />
                 </Box>
-              </>
-            ) : (
-              <Box>
-                <CropEasy
-                  uploadedFile={file}
-                  upBar={
-                    <AICreateMemoryUpBar
-                      justifyContent="space-between"
-                      backArrow={false}
-                      nextButton={false}
-                      renderMessage=""
-                      backArrowOnClick={handleUpBarClick}
-                      visibility="hidden"
-                    />
-                  }
-                />
-              </Box>
-            )}
-          </Box>
-        </Container>
-      </Modal>
+              )}
+            </Box>
+          </Container>
+        </Modal>
+      ) : null}
     </div>
   );
 }

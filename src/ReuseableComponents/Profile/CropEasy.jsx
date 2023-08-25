@@ -51,9 +51,9 @@ export const CropEasy = ({ uploadedFile, upBar }) => {
   };
 
   useEffect(() => {
-    setProfileUrl(URL.createObjectURL(uploadedFile));
     const newUpBar = cloneElement(upBar, {
       nextButton: true,
+      nextVisibility: "hidden",
       backArrow: true,
       renderMessage: "Crop",
       backArrowOnClick: handleUpBarClick,
@@ -67,6 +67,7 @@ export const CropEasy = ({ uploadedFile, upBar }) => {
 
     setNewUpBarForNext(newUpBarForNextData);
     setNewUpBarCom(newUpBar);
+    setProfileUrl(URL.createObjectURL(uploadedFile));
   }, [uploadedFile, upBar, handleUpBarClick]);
 
   return (
@@ -90,6 +91,8 @@ export const CropEasy = ({ uploadedFile, upBar }) => {
                 position: "relative",
                 height: 490,
                 width: "auto",
+                border: 1,
+                borderRadius: 3,
                 minWidth: { sm: 785 },
               }}
             >

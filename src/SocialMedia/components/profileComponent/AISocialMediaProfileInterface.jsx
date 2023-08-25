@@ -2,13 +2,15 @@ import React from "react";
 import { AISideBar } from "../../../ReuseableComponents/AISideBar";
 import { AIUpBar } from "../../../ReuseableComponents/AIUpBar";
 import { Avatar, Box, Stack, Typography } from "@mui/material";
-import jenPic1 from "../../../static/images/avatar/jen1.webp";
+import jenPic1 from "../../../static/images/avatar/jen1.jpeg";
 import jenPic2 from "../../../static/images/avatar/jen2.jpeg";
-import jenPic3 from "../../../static/images/avatar/jen3.webp";
+import jenPic3 from "../../../static/images/avatar/jen3.jpeg";
 import jenPic4 from "../../../static/images/avatar/jen4.jpeg";
-import { AddAPhotoRounded } from "@mui/icons-material";
 import { AvatarFileInput } from "../../../ReuseableComponents/AvatarFileInput";
-import AICreateMemoryModel from "../../../ReuseableComponents/Profile/AICreateMemoryModel";
+import TabsComponent from "../../../ReuseableComponents/Tabs";
+import { ShowMemoryBar } from "../../../ReuseableComponents/Profile/ShowMemoryBar";
+import { ShowGlanceBar } from "../../../ReuseableComponents/Profile/ShowGlanceBar";
+import { ShowSavedMemories } from "../../../ReuseableComponents/Profile/ShowSavedMemories";
 
 export const AISocialMediaProfileInterface = () => {
   return (
@@ -23,9 +25,9 @@ export const AISocialMediaProfileInterface = () => {
         <Stack
           direction="row"
           sx={{
-            display: "flex",
             justifyContent: "space-between",
-            alignItems: "center",
+            alignItems: "start",
+            paddingBottom: 30,
           }}
         >
           <Box>
@@ -35,63 +37,69 @@ export const AISocialMediaProfileInterface = () => {
               sx={{
                 marginLeft: 40,
               }}
+              position="fixed"
             >
-              <Box alignItems="center" display="flex" flexDirection="column">
-                <Avatar
-                  alt="Jenna"
-                  src={jenPic1}
-                  sx={{
-                    width: 100,
-                    height: 100,
-                  }}
-                  style={{
-                    margin: 15,
-                  }}
-                />
-                <Typography variant="subtitle2">Holiday mood!</Typography>
-              </Box>
-              <Box alignItems="center" display="flex" flexDirection="column">
-                <Avatar
-                  alt="Jenna"
-                  src={jenPic2}
-                  sx={{
-                    width: 100,
-                    height: 100,
-                  }}
-                  style={{
-                    margin: 15,
-                  }}
-                />
-                <Typography variant="subtitle2">Hello , Los angales</Typography>
-              </Box>
-              <Box alignItems="center" display="flex" flexDirection="column">
-                <Avatar
-                  alt="Jenna"
-                  src={jenPic3}
-                  sx={{
-                    width: 100,
-                    height: 100,
-                  }}
-                  style={{
-                    margin: 15,
-                  }}
-                />
-                <Typography variant="subtitle2">Paris</Typography>
-              </Box>
-              <Box alignItems="center" display="flex" flexDirection="column">
-                <Avatar
-                  alt="Jenna"
-                  src={jenPic4}
-                  sx={{
-                    width: 100,
-                    height: 100,
-                  }}
-                  style={{
-                    margin: 15,
-                  }}
-                />
-                <Typography variant="subtitle2">work mood</Typography>
-              </Box>
+              <Stack direction="row" spacing={3}>
+                <Box alignItems="center" display="flex" flexDirection="column">
+                  <Avatar
+                    alt="Jenna"
+                    src={jenPic1}
+                    sx={{
+                      width: 100,
+                      height: 100,
+                    }}
+                    style={{
+                      marginTop: 15,
+                    }}
+                  />
+                  <Typography variant="subtitle2">Holiday mood!</Typography>
+                </Box>
+                <Box alignItems="center" display="flex" flexDirection="column">
+                  <Avatar
+                    alt="Jenna"
+                    src={jenPic2}
+                    sx={{
+                      width: 100,
+                      height: 100,
+                    }}
+                    style={{
+                      marginTop: 15,
+                    }}
+                  />
+                  <Typography variant="subtitle2">
+                    Hello , Los angales
+                  </Typography>
+                </Box>
+                <Box alignItems="center" display="flex" flexDirection="column">
+                  <Avatar
+                    alt="Jenna"
+                    src={jenPic3}
+                    sx={{
+                      width: 100,
+                      height: 100,
+                    }}
+                    style={{
+                      marginTop: 15,
+                    }}
+                  />
+                  <Typography variant="subtitle2">Paris</Typography>
+                </Box>
+                <Box alignItems="center" display="flex" flexDirection="column">
+                  <Avatar
+                    alt="Jenna"
+                    src={jenPic4}
+                    sx={{
+                      width: 100,
+                      height: 100,
+                    }}
+                    style={{
+                      marginTop: 15,
+                    }}
+                  />
+                  <Typography variant="subtitle2">work mood</Typography>
+                </Box>
+              </Stack>
+
               <Box>
                 <p
                   style={{
@@ -115,58 +123,24 @@ export const AISocialMediaProfileInterface = () => {
             <AvatarFileInput />
           </Box>
         </Stack>
-        <hr
-          style={{
-            paddingLeft: 160,
-            width: "50%",
-            backgroundColor: "black",
+        <Stack
+          sx={{
+            justifyContent: "center",
+            alignItems: "center",
           }}
-        />
-        <span>
-          <p
-            style={{
-              marginTops: 10,
-              marginLeft: 1600,
-            }}
-          >
-            <b>Jenna Oretega</b>
-          </p>
-        </span>
-        <span>
-          <AddAPhotoRounded
+        >
+          <Box
             sx={{
-              marginLeft: 115,
-              height: 120,
-              width: 60,
-            }}
-          />
-          <Typography
-            style={{
-              marginLeft: 825,
-              fontSize: 25,
-              fontWeight: "bold",
-              color: "black",
-            }}
-            variant="subtitle1"
-          >
-            Share your memories
-          </Typography>
-        </span>
-        <span>
-          <Typography
-            style={{
-              marginLeft: 700,
-              fontSize: 15,
-              fontWeight: "bold",
-              color: "black",
+              position: "fixed",
             }}
           >
-            when you share your memories, they will will appear on your profile.
-          </Typography>
-        </span>
-        <span>
-          <AICreateMemoryModel />
-        </span>
+            <TabsComponent
+              firstTab={<ShowMemoryBar />}
+              secondTab={<ShowGlanceBar />}
+              thirdTab={<ShowSavedMemories />}
+            />
+          </Box>
+        </Stack>
       </div>
     </>
   );

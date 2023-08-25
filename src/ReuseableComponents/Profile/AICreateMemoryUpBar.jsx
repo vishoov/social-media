@@ -1,5 +1,5 @@
 import { ArrowBackRounded } from "@mui/icons-material";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Button, IconButton, Stack, Typography } from "@mui/material";
 import React from "react";
 
 export const AICreateMemoryUpBar = ({
@@ -7,9 +7,12 @@ export const AICreateMemoryUpBar = ({
   justifyContent,
   nextButton,
   backArrowOnClick,
+  shareButtonOnClick,
   nextButtonOnClick,
   renderMessage,
-  visibility,
+  shareVisibility,
+  nextVisibility,
+  ShareButton,
 }) => {
   return (
     <Stack
@@ -29,7 +32,9 @@ export const AICreateMemoryUpBar = ({
     >
       {backArrow ? (
         <Box>
-          <ArrowBackRounded onClick={backArrowOnClick} />
+          <IconButton onClick={backArrowOnClick}>
+            <ArrowBackRounded />
+          </IconButton>
         </Box>
       ) : null}
       <Box>
@@ -46,11 +51,22 @@ export const AICreateMemoryUpBar = ({
       {nextButton ? (
         <Box
           sx={{
-            visibility: { visibility },
+            visibility: nextVisibility,
           }}
         >
           <Button variant="text" onClick={nextButtonOnClick}>
             Next
+          </Button>
+        </Box>
+      ) : null}
+      {ShareButton ? (
+        <Box
+          sx={{
+            visibility: shareVisibility,
+          }}
+        >
+          <Button variant="text" onClick={shareButtonOnClick}>
+            Share
           </Button>
         </Box>
       ) : null}

@@ -85,6 +85,13 @@ export const AvatarFileInput = () => {
         }}
         onClick={handleAvatarClick}
       />
+      <p
+        style={{
+          marginLeft: 100,
+        }}
+      >
+        <b>Jenna Oretega</b>
+      </p>
     </div>
   );
 };

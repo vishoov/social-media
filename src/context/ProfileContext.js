@@ -9,6 +9,11 @@ const ProfileReducer = (state, action) => {
         ...state,
         style: action.payload,
       };
+    case "SHOW_MEMORIES":
+      return {
+        ...state,
+        showMemories: action.payload,
+      };
     default:
       return state;
   }
@@ -22,11 +27,16 @@ const editStyle = (dispatch) => (newStyle) => {
   dispatch({ type: "EDIT_STYLE", payload: newStyle });
 };
 
+const showMemories = (dispatch) => (open) => {
+  dispatch({ type: "SHOW_MEMORIES", payload: open });
+};
+
 export const { Context, Provider } = createDataContext(
   ProfileReducer,
   {
     openModel,
     editStyle,
+    showMemories,
   },
   {
     open: false,
@@ -41,5 +51,6 @@ export const { Context, Provider } = createDataContext(
       flexDirection: "column",
       alignItems: "center",
     },
+    showMemories: -1,
   }
 );

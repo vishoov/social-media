@@ -1,5 +1,5 @@
 import { NavigateNextRounded } from "@mui/icons-material";
-import { Avatar, Box } from "@mui/material";
+import { Avatar, Box, IconButton } from "@mui/material";
 import React, { cloneElement, useCallback, useEffect, useState } from "react";
 import { AIAddMemoryContent } from "./AIAddMemoryContent";
 
@@ -30,6 +30,7 @@ export const AIAddFilter = ({ updatedCroppedPic, upBarNext }) => {
     const newUpBar1 = cloneElement(upBarNext, {
       nextButton: true,
       backArrow: true,
+      nextVisibility: "hidden",
       renderMessage: "Filter",
       backArrowOnClick: handleCallBack1,
     });
@@ -50,9 +51,9 @@ export const AIAddFilter = ({ updatedCroppedPic, upBarNext }) => {
         </div>
       ) : (
         <>
-          {newUpBarCom1}
           <div>
-            <Box display="flex">
+            <Box display="flex" position="relative">
+              {newUpBarCom1}
               <Avatar
                 srcSet={updatedCroppedPic}
                 sx={{
@@ -65,17 +66,28 @@ export const AIAddFilter = ({ updatedCroppedPic, upBarNext }) => {
                   borderRadius: 4,
                 }}
               />
-              <NavigateNextRounded
+              <IconButton
                 sx={{
                   position: "absolute",
-                  bottom: 5,
-                  right: 5,
-                  cursor: "pointer",
+                  bottom: 0,
+                  right: 0,
+                  borderRadius: "50%",
+                  width: 40,
+                  height: 40,
+                  minWidth: 40,
+                  minHeight: 40,
+                  backgroundColor: "transparent",
+                  color: "white",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
                 onClick={() => {
                   setNextStep(true);
                 }}
-              />
+              >
+                <NavigateNextRounded />
+              </IconButton>
             </Box>
           </div>
         </>

@@ -1,8 +1,8 @@
 import React from "react";
 import { AISideBar } from "../../../ReuseableComponents/AISideBar";
 import { Avatar, Box, Stack, Typography } from "@mui/material";
-import jenPic1 from "../../../static/images/avatar/jen1.webp";
-import jenPic3 from "../../../static/images/avatar/jen3.webp";
+import jenPic1 from "../../../static/images/avatar/jen1.jpeg";
+import jenPic3 from "../../../static/images/avatar/jen3.jpeg";
 import jenPic4 from "../../../static/images/avatar/jen4.jpeg";
 import { AIProfileEditUpBar } from "../../../ReuseableComponents/AIProfileEditUpBar";
 

@@ -1,16 +1,15 @@
-import {
-  Avatar,
-  Box,
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-} from "@mui/material";
+import { Avatar, Box, Button } from "@mui/material";
 import React, { cloneElement, useCallback, useEffect, useState } from "react";
+import { ShareMemoryProgress } from "./ShareMemoryProgress";
+import axios from "axios";
+import { useShareMemory } from "../../SocialMedia/APIs/SocialMediaMemoryInterfaceAPI";
+import { useForm } from "react-hook-form";
+import { useCookies } from "react-cookie";
 
 export const AIAddMemoryContent = ({ updatedCroppedPic, upBarNext1 }) => {
   const [newUpBarNext2, setNewUpBarNext2] = useState(null);
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [redirectNewPage, setRedirectNewPage] = useState(false);
+  const [newUpBarNext3, setNewUpBarNext3] = useState(null);
 
   var callBackToAddFilter = useCallback(() => {
     if (upBarNext1?.props?.backArrowOnClick) {
@@ -18,139 +17,158 @@ export const AIAddMemoryContent = ({ updatedCroppedPic, upBarNext1 }) => {
     }
   }, [upBarNext1?.props]);
 
+  // use cookies hook
+
+  const [cookies] = useCookies("avt_token");
+
+  // use form hooks
+  const { register, handleSubmit } = useForm();
+
+  //use share memory hook
+  const { data, isLoading, mutate } = useShareMemory();
+
+  const downloadImage = async () => {
+    try {
+      const response = await axios.get(updatedCroppedPic, {
+        responseType: "blob",
+      });
+      return response.data;
+    } catch (error) {
+      console.log("somthing went wrong!!!", error);
+    }
+  };
+
+  const submit = async (newMemorydata) => {
+    const image = await downloadImage();
+
+    if (image) {
+      const memoryPredata = {
+        userId: parseInt(localStorage.getItem("sm_user_id")),
+        feelings: newMemorydata.feelings,
+      };
+
+      const formData = new FormData();
+      formData.append("file", image);
+      formData.append(
+        "data",
+        new Blob([JSON.stringify(memoryPredata)], { type: "application/json" })
+      );
+
+      const memoryData = {
+        fileData: formData,
+        Authorization: cookies?.avt_token,
+      };
+      mutate(memoryData);
+      setRedirectNewPage(true);
+    }
+  };
+
+  // useEffect hook
   useEffect(() => {
     const newUpBar = cloneElement(upBarNext1, {
-      nextButton: true,
+      nextButton: false,
       backArrow: true,
+      ShareButton: true,
       renderMessage: "Make new memory",
       backArrowOnClick: callBackToAddFilter,
+      shareButtonOnClick: () => {
+        document.getElementById("submit").click();
+      },
     });
 
-    if ("caches" in window) {
-      caches.open("my-cache").then((cache) => {
-        cache.match("/profilePics.json").then((response) => {
-          if (response) {
-            return response.json().then((data) => {
-              const jsonData = {
-                profilePicUrl: data?.profilePicUrl,
-              };
-              setSelectedImage(jsonData?.profilePicUrl?.[0]);
-            });
-          }
-        });
-      });
-    }
+    const newUpBarNext2 = cloneElement(upBarNext1, {
+      nextButton: false,
+      backArrow: false,
+      ShareButton: false,
+      renderMessage: "Memory shared",
+      justifyContent: "center",
+    });
 
     setNewUpBarNext2(newUpBar);
-  }, [upBarNext1, callBackToAddFilter]);
+    setNewUpBarNext3(newUpBarNext2);
+  }, [upBarNext1, callBackToAddFilter, isLoading, data]);
 
   return (
     <>
-      <div>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: 18,
-          }}
-        >
-          {newUpBarNext2}
-        </Box>
-
-        <Table>
-          <TableBody>
-            <TableRow>
-              <TableCell>
-                <Avatar
-                  srcSet={updatedCroppedPic}
-                  variant="square"
-                  sx={{
-                    display: "flex",
-                    marginRight: 30,
-                    marginTop: 5,
-                    width: 300,
-                    height: 300,
-                    border: 1,
-                    borderRadius: 4,
-                  }}
-                />
-              </TableCell>
-              <TableRow>
-                <TableCell>
-                  <Avatar
-                    srcSet={selectedImage}
-                    alt="ImageNotFound"
-                    sx={{
-                      marginBottom: 35,
-                      width: 50,
-                      height: 50,
-                    }}
-                  />
-                </TableCell>
-                <TableCell>
-                  <p
-                    style={{
-                      marginBottom: 300,
-                      fontWeight: "bold",
-                    }}
-                  >
-                    JennaOrtega
-                  </p>
-                </TableCell>
-              </TableRow>
-              <TableCell>
-                <textarea></textarea>
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-        {/* 
-        <Stack spacing={20} direction="row">
-          <Box>
-            <Avatar
-              srcSet={updatedCroppedPic}
-              variant="square"
+      {redirectNewPage ? (
+        <div>
+          <ShareMemoryProgress
+            upBar={newUpBarNext3}
+            isLoading={isLoading}
+            data={data}
+          />
+        </div>
+      ) : (
+        <>
+          <div>
+            <Box
               sx={{
                 display: "flex",
-                marginTop: 5,
-                width: 300,
-                height: 300,
-                border: 1,
-                borderRadius: 4,
+                justifyContent: "center",
+                alignItems: "center",
+                height: 18,
               }}
-            />
-          </Box>
-          <Box>
-            <Stack spacing={2} direction="row" alignItems="center">
-            <Box>
+            >
+              {newUpBarNext2}
+            </Box>
+          </div>
+          <div>
+            <Box
+              sx={{
+                marginTop: 2,
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
               <Avatar
-                srcSet={selectedImage}
-                alt="ImageNotFound"
+                srcSet={updatedCroppedPic}
+                variant="square"
                 sx={{
-                  marginTop: 3,
-                  width: 50,
-                  height: 50,
+                  width: 400,
+                  height: 400,
+                  border: 1,
+                  borderRadius: 4,
                 }}
               />
             </Box>
-            <Box
-              sx={{
-                paddingTop: 2,
-              }}
-            >
-              <p
-                style={{
-                  fontWeight: "bold",
+          </div>
+          <div>
+            <form onSubmit={handleSubmit(submit)}>
+              <Box
+                sx={{
+                  marginTop: 2,
                 }}
               >
-                JennaOrtega
-              </p>
-            </Box>
-            </Stack>
-          </Box>
-        </Stack> */}
-      </div>
+                <textarea
+                  style={{
+                    width: 400,
+                    height: 100,
+                    border: 1,
+                    borderRadius: 4,
+                    borderColor: "grey",
+                    borderStyle: "solid",
+                  }}
+                  placeholder="share your feelings..."
+                  maxLength={2000}
+                  {...register("feelings", { required: true })}
+                />
+              </Box>
+              <Box>
+                <Button
+                  variant="text"
+                  sx={{
+                    visibility: "hidden",
+                  }}
+                  id="submit"
+                  type="submit"
+                >
+                  share
+                </Button>
+              </Box>
+            </form>
+          </div>
+        </>
+      )}
     </>
   );
 };
