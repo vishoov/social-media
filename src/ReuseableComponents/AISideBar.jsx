@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, ButtonGroup } from "@mui/material";
 import {
   AccountCircleRounded,
@@ -11,9 +11,12 @@ import {
   TvRounded,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import { SearchBarComponent } from "../SocialMedia/components/SearchComponents/SearchBarComponent";
 
 export const AISideBar = () => {
   const navigate = useNavigate();
+
+  const [IsModalOpenForSearch, setIsModalOpenForSearch] = useState(false);
 
   return (
     <>
@@ -60,7 +63,11 @@ export const AISideBar = () => {
                 </Button>
               </div>
               <div>
-                <Button size="medium" style={{ width: 300, marginBottom: 25 }}>
+                <Button
+                  size="medium"
+                  style={{ width: 300, marginBottom: 25 }}
+                  onClick={() => setIsModalOpenForSearch(true)}
+                >
                   <SearchRounded
                     style={{
                       marginRight: 12,
@@ -184,6 +191,10 @@ export const AISideBar = () => {
             </div>
           </ButtonGroup>
         </span>
+        <SearchBarComponent
+          open={IsModalOpenForSearch}
+          onClose={() => setIsModalOpenForSearch(false)}
+        />
       </span>
     </>
   );

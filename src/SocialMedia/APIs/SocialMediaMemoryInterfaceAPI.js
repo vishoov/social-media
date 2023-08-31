@@ -1,7 +1,10 @@
 import axios from "axios";
 import { useMutation, useQuery } from "react-query";
 import { useDispatch } from "react-redux";
-import { setSocialMediaMemories } from "../../redux/SocialMediaMemoriesSlice";
+import {
+  setSocialMediaMemories,
+  setSocialMediaAnotherUserMemories,
+} from "../../redux/SocialMediaMemoriesSlice";
 
 const urls = () => {
   return axios.create({
@@ -38,7 +41,6 @@ export const useShareMemory = () => {
 };
 
 export const useGetAllMemories = (memoryData) => {
-  console.log("hii buddy", memoryData);
   const dispatch = useDispatch();
 
   return useQuery(
@@ -47,14 +49,22 @@ export const useGetAllMemories = (memoryData) => {
     {
       onError: (error) => console.log(error),
       onSuccess: (data) => {
-        localStorage.setItem("done", true);
-        dispatch(
-          setSocialMediaMemories(
-            data?.data?.data?.results?.map((memory) =>
-              memory?.memory_details?.map((urls) => urls?.urls?.at(0))
-            )
-          )
+        var wholeData = data?.data?.data?.results?.map((memories) =>
+          memories?.memory_details?.map((memory_details) => {
+            var combained_details = {
+              urls: memory_details?.urls?.at(0),
+              feelings: memory_details?.feelings,
+            };
+            return combained_details;
+          })
         );
+        if (memoryData?.otherUsersMemory) {
+          dispatch(setSocialMediaAnotherUserMemories(wholeData));
+        } else {
+          localStorage.setItem("done", true);
+
+          dispatch(setSocialMediaMemories(wholeData));
+        }
       },
       refetchOnMount: false,
       enabled: !!memoryData,

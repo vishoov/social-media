@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useUploadProfilePics } from "../SocialMedia/APIs/SocialMediaProfileInterfaceAPI";
 import { useCookies } from "react-cookie";
 
-export const AvatarFileInput = () => {
+export const AvatarFileInput = ({ firstName, lastName }) => {
   const [selectedImage, setSelectedImage] = useState(undefined);
 
   const [cookies] = useCookies(["avt_token"]);
@@ -87,10 +87,12 @@ export const AvatarFileInput = () => {
       />
       <p
         style={{
-          marginLeft: 100,
+          marginLeft: 120,
         }}
       >
-        <b>Jenna Oretega</b>
+        <b>
+          {firstName} {lastName}
+        </b>
       </p>
     </div>
   );

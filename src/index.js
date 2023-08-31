@@ -8,6 +8,7 @@ import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import store from "./store";
 import { persistStore } from "redux-persist";
+import { AILoader } from "./ReuseableComponents/AILoader";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const client = new QueryClient();
@@ -16,7 +17,7 @@ const persistor = persistStore(store);
 
 root.render(
   <Provider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
+    <PersistGate loading={<AILoader />} persistor={persistor}>
       <QueryClientProvider client={client}>
         <App />
       </QueryClientProvider>

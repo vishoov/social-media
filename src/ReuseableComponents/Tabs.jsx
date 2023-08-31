@@ -12,13 +12,13 @@ const TabsComponent = ({ firstTab, secondTab, style, thirdTab }) => {
     <div style={style}>
       <Tabs value={selectedTab} onChange={handleTabChange} centered>
         <Tab label="MEMORIES" />
-        <Tab label="GLACNE" />
+        <Tab label="LINKS" />
         <Tab label="SAVED" />
       </Tabs>
       <Divider
         sx={{
-          width: 1170,
-          marginLeft: 3,
+          width: 1200,
+          marginLeft: 1,
         }}
       />
       {selectedTab === 0 && firstTab}

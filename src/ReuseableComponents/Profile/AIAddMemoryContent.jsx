@@ -100,24 +100,27 @@ export const AIAddMemoryContent = ({ updatedCroppedPic, upBarNext1 }) => {
         </div>
       ) : (
         <>
-          <div>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                height: 18,
-              }}
-            >
-              {newUpBarNext2}
+          {newUpBarNext2}
+          {/* <Stack
+            sx={{
+              paddingRight: 20,
+            }}
+            direction="row"
+          >
+            <Box>
+              <Avatar
+                variant="square"
+                sx={{
+                  width: 200,
+                  height: 50,
+                }}
+              />
             </Box>
-          </div>
+          </Stack> */}
           <div>
             <Box
               sx={{
-                marginTop: 2,
-                display: "flex",
-                alignItems: "center",
+                marginTop: 8,
               }}
             >
               <Avatar

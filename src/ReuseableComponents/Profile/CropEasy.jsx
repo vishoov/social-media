@@ -73,12 +73,10 @@ export const CropEasy = ({ uploadedFile, upBar }) => {
   return (
     <>
       {next ? (
-        <div>
-          <AIAddFilter
-            updatedCroppedPic={newUpdatedProfile}
-            upBarNext={newUpBarForNext}
-          />
-        </div>
+        <AIAddFilter
+          updatedCroppedPic={newUpdatedProfile}
+          upBarNext={newUpBarForNext}
+        />
       ) : (
         <>
           {newUpBarCom}

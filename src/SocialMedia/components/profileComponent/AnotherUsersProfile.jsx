@@ -1,56 +1,30 @@
-import React, { useEffect, useState } from "react";
-import { AISideBar } from "../../../ReuseableComponents/AISideBar";
+import React from "react";
 import { AIUpBar } from "../../../ReuseableComponents/AIUpBar";
+import { AISideBar } from "../../../ReuseableComponents/AISideBar";
 import { Avatar, Box, Stack, Typography } from "@mui/material";
+import { AvatarFileInput } from "../../../ReuseableComponents/AvatarFileInput";
+import { ShowLinksBar } from "../../../ReuseableComponents/Profile/ShowLinksBar";
+import { ShowSavedMemories } from "../../../ReuseableComponents/Profile/ShowSavedMemories";
+import TabsComponent from "../../../ReuseableComponents/Tabs";
 import jenPic1 from "../../../static/images/avatar/jen1.jpeg";
 import jenPic2 from "../../../static/images/avatar/jen2.jpeg";
 import jenPic3 from "../../../static/images/avatar/jen3.jpeg";
 import jenPic4 from "../../../static/images/avatar/jen4.jpeg";
-import { AvatarFileInput } from "../../../ReuseableComponents/AvatarFileInput";
-import TabsComponent from "../../../ReuseableComponents/Tabs";
-import { ShowMemoryBar } from "../../../ReuseableComponents/Profile/ShowMemoryBar";
-import { ShowSavedMemories } from "../../../ReuseableComponents/Profile/ShowSavedMemories";
-import { ShowLinksBar } from "../../../ReuseableComponents/Profile/ShowLinksBar";
-import { useGetProfileDetails } from "../../APIs/SocialMediaProfileInterfaceAPI";
-import { useCookies } from "react-cookie";
 import { useSelector } from "react-redux";
+import { ShowMemoryBarOfAnotherUsers } from "../../../ReuseableComponents/Profile/ShowMemoryBarOfAnotherUsers";
 
-export const AISocialMediaProfileInterface = () => {
-  const [requiredData, setRequiredData] = useState(null);
+export const AnotherUsersProfile = () => {
+  const searchData = useSelector((state) => state?.search);
 
-  const { refetch } = useGetProfileDetails(requiredData);
-  const [cookies] = useCookies(["avt_token"]);
-
-  const userData = useSelector((state) => state.socialMediaUser);
-
-  useEffect(() => {
-    var isPresent = JSON.parse(
-      JSON.parse(localStorage.getItem("persist:root"))?.auth
-    ).value?.signupData;
-
-    if (isPresent === null) {
-      const data = {
-        Authorization: cookies?.avt_token,
-      };
-
-      if (requiredData) {
-        console.log("Please provide a required data");
-        refetch();
-      } else {
-        setRequiredData(data);
-      }
-    }
-  }, [requiredData, cookies, refetch]);
   return (
     <>
       <div>
         <span>
           <AIUpBar
-            editProfile={true}
-            settingsSuggested={true}
-            shareMemory={true}
-            MoreButton={false}
-            userName={userData?.value?.SocialMediaUserData?.userName}
+            follow={true}
+            message={true}
+            MoreButton={true}
+            userName={searchData?.requestUserSearchData?.userName}
           />
         </span>
         <span>
@@ -155,8 +129,8 @@ export const AISocialMediaProfileInterface = () => {
             }}
           >
             <AvatarFileInput
-              firstName={userData?.value?.SocialMediaUserData?.firstName}
-              lastName={userData?.value?.SocialMediaUserData?.lastName}
+              firstName={searchData?.requestUserSearchData?.firstName}
+              lastName={searchData?.requestUserSearchData?.lastName}
             />
           </Box>
         </Stack>
@@ -172,7 +146,11 @@ export const AISocialMediaProfileInterface = () => {
             }}
           >
             <TabsComponent
-              firstTab={<ShowMemoryBar />}
+              firstTab={
+                <ShowMemoryBarOfAnotherUsers
+                  userIdofRequested={searchData?.requestUserSearchData?.userId}
+                />
+              }
               secondTab={<ShowLinksBar />}
               thirdTab={<ShowSavedMemories />}
             />

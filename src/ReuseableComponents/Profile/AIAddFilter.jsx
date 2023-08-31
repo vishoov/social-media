@@ -33,8 +33,10 @@ export const AIAddFilter = ({ updatedCroppedPic, upBarNext }) => {
       nextVisibility: "hidden",
       renderMessage: "Filter",
       backArrowOnClick: handleCallBack1,
+      // nextButtonOnClick: () => {
+      //   setNextStep(true);
+      // },
     });
-
     setNewUpBarCom2(newUpBarComp1);
     setNewUpBarCom1(newUpBar1);
     setProfilePicForFilter(updatedCroppedPic);
@@ -43,13 +45,13 @@ export const AIAddFilter = ({ updatedCroppedPic, upBarNext }) => {
   return (
     <>
       {nextStep ? (
-        <div>
-          <AIAddMemoryContent
-            upBarNext1={newUpBarCom2}
-            updatedCroppedPic={profilePicForFilter}
-          />
-        </div>
+        // <div>
+        <AIAddMemoryContent
+          upBarNext1={newUpBarCom2}
+          updatedCroppedPic={profilePicForFilter}
+        />
       ) : (
+        // </div>
         <>
           <div>
             <Box display="flex" position="relative">

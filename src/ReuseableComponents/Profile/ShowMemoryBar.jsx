@@ -19,7 +19,15 @@ export const ShowMemoryBar = () => {
   const random = localStorage.getItem("random");
 
   useEffect(() => {
-    if (localStorage.getItem("done") === "false") {
+    var isPresent = JSON.parse(
+      JSON.parse(localStorage.getItem("persist:root"))?.memories
+    ).value?.socialMediaMemories;
+
+    if (
+      localStorage.getItem("done") === "false" ||
+      memories?.value?.socialMediaMemories?.length < 0 ||
+      isPresent?.length <= 0
+    ) {
       const memoryData = {
         Authorization: cookies?.avt_token,
         userId: localStorage.getItem("sm_user_id"),

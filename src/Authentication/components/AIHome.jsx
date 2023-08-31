@@ -16,7 +16,10 @@ export const AIHome = () => {
 
   // useEffect hook
   useEffect(() => {
-    setFirstName(auth?.value?.signupData?.firstName);
+    console.log(auth?.value?.signupData);
+    if (auth?.value?.signupData?.firstName !== null) {
+      setFirstName(auth?.value?.signupData?.firstName);
+    }
   }, [auth]);
 
   return (
@@ -25,7 +28,9 @@ export const AIHome = () => {
         <h1 style={{ textAlign: "center" }}>Home</h1>
       </div>
 
-      {firstName && <AIVoiceAssist name={firstName} />}
+      {auth?.value?.signupData !== null && auth?.value?.signinData === null && (
+        <AIVoiceAssist name={firstName} />
+      )}
       <AIButton
         content="Initiate Social Media user interface"
         style={{
