@@ -151,7 +151,7 @@ export const AISocialMediaProfileInterface = () => {
           </Box>
           <Box
             sx={{
-              paddingRight: 4,
+              paddingRight: 3,
             }}
           >
             <AvatarFileInput

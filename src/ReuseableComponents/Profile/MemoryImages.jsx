@@ -53,6 +53,7 @@ export const MemoryImages = () => {
           open={isModalOpen}
           onClose={closeModal}
           username="JennaOrtega"
+          other={false}
         />
       )}
     </ImageList>

@@ -11,7 +11,7 @@ import jen from "../../static/images/avatar/jen.jpeg";
 import { MoreHorizRounded } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 
-export const ShowMemoryModel = ({ open, onClose, item, username }) => {
+export const ShowMemoryModel = ({ open, onClose, item, username, other }) => {
   return (
     <Modal
       open={open}
@@ -87,14 +87,25 @@ export const ShowMemoryModel = ({ open, onClose, item, username }) => {
             alignItems: "end",
           }}
         >
-          <img
-            srcSet={item?.urls}
-            alt="imageNotFound"
-            style={{
-              width: 865,
-              height: 865,
-            }}
-          />
+          {other ? (
+            <img
+              srcSet={item?.urls}
+              alt="imageNotFound"
+              style={{
+                width: 865,
+                height: 865,
+              }}
+            />
+          ) : (
+            <img
+              srcSet={item?.urls}
+              alt="imageNotFound"
+              style={{
+                width: 865,
+                height: 865,
+              }}
+            />
+          )}
           <Box>
             <Typography
               sx={{

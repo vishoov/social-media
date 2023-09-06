@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useMutation } from "react-query";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setSearchDataError, setSearchData } from "../../redux/SearchSlice";
 import {
   setRequestedUserSearchError,
@@ -11,6 +11,12 @@ import { useNavigate } from "react-router-dom";
 const urls = () => {
   return axios.create({
     baseURL: "http://localhost:9999/ai/socialmedia/api/v1/private/search",
+  });
+};
+
+const urls1 = () => {
+  return axios.create({
+    baseURL: "http://localhost:9999/ai/socialmedia/api/v1/private/customjoin",
   });
 };
 
@@ -27,7 +33,7 @@ const getUserBySearch = (searchdata) => {
 
 const getUserProfileInfo = (searchdata) => {
   console.log("search data:", searchdata);
-  return urls().post("/get/userdetails", null, {
+  return urls1().post("/userdetailswithmemories", null, {
     headers: {
       Authorization: "Bearer " + searchdata?.Authorization,
     },
@@ -59,20 +65,30 @@ export const useGetUserBySearch = () => {
 export const useGetUserProfileInfo = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const socialMediaUser = useSelector((state) => state.socialMediaUser);
+
   return useMutation(getUserProfileInfo, {
     onError: (error) => {
       if (error?.response?.status === 404) {
         dispatch(setRequestedUserSearchError(error?.response?.data?.message));
       } else {
-        dispatch(setRequestedUserSearchError(error?.response?.data?.message));
+        dispatch(setRequestedUserSearchError("no memories are available"));
       }
     },
     onSuccess: (data) => {
       if (data?.status === 200) {
+        console.log("0000000");
         dispatch(setRequestUserSearchData(data?.data?.data));
-        navigate(
-          `/environment/socialMedia/profile/${data?.data?.data?.userName}`
-        );
+        if (
+          data?.data?.data?.userPersonalDetails?.userName ===
+          socialMediaUser?.value?.SocialMediaUserData?.userName
+        ) {
+          navigate("/environment/socialMedia/profile");
+        } else {
+          navigate(
+            `/environment/socialMedia/profile/${data?.data?.data?.userPersonalDetails?.userName}`
+          );
+        }
       } else {
         dispatch(setRequestUserSearchData(data?.data?.message));
       }

@@ -6,6 +6,8 @@ import {
   setSocialMediaUserData,
   setSocialMediaUserError,
 } from "../../redux/SocialMediaUserSlice";
+import { useGetProfileDetails } from "./SocialMediaProfileInterfaceAPI";
+import { useCookies } from "react-cookie";
 
 const URLs = () => {
   return axios.create({
@@ -26,6 +28,10 @@ const addSocialMediaUser = (data) => {
 export const useAddSocialMediaUser = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [cookies] = useCookies(["avt_token"]);
+  const { data: profileData } = useGetProfileDetails({
+    Authorization: cookies?.avt_token,
+  });
 
   return useMutation(addSocialMediaUser, {
     onSuccess: (data) => {
@@ -33,8 +39,7 @@ export const useAddSocialMediaUser = () => {
         data?.data?.data?.socialMediaUserId !== null &&
         data?.data?.data?.socialMediaUserId !== undefined
       ) {
-        dispatch(setSocialMediaUserData(data?.data?.data));
-
+        dispatch(setSocialMediaUserData(profileData?.data?.data));
         localStorage.setItem("sm_user_id", data?.data?.data?.socialMediaUserId);
         navigate("/environment/socialMedia/home");
       } else {

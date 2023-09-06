@@ -14,12 +14,14 @@ export const AIUpBar = ({
   message,
   MoreButton,
   userName,
+  otherUser,
 }) => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [changeButtonState, setChangeButtonState] = useState("follow");
 
   const memories = useSelector((state) => state.memories);
+  const search = useSelector((state) => state.search);
 
   const handleModelClose = () => {
     setIsOpen(false);
@@ -70,16 +72,41 @@ export const AIUpBar = ({
               <b>0</b> Followings
             </p>
           </Box>
-          <Box>
-            <p
-              style={{
-                marginLeft: 30,
-              }}
-            >
-              <b>{memories?.value?.socialMediaMemories?.at(0)?.length}</b>{" "}
-              Memories
-            </p>
-          </Box>
+          {otherUser ? (
+            <Box>
+              <p
+                style={{
+                  marginLeft: 30,
+                }}
+              >
+                <b>
+                  {search?.requestUserSearchData?.userMemoriesDetails?.results?.at(
+                    0
+                  )?.memory_details?.length > 0
+                    ? search?.requestUserSearchData?.userMemoriesDetails?.results?.at(
+                        0
+                      )?.memory_details?.length
+                    : 0}
+                </b>{" "}
+                Memories
+              </p>
+            </Box>
+          ) : (
+            <Box>
+              <p
+                style={{
+                  marginLeft: 30,
+                }}
+              >
+                <b>
+                  {memories?.value?.socialMediaMemories?.at(0)?.length > 0
+                    ? memories?.value?.socialMediaMemories?.at(0)?.length
+                    : 0}
+                </b>{" "}
+                Memories
+              </p>
+            </Box>
+          )}
           <Box>
             <p
               style={{

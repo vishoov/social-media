@@ -87,7 +87,7 @@ export const AvatarFileInput = ({ firstName, lastName }) => {
       />
       <p
         style={{
-          marginLeft: 120,
+          marginLeft: 115,
         }}
       >
         <b>

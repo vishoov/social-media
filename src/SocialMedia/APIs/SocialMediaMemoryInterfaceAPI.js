@@ -1,10 +1,7 @@
 import axios from "axios";
 import { useMutation, useQuery } from "react-query";
 import { useDispatch } from "react-redux";
-import {
-  setSocialMediaMemories,
-  setSocialMediaAnotherUserMemories,
-} from "../../redux/SocialMediaMemoriesSlice";
+import { setSocialMediaMemories } from "../../redux/SocialMediaMemoriesSlice";
 
 const urls = () => {
   return axios.create({
@@ -58,13 +55,8 @@ export const useGetAllMemories = (memoryData) => {
             return combained_details;
           })
         );
-        if (memoryData?.otherUsersMemory) {
-          dispatch(setSocialMediaAnotherUserMemories(wholeData));
-        } else {
-          localStorage.setItem("done", true);
-
-          dispatch(setSocialMediaMemories(wholeData));
-        }
+        localStorage.setItem("done", true);
+        dispatch(setSocialMediaMemories(wholeData));
       },
       refetchOnMount: false,
       enabled: !!memoryData,

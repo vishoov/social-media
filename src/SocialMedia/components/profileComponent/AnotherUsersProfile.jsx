@@ -2,7 +2,6 @@ import React from "react";
 import { AIUpBar } from "../../../ReuseableComponents/AIUpBar";
 import { AISideBar } from "../../../ReuseableComponents/AISideBar";
 import { Avatar, Box, Stack, Typography } from "@mui/material";
-import { AvatarFileInput } from "../../../ReuseableComponents/AvatarFileInput";
 import { ShowLinksBar } from "../../../ReuseableComponents/Profile/ShowLinksBar";
 import { ShowSavedMemories } from "../../../ReuseableComponents/Profile/ShowSavedMemories";
 import TabsComponent from "../../../ReuseableComponents/Tabs";
@@ -12,9 +11,11 @@ import jenPic3 from "../../../static/images/avatar/jen3.jpeg";
 import jenPic4 from "../../../static/images/avatar/jen4.jpeg";
 import { useSelector } from "react-redux";
 import { ShowMemoryBarOfAnotherUsers } from "../../../ReuseableComponents/Profile/ShowMemoryBarOfAnotherUsers";
+import { useParams } from "react-router-dom";
 
 export const AnotherUsersProfile = () => {
   const searchData = useSelector((state) => state?.search);
+  const { username } = useParams();
 
   return (
     <>
@@ -24,7 +25,10 @@ export const AnotherUsersProfile = () => {
             follow={true}
             message={true}
             MoreButton={true}
-            userName={searchData?.requestUserSearchData?.userName}
+            userName={
+              searchData?.requestUserSearchData?.userPersonalDetails?.userName
+            }
+            otherUser={true}
           />
         </span>
         <span>
@@ -128,10 +132,38 @@ export const AnotherUsersProfile = () => {
               paddingRight: 4,
             }}
           >
-            <AvatarFileInput
-              firstName={searchData?.requestUserSearchData?.firstName}
-              lastName={searchData?.requestUserSearchData?.lastName}
+            <Avatar
+              alt="Avatar"
+              id="avatar"
+              src={searchData?.requestUserSearchData?.userProfilePics
+                ?.at(0)
+                ?.profile_details?.at(0)
+                ?.urls?.at(0)}
+              sx={{
+                width: 300,
+                height: 300,
+                cursor: "pointer",
+              }}
+              style={{
+                margin: 15,
+              }}
             />
+            <p
+              style={{
+                marginLeft: 110,
+              }}
+            >
+              <b>
+                {
+                  searchData?.requestUserSearchData?.userPersonalDetails
+                    ?.firstName
+                }{" "}
+                {
+                  searchData?.requestUserSearchData?.userPersonalDetails
+                    ?.lastName
+                }
+              </b>
+            </p>
           </Box>
         </Stack>
         <Stack
@@ -146,11 +178,7 @@ export const AnotherUsersProfile = () => {
             }}
           >
             <TabsComponent
-              firstTab={
-                <ShowMemoryBarOfAnotherUsers
-                  userIdofRequested={searchData?.requestUserSearchData?.userId}
-                />
-              }
+              firstTab={<ShowMemoryBarOfAnotherUsers username={username} />}
               secondTab={<ShowLinksBar />}
               thirdTab={<ShowSavedMemories />}
             />
