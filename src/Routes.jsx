@@ -8,7 +8,7 @@ import { AIAuthUserNameForgotPassword } from "./Authentication/components/AIAuth
 import { WaitAuthentication } from "./Authentication/components/WaitAuthentication";
 import { AIChangePassword } from "./Authentication/components/AIChangePassword";
 import { AIAuthentication } from "./Authentication/components/AIAuthentication";
-import { SocialMediaHome } from "./SocialMedia/components/SocialMediaHome";
+import { SocialMediaHome } from "./SocialMedia/components/HomeComponent/SocialMediaHome";
 import { SocialMediaActivationInterface } from "./SocialMedia/components/SocialMediaActivationInterface";
 import { AICheckSession } from "./Authentication/components/AICheckSession";
 import { AISocialMediaProfileInterface } from "./SocialMedia/components/profileComponent/AISocialMediaProfileInterface";

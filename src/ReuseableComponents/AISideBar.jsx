@@ -45,14 +45,10 @@ export const AISideBar = () => {
               <div>
                 <Button
                   size="medium"
-                  style={{ width: 300, marginBottom: 25 }}
+                  style={{ width: 300, marginBottom: 20 }}
                   onClick={() => navigate("/environment/socialMedia/home")}
+                  startIcon={<HomeRounded />}
                 >
-                  <HomeRounded
-                    style={{
-                      marginRight: 12,
-                    }}
-                  />
                   <p
                     style={{
                       marginRight: 30,
@@ -65,17 +61,13 @@ export const AISideBar = () => {
               <div>
                 <Button
                   size="medium"
-                  style={{ width: 300, marginBottom: 25 }}
+                  style={{ width: 300, marginBottom: 20 }}
                   onClick={() => setIsModalOpenForSearch(true)}
+                  startIcon={<SearchRounded />}
                 >
-                  <SearchRounded
-                    style={{
-                      marginRight: 12,
-                    }}
-                  />
                   <p
                     style={{
-                      marginRight: 25,
+                      marginRight: 26,
                     }}
                   >
                     Search
@@ -83,12 +75,11 @@ export const AISideBar = () => {
                 </Button>
               </div>
               <div>
-                <Button size="medium" style={{ width: 300, marginBottom: 25 }}>
-                  <ChatRounded
-                    style={{
-                      marginRight: 15,
-                    }}
-                  />
+                <Button
+                  size="medium"
+                  style={{ width: 300, marginBottom: 20 }}
+                  startIcon={<ChatRounded />}
+                >
                   <p
                     style={{
                       marginRight: 25,
@@ -103,14 +94,10 @@ export const AISideBar = () => {
                   size="medium"
                   style={{
                     width: 300,
-                    marginBottom: 25,
+                    marginBottom: 20,
                   }}
+                  startIcon={<FavoriteBorderRounded />}
                 >
-                  <FavoriteBorderRounded
-                    style={{
-                      marginRight: 10,
-                    }}
-                  />
                   <p
                     style={{
                       marginRight: 10,
@@ -121,12 +108,11 @@ export const AISideBar = () => {
                 </Button>
               </div>
               <div>
-                <Button size="medium" style={{ width: 300, marginBottom: 25 }}>
-                  <TvRounded
-                    style={{
-                      marginRight: 15,
-                    }}
-                  />
+                <Button
+                  size="medium"
+                  style={{ width: 300, marginBottom: 20 }}
+                  startIcon={<TvRounded />}
+                >
                   <p
                     style={{
                       marginRight: 50,
@@ -137,12 +123,11 @@ export const AISideBar = () => {
                 </Button>
               </div>
               <div>
-                <Button size="medium" style={{ width: 300, marginBottom: 25 }}>
-                  <GroupsRounded
-                    style={{
-                      marginRight: 15,
-                    }}
-                  />
+                <Button
+                  size="medium"
+                  style={{ width: 300, marginBottom: 20 }}
+                  startIcon={<GroupsRounded />}
+                >
                   <p
                     style={{
                       marginRight: 60,
@@ -155,14 +140,10 @@ export const AISideBar = () => {
               <div>
                 <Button
                   size="medium"
-                  style={{ width: 300, marginBottom: 25 }}
+                  style={{ width: 300, marginBottom: 20 }}
                   onClick={() => navigate("/environment/socialMedia/profile")}
+                  startIcon={<AccountCircleRounded />}
                 >
-                  <AccountCircleRounded
-                    style={{
-                      marginRight: 15,
-                    }}
-                  />
                   <p
                     style={{
                       marginRight: 50,
@@ -173,12 +154,11 @@ export const AISideBar = () => {
                 </Button>
               </div>
               <div>
-                <Button size="medium" style={{ width: 300, marginBottom: 25 }}>
-                  <MenuRounded
-                    style={{
-                      marginRight: 15,
-                    }}
-                  />
+                <Button
+                  size="medium"
+                  style={{ width: 300, marginBottom: 20 }}
+                  startIcon={<MenuRounded />}
+                >
                   <p
                     style={{
                       marginRight: 70,

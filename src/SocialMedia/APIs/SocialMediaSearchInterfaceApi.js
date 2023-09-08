@@ -32,7 +32,7 @@ const getUserBySearch = (searchdata) => {
 };
 
 const getUserProfileInfo = (searchdata) => {
-  console.log("search data:", searchdata);
+
   return urls1().post("/userdetailswithmemories", null, {
     headers: {
       Authorization: "Bearer " + searchdata?.Authorization,
@@ -77,7 +77,7 @@ export const useGetUserProfileInfo = () => {
     },
     onSuccess: (data) => {
       if (data?.status === 200) {
-        console.log("0000000");
+
         dispatch(setRequestUserSearchData(data?.data?.data));
         if (
           data?.data?.data?.userPersonalDetails?.userName ===
