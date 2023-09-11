@@ -3,7 +3,6 @@ import { useCallback, useEffect, useState } from "react";
 const useResizeImageHook = (imageFile) => {
   const [, setFile] = useState(null);
   const [resizedImage, setResizedImage] = useState(null);
-  console.log("image file", imageFile);
 
   const handleImageChange = useCallback(
     (event) => {

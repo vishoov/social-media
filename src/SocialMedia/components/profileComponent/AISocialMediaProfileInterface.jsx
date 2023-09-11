@@ -24,11 +24,11 @@ export const AISocialMediaProfileInterface = () => {
   const userData = useSelector((state) => state.socialMediaUser);
 
   useEffect(() => {
-    var isPresent = JSON.parse(
-      JSON.parse(localStorage.getItem("persist:root"))?.auth
-    ).value?.signupData;
+    // var isPresent = JSON.parse(
+    //   JSON.parse(localStorage.getItem("persist:root"))?.auth
+    // ).value?.signupData;
 
-    if (isPresent === null) {
+    if (userData?.value?.SocialMediaUserData === null) {
       const data = {
         Authorization: cookies?.avt_token,
       };
@@ -40,7 +40,7 @@ export const AISocialMediaProfileInterface = () => {
         setRequiredData(data);
       }
     }
-  }, [requiredData, cookies, refetch]);
+  }, [requiredData, cookies, refetch, userData?.value?.SocialMediaUserData]);
   return (
     <>
       <div>

@@ -113,6 +113,12 @@ export const ShowMemoryModel = ({ open, onClose, item, username, other }) => {
                 top: 30,
                 left: 0,
                 p: 3,
+                width: 595,
+                marginTop: 4,
+                maxHeight: "none",
+                overflowY: "auto",
+                fontWeight: 550,
+                height: 140,
               }}
             >
               {item?.feelings}

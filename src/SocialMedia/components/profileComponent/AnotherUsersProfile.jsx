@@ -26,7 +26,8 @@ export const AnotherUsersProfile = () => {
             message={true}
             MoreButton={true}
             userName={
-              searchData?.requestUserSearchData?.userPersonalDetails?.userName
+              searchData?.requestUserSearchData?.userPersonalDetails
+                ?.userName || username
             }
             otherUser={true}
           />

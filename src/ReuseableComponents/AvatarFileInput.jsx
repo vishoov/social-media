@@ -25,6 +25,9 @@ export const AvatarFileInput = ({ firstName, lastName }) => {
   };
 
   useEffect(() => {
+    console.log("hello data love you!!!!", data);
+
+    console.log("hello world!");
     if (data?.data?.data?.urls?.length > 0) {
       if ("caches" in window) {
         caches.open("my-cache").then((cache) => {
@@ -47,6 +50,7 @@ export const AvatarFileInput = ({ firstName, lastName }) => {
                 const jsonData = {
                   profilePicUrl: data?.profilePicUrl,
                 };
+                console.log("profilePicUrl :", jsonData);
                 setSelectedImage(jsonData?.profilePicUrl?.[0]);
               });
             }

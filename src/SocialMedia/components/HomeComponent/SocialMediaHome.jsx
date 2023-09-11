@@ -1,8 +1,6 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 import { AISideBar } from "../../../ReuseableComponents/AISideBar";
-import { useDispatch, useSelector } from "react-redux";
-import SockJS from "sockjs-client";
-import Stomp from "stompjs";
+import { useSelector } from "react-redux";
 import {
   Alert,
   Avatar,
@@ -15,7 +13,6 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import Jen2 from "../../../static/images/avatar/jen2.jpeg";
 import {
   FavoriteBorderRounded,
   MoreHorizRounded,
@@ -23,63 +20,21 @@ import {
   TvRounded,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import { setHomeMemoriesContent } from "../../../redux/SocialMediaHomeSlice";
+import useMemoriesSubscribeHook from "../../../hooks/useMemoriesSubscribeHook";
+import useGetMemoriesWithinAWeekHook from "../../../hooks/useGetMemoriesWithinAWeekHook";
 
 export const SocialMediaHome = () => {
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  // useDispatch hook
-  const dispatch = useDispatch();
+  // live memories updates
+  const { snackbarMessage, snackbarOpen } = useMemoriesSubscribeHook();
 
   const HOME = useSelector((state) => state.home);
-  // useCallback hook for only rendering the function when some perticular variable changes
-
-  const callBack = useCallback(
-    (data) => {
-      dispatch(setHomeMemoriesContent(data));
-    },
-    [dispatch]
-  );
 
   // useNavigate hook
   const navigate = useNavigate();
 
-  // useSelector hooks to get the current state of the store
-  const socialMediaUser = useSelector((state) => state.socialMediaUser);
+  const handleSnackbarClose = () => {};
 
-  useEffect(() => {
-    // Create a SockJS WebSocket connection to the server
-    const socket = new SockJS("http://localhost:9989/websocket");
-
-    // Create a Stomp client over the SockJS WebSocket connection
-    const stompClient = Stomp.over(socket);
-
-    // Connect to the WebSocket server
-    stompClient.connect({}, (frame) => {
-      // Subscribe to the topic where Kafka messages are sent
-      stompClient.subscribe(
-        `/queue/${
-          socialMediaUser?.value?.SocialMediaUserData?.userId ||
-          localStorage.getItem("sm_user_id")
-        }`,
-        (message) => {
-          // Handle incoming messages here
-
-          const data = JSON.parse(message.body);
-
-          callBack(data);
-
-          // Show a Snackbar notification
-          setSnackbarMessage(`${data?.userName} just shared a memory`);
-          setSnackbarOpen(true);
-        }
-      );
-    });
-  }, [callBack, socialMediaUser?.value?.SocialMediaUserData?.userId]);
-
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
-  };
+  useGetMemoriesWithinAWeekHook();
 
   return (
     <>
@@ -126,9 +81,10 @@ export const SocialMediaHome = () => {
                           paddingBottom: 0.5,
                         }}
                       >
+                        {console.log("profile urls :", memories?.profileUrl)}
                         <Avatar
-                          src={Jen2}
-                          srcSet={Jen2}
+                          src={memories?.profileUrl}
+                          srcSet={memories?.profileUrl}
                           alt="nothing"
                           sx={{
                             width: 35,
@@ -294,7 +250,7 @@ export const SocialMediaHome = () => {
       >
         <Snackbar
           open={snackbarOpen}
-          autoHideDuration={6000} // Adjust as needed
+          autoHideDuration={3000} // Adjust as needed
           onClose={handleSnackbarClose}
         >
           <Alert onClose={handleSnackbarClose} severity="success">

@@ -44,7 +44,6 @@ export const AISignin = () => {
         setCookie("avt_token", data?.data?.data?.jwtToken, {
           // expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
         });
-
         navigate("/environment/home");
       }
     }

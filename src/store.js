@@ -7,6 +7,7 @@ import { persistReducer } from "redux-persist";
 import thunk from "redux-thunk";
 import SearchReducer from "./redux/SearchSlice";
 import HomeReducer from "./redux/SocialMediaHomeSlice";
+import UtilitiesSlice from "./redux/UtilitiesSlice";
 
 const persistConfig = {
   key: "root",
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   socialMediaUser: socialMediaUserDataReducer,
   search: SearchReducer,
   home: HomeReducer,
+  utilities: UtilitiesSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

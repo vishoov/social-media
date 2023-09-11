@@ -46,6 +46,8 @@ export const useGetAllMemories = (memoryData) => {
     {
       onError: (error) => console.log(error),
       onSuccess: (data) => {
+        console.log("commited data:", data?.data?.data?.results);
+
         var wholeData = data?.data?.data?.results?.map((memories) =>
           memories?.memory_details?.map((memory_details) => {
             var combained_details = {

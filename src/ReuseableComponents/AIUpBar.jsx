@@ -1,10 +1,16 @@
 import React, { useState } from "react";
 import { AIButton } from "./AIButton";
 import { MoreHorizRounded, SettingsSuggestRounded } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AICreateMemoryModel from "./Profile/AICreateMemoryModel";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Box, IconButton, Stack } from "@mui/material";
+import {
+  useFollowPerson,
+  useGetUserDataInProfile,
+} from "../SocialMedia/APIs/SocialMediaProfileInterfaceAPI";
+import { useCookies } from "react-cookie";
+import { setFollowButtonChange } from "../redux/UtilitiesSlice";
 
 export const AIUpBar = ({
   editProfile,
@@ -18,13 +24,53 @@ export const AIUpBar = ({
 }) => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const [changeButtonState, setChangeButtonState] = useState("follow");
+  const [requestedUserData, setRequestedUserData] = useState(null);
 
+  const { username } = useParams();
+
+  // store variables
   const memories = useSelector((state) => state.memories);
   const search = useSelector((state) => state.search);
+  const socialMediaUser = useSelector((state) => state.socialMediaUser);
+  const auth = useSelector((state) => state.auth);
+  const utilities = useSelector((state) => state.utilities);
+
+  // useCookies hook
+  const [cookies] = useCookies(["avt_token"]);
+
+  const dispatch = useDispatch();
+
+  const userId =
+    localStorage.getItem("sm_user_id") ||
+    socialMediaUser?.value?.SocialMediaUserData?.userId ||
+    auth?.value?.userDetails?.userId;
 
   const handleModelClose = () => {
     setIsOpen(false);
+  };
+
+  const { refetch } = useGetUserDataInProfile(requestedUserData);
+
+  const { mutate } = useFollowPerson();
+
+  const followHandler = () => {
+    if (userId !== null || userId !== undefined) {
+      const json = {
+        data: {
+          userId: search?.requestUserSearchData?.userPersonalDetails?.userId,
+          followerId: parseInt(userId),
+        },
+        Authorization: cookies?.avt_token,
+      };
+      console.log("hello world!!!1", json);
+      mutate(json);
+    } else {
+      if (requestedUserData === null) {
+        setRequestedUserData(username || userName);
+      } else {
+        refetch();
+      }
+    }
   };
 
   return (
@@ -152,14 +198,14 @@ export const AIUpBar = ({
         )}
         {follow && (
           <Box>
-            {changeButtonState ? (
+            {utilities?.profile?.followButtonChanged ? (
               <AIButton
                 content="follow"
                 style={{
                   marginLeft: 480,
                 }}
                 onClick={() => {
-                  setChangeButtonState(false);
+                  followHandler();
                 }}
               />
             ) : (
@@ -169,7 +215,7 @@ export const AIUpBar = ({
                   marginLeft: 480,
                 }}
                 onClick={() => {
-                  setChangeButtonState(true);
+                  dispatch(setFollowButtonChange(true));
                 }}
               />
             )}

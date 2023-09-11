@@ -15,8 +15,18 @@ export const HomeSlice = createSlice({
         state.HomeMemoriesContent.pop();
       }
     },
+    setHomeMemoriesContentWithApiCall: (state, action) => {
+      state.HomeMemoriesContent = action.payload;
+    },
+    setHomeMemoriesContentError: (state, action) => {
+      state.HomeMemoriesContent = action.payload;
+    },
   },
 });
 
-export const { setHomeMemoriesContent } = HomeSlice.actions;
+export const {
+  setHomeMemoriesContent,
+  setHomeMemoriesContentWithApiCall,
+  setHomeMemoriesContentError,
+} = HomeSlice.actions;
 export default HomeSlice.reducer;
