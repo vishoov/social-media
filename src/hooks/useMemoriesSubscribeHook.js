@@ -29,10 +29,19 @@ const useMemoriesSubscribeHook = () => {
         }`,
         (message) => {
           // Handle incoming messages here
-
           const data = JSON.parse(message.body);
 
-          dispatch(setHomeMemoriesContent(data));
+          const jsonData = {
+            urls: data?.urls,
+            userName: data?.userName,
+            feelings: data?.feelings,
+            profileUrl: data?.profileData?.results
+              ?.at(0)
+              ?.profile_details?.at(0)
+              ?.urls?.at(0),
+          };
+
+          dispatch(setHomeMemoriesContent(jsonData));
 
           // Show a Snackbar notification
           setSnackbarMessage(`${data?.userName} just shared a memory`);

@@ -81,7 +81,6 @@ export const SocialMediaHome = () => {
                           paddingBottom: 0.5,
                         }}
                       >
-                        {console.log("profile urls :", memories?.profileUrl)}
                         <Avatar
                           src={memories?.profileUrl}
                           srcSet={memories?.profileUrl}
