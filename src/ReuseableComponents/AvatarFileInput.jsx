@@ -25,9 +25,6 @@ export const AvatarFileInput = ({ firstName, lastName }) => {
   };
 
   useEffect(() => {
-    console.log("hello data love you!!!!", data);
-
-    console.log("hello world!");
     if (data?.data?.data?.urls?.length > 0) {
       if ("caches" in window) {
         caches.open("my-cache").then((cache) => {

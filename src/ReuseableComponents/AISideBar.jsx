@@ -7,6 +7,7 @@ import {
   GroupsRounded,
   HomeRounded,
   MenuRounded,
+  PublicRounded,
   SearchRounded,
   TvRounded,
 } from "@mui/icons-material";
@@ -97,6 +98,9 @@ export const AISideBar = () => {
                     marginBottom: 20,
                   }}
                   startIcon={<FavoriteBorderRounded />}
+                  onClick={() =>
+                    navigate("/environment/socialMedia/Notifications")
+                  }
                 >
                   <p
                     style={{
@@ -119,6 +123,21 @@ export const AISideBar = () => {
                     }}
                   >
                     Glance
+                  </p>
+                </Button>
+              </div>
+              <div>
+                <Button
+                  size="medium"
+                  style={{ width: 300, marginBottom: 20 }}
+                  startIcon={<PublicRounded />}
+                >
+                  <p
+                    style={{
+                      marginRight: 70,
+                    }}
+                  >
+                    Meet
                   </p>
                 </Button>
               </div>

@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   HomeMemoriesContent: [],
+  HomeMemoriesContentError: [],
 };
 
 export const HomeSlice = createSlice({
@@ -19,7 +20,7 @@ export const HomeSlice = createSlice({
       state.HomeMemoriesContent = action.payload;
     },
     setHomeMemoriesContentError: (state, action) => {
-      state.HomeMemoriesContent = action.payload;
+      state.HomeMemoriesContentError = action.payload;
     },
   },
 });

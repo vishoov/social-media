@@ -2,7 +2,7 @@ import { Box, CircularProgress } from "@mui/material";
 import React, { useEffect } from "react";
 import completeImage from "../../static/images/utils/complete.svg";
 
-export const ShareMemoryProgress = ({ upBar, isLoading, data }) => {
+export const ShareMemoryProgress = ({ upBar, isLoading, data, isSuccess }) => {
   useEffect(() => {}, [isLoading, data]);
 
   return (
@@ -20,7 +20,7 @@ export const ShareMemoryProgress = ({ upBar, isLoading, data }) => {
         </Box>
       </div>
       <div>
-        {isLoading ? (
+        {isLoading && !isSuccess ? (
           <Box>
             <CircularProgress
               variant="indeterminate"

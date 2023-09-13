@@ -200,7 +200,7 @@ export const SocialMediaHome = () => {
                         paddingTop: 1,
                       }}
                     >
-                      JennaOrtega
+                      {memories?.userName}
                     </Typography>
                     <Typography
                       sx={{

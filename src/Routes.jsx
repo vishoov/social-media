@@ -14,6 +14,7 @@ import { AICheckSession } from "./Authentication/components/AICheckSession";
 import { AISocialMediaProfileInterface } from "./SocialMedia/components/profileComponent/AISocialMediaProfileInterface";
 import { AISocialMediaEditProfile } from "./SocialMedia/components/profileComponent/AISocialMediaEditProfile";
 import { AnotherUsersProfile } from "./SocialMedia/components/profileComponent/AnotherUsersProfile";
+import { SocialMediaNotificationInterface } from "./SocialMedia/components/NotificationComponent/SocialMediaNotificationInterface";
 
 export const Routes = ({ children }) => {
   const routes = createBrowserRouter([
@@ -96,6 +97,14 @@ export const Routes = ({ children }) => {
               element: (
                 <AIAuthentication>
                   <AnotherUsersProfile />
+                </AIAuthentication>
+              ),
+            },
+            {
+              path: "Notifications",
+              element: (
+                <AIAuthentication>
+                  <SocialMediaNotificationInterface />
                 </AIAuthentication>
               ),
             },

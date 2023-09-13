@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
 import { setHomeMemoriesContent } from "../redux/SocialMediaHomeSlice";
+import { setMemoriesNotification } from "../redux/Notifications";
 
 const useMemoriesSubscribeHook = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -39,9 +40,11 @@ const useMemoriesSubscribeHook = () => {
               ?.at(0)
               ?.profile_details?.at(0)
               ?.urls?.at(0),
+            created: data?.created,
           };
 
           dispatch(setHomeMemoriesContent(jsonData));
+          dispatch(setMemoriesNotification(jsonData));
 
           // Show a Snackbar notification
           setSnackbarMessage(`${data?.userName} just shared a memory`);

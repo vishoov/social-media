@@ -8,6 +8,7 @@ import thunk from "redux-thunk";
 import SearchReducer from "./redux/SearchSlice";
 import HomeReducer from "./redux/SocialMediaHomeSlice";
 import UtilitiesSlice from "./redux/UtilitiesSlice";
+import NotificationSlice from "./redux/Notifications";
 
 const persistConfig = {
   key: "root",
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   search: SearchReducer,
   home: HomeReducer,
   utilities: UtilitiesSlice,
+  notification: NotificationSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
