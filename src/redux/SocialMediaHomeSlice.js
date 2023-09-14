@@ -1,9 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
-  HomeMemoriesContent: [],
-  HomeMemoriesContentError: [],
-};
+const initialState = {};
 
 export const HomeSlice = createSlice({
   name: "Home",
