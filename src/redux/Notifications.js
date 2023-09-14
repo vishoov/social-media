@@ -1,21 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
-  memoriesNotification: [],
-};
+const initialState = {};
 
 const NotificationSlice = createSlice({
   name: "notifications",
   initialState,
-  reducers: {
-    setMemoriesNotification: (state, action) => {
-      state.memoriesNotification.unshift(action.payload);
-
-      while (state.memoriesNotification.length > 10) {
-        state.memoriesNotification.pop();
-      }
-    },
-  },
+  reducers: {},
 });
 
 export const { setMemoriesNotification } = NotificationSlice.actions;

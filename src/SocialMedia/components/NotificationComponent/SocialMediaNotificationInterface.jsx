@@ -1,19 +1,24 @@
-import React from "react";
+import React, { useContext } from "react";
 import { AISideBar } from "../../../ReuseableComponents/AISideBar";
 import { Avatar, Box, List, ListItem, Stack, Typography } from "@mui/material";
 import jen18 from "../../../static/images/avatar/jen18.jpeg";
 import useMemoriesSubscribeHook from "../../../hooks/useMemoriesSubscribeHook";
-import { useSelector } from "react-redux";
+import useGetMemoriesWithinAWeekHook from "../../../hooks/useGetMemoriesWithinAWeekHook";
+import { Context as NotificationContext } from "../../../context/NotificationContext";
 
 export const SocialMediaNotificationInterface = () => {
   useMemoriesSubscribeHook();
 
-  const NOTIFICATION = useSelector((state) => state.notification);
+  useGetMemoriesWithinAWeekHook();
+
+  const {
+    state: { memoriesNotification },
+  } = useContext(NotificationContext);
 
   const getTime = (created) => {
     const nowTimestamp = Date.now();
 
-    const timeDifference = Math.abs(nowTimestamp - parseInt(created));
+    const timeDifference = Math.abs(nowTimestamp - Date.parse(created));
 
     var time = `${Math.floor(timeDifference / 3600000)} hr ago`; // 1 hour = 3600000 milliseconds
 
@@ -75,60 +80,61 @@ export const SocialMediaNotificationInterface = () => {
           }}
         >
           <List>
-            {NOTIFICATION?.memoriesNotification?.map((data) => {
-              return (
-                <ListItem key={data?.profileUrl}>
-                  <Box
-                    sx={{
-                      paddingTop: 3,
-                    }}
-                  >
-                    <Stack
+            {memoriesNotification?.length > 0 &&
+              memoriesNotification?.map((data) => {
+                return (
+                  <ListItem key={data?.created}>
+                    <Box
                       sx={{
-                        border: "1px solid lightBlue",
-                        borderRadius: "8px", // Add rounded corners
-                        padding: "8px", // Add some padding for spacing
-                        width: "auto",
-                        maxWidth: 600, // Set a maximum width
-                        wordWrap: "break-word", // Wrap long words to the next line
-                        alignItems: "center",
-                        justifyContent: "space-between",
+                        paddingTop: 3,
                       }}
-                      direction="row"
                     >
-                      {/* most inner stack */}
                       <Stack
-                        direction="row"
-                        spacing={1}
                         sx={{
-                          display: "flex",
+                          border: "1px solid lightBlue",
+                          borderRadius: "8px", // Add rounded corners
+                          padding: "8px", // Add some padding for spacing
+                          width: "auto",
+                          maxWidth: 600, // Set a maximum width
+                          wordWrap: "break-word", // Wrap long words to the next line
                           alignItems: "center",
+                          justifyContent: "space-between",
                         }}
+                        direction="row"
                       >
-                        <Avatar
-                          alt="Natacha"
-                          srcSet={data?.profileUrl}
-                          src={data?.profileUrl}
-                        />
-                        <Box>
-                          <Typography
-                            variant="body2"
-                            sx={{
-                              marginRight: 5,
-                            }}
-                          >
-                            {data?.userName} just shared a memory
-                          </Typography>
-                        </Box>
+                        {/* most inner stack */}
+                        <Stack
+                          direction="row"
+                          spacing={1}
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Avatar
+                            alt="Natacha"
+                            srcSet={data?.profileUrl}
+                            src={data?.profileUrl}
+                          />
+                          <Box>
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                marginRight: 5,
+                              }}
+                            >
+                              {data?.userName} just shared a memory
+                            </Typography>
+                          </Box>
+                        </Stack>
+                        <Typography variant="caption">
+                          {getTime(data?.created)}
+                        </Typography>
                       </Stack>
-                      <Typography variant="caption">
-                        {getTime(data?.created)}
-                      </Typography>
-                    </Stack>
-                  </Box>
-                </ListItem>
-              );
-            })}
+                    </Box>
+                  </ListItem>
+                );
+              })}
           </List>
         </Stack>
       </Stack>

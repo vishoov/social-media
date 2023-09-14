@@ -1,15 +1,21 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
-import { setHomeMemoriesContent } from "../redux/SocialMediaHomeSlice";
-import { setMemoriesNotification } from "../redux/Notifications";
+// import { setHomeMemoriesContent } from "../redux/SocialMediaHomeSlice";
+// import { setMemoriesNotification } from "../redux/Notifications";
+import { Context as HomeContext } from "../context/HomeContext";
+import { Context as NotificationsContext } from "../context/NotificationContext";
 
 const useMemoriesSubscribeHook = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
 
   const dispatch = useDispatch();
+
+  // context variables
+  const { setHomeMemoriesContent } = useContext(HomeContext);
+  const { setMemoriesNotification } = useContext(NotificationsContext);
 
   // useSelector hooks to get the current state of the store
   const socialMediaUser = useSelector((state) => state.socialMediaUser);
@@ -43,8 +49,15 @@ const useMemoriesSubscribeHook = () => {
             created: data?.created,
           };
 
-          dispatch(setHomeMemoriesContent(jsonData));
-          dispatch(setMemoriesNotification(jsonData));
+          // setHomeMemoriesContent(jsonData);
+
+          setHomeMemoriesContent(jsonData);
+          setMemoriesNotification(jsonData);
+
+          // callBackForHomeMemoriesContent(jsonData);
+
+          // dispatch(setHomeMemoriesContent(jsonData));
+          // dispatch(setMemoriesNotification(jsonData));
 
           // Show a Snackbar notification
           setSnackbarMessage(`${data?.userName} just shared a memory`);
@@ -52,6 +65,9 @@ const useMemoriesSubscribeHook = () => {
         }
       );
     });
+
+    // when i wrote above line now i didn't need to include setHomeMemoriesContent to dependency array
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socialMediaUser?.value?.SocialMediaUserData?.userId, dispatch]);
 
   useEffect(() => {

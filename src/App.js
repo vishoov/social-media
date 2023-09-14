@@ -1,12 +1,15 @@
 import { Routes } from "./Routes";
-import { Provider } from "./context/ProfileContext";
+import { Provider as HomeProvider } from "./context/HomeContext";
+import { Provider as NotificationProvider } from "./context/NotificationContext";
 
 function App() {
   return (
     <>
-      <Provider>
-        <Routes />
-      </Provider>
+      <NotificationProvider>
+        <HomeProvider>
+          <Routes />
+        </HomeProvider>
+      </NotificationProvider>
     </>
   );
 }

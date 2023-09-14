@@ -1,10 +1,8 @@
 import axios from "axios";
 import { useQuery } from "react-query";
-import {
-  setHomeMemoriesContentError,
-  setHomeMemoriesContentWithApiCall,
-} from "../../redux/SocialMediaHomeSlice";
-import { useDispatch } from "react-redux";
+import { useContext } from "react";
+import { Context as HomeContext } from "../../context/HomeContext";
+import { Context as NotificationsContext } from "../../context/NotificationContext";
 
 // base urls
 const url = () => {
@@ -24,7 +22,9 @@ const getMemoriesWithinAWeek = (data) => {
 };
 
 export const useGetMemoriesWithinAWeek = (requiredData) => {
-  const dispatch = useDispatch();
+  const { setHomeMemoriesContentWithApiCall, setHomeMemoriesContentError } =
+    useContext(HomeContext);
+  const { setMemoriesNotificationsUsingApi } = useContext(NotificationsContext);
 
   return useQuery(
     ["getMemoriesWithinAWeek", requiredData],
@@ -41,13 +41,15 @@ export const useGetMemoriesWithinAWeek = (requiredData) => {
                 ?.profile_details?.at(0)
                 ?.urls?.at(0),
               userName: item?.userName,
+              created: item?.memory_details?.created,
             };
             return memories;
           });
 
-          dispatch(setHomeMemoriesContentWithApiCall(wholeData));
+          setHomeMemoriesContentWithApiCall(wholeData);
+          setMemoriesNotificationsUsingApi(wholeData);
         } else {
-          dispatch(setHomeMemoriesContentError(data?.data?.message));
+          setHomeMemoriesContentError(data?.data?.message);
         }
       },
       onError: (error) => {
