@@ -3,8 +3,9 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   searchData: [],
   searchError: null,
-  requestUserSearchData: null,
   requestedUserSearchError: null,
+  isFollowing: false,
+  requestedUserSearchdata: null,
 };
 
 export const searchSlice = createSlice({
@@ -17,11 +18,14 @@ export const searchSlice = createSlice({
     setSearchDataError: (state, action) => {
       state.searchError = action.payload;
     },
-    setRequestUserSearchData: (state, action) => {
-      state.requestUserSearchData = action.payload;
-    },
     setRequestedUserSearchError: (state, action) => {
       state.requestedUserSearchError = action.payload;
+    },
+    setIsFollowing: (state, action) => {
+      state.isFollowing = action.payload;
+    },
+    setRequestedUserSearchData: (state, action) => {
+      state.requestedUserSearchdata = action.payload;
     },
   },
 });
@@ -29,7 +33,8 @@ export const searchSlice = createSlice({
 export const {
   setSearchData,
   setSearchDataError,
-  setRequestUserSearchData,
   setRequestedUserSearchError,
+  setIsFollowing,
+  setRequestedUserSearchData,
 } = searchSlice.actions;
 export default searchSlice.reducer;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useContext, useEffect } from "react";
 import { AIUpBar } from "../../../ReuseableComponents/AIUpBar";
 import { AISideBar } from "../../../ReuseableComponents/AISideBar";
 import { Avatar, Box, Stack, Typography } from "@mui/material";
@@ -9,13 +9,49 @@ import jenPic1 from "../../../static/images/avatar/jen1.jpeg";
 import jenPic2 from "../../../static/images/avatar/jen2.jpeg";
 import jenPic3 from "../../../static/images/avatar/jen3.jpeg";
 import jenPic4 from "../../../static/images/avatar/jen4.jpeg";
-import { useSelector } from "react-redux";
 import { ShowMemoryBarOfAnotherUsers } from "../../../ReuseableComponents/Profile/ShowMemoryBarOfAnotherUsers";
+import { Context as SearchContext } from "../../../context/SearchContext";
+
 import { useParams } from "react-router-dom";
+import { useGetUserProfileInfo } from "../../APIs/SocialMediaSearchInterfaceApi";
+import { useCookies } from "react-cookie";
 
 export const AnotherUsersProfile = () => {
-  const searchData = useSelector((state) => state?.search);
   const { username } = useParams();
+
+  const {
+    state: { requestUserSearchData },
+    setRequestUserSearchData,
+  } = useContext(SearchContext);
+
+  const [cookies] = useCookies(["avt_token"]);
+
+  const { mutate: mutateUserProfile, data } = useGetUserProfileInfo();
+
+  const callBack = useCallback(() => {
+    if (data?.status === 200) {
+      console.log("2");
+      setRequestUserSearchData(data?.data?.data);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data?.status]);
+
+  useEffect(() => {
+    if (data?.data?.data === undefined || data?.data?.data === null) {
+      console.log("1");
+      mutateUserProfile({
+        username: username,
+        Authorization: cookies?.avt_token,
+      });
+    } else {
+      if (data?.status === 200) {
+        console.log("2");
+        setRequestUserSearchData(data?.data?.data);
+      }
+    }
+    // callBack();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [callBack, data?.status, data?.data?.data]);
 
   return (
     <>
@@ -26,8 +62,7 @@ export const AnotherUsersProfile = () => {
             message={true}
             MoreButton={true}
             userName={
-              searchData?.requestUserSearchData?.userPersonalDetails
-                ?.userName || username
+              requestUserSearchData?.userPersonalDetails?.userName || username
             }
             otherUser={true}
           />
@@ -136,7 +171,7 @@ export const AnotherUsersProfile = () => {
             <Avatar
               alt="Avatar"
               id="avatar"
-              src={searchData?.requestUserSearchData?.userProfilePics
+              src={requestUserSearchData?.userProfilePics
                 ?.at(0)
                 ?.profile_details?.at(0)
                 ?.urls?.at(0)}
@@ -155,14 +190,8 @@ export const AnotherUsersProfile = () => {
               }}
             >
               <b>
-                {
-                  searchData?.requestUserSearchData?.userPersonalDetails
-                    ?.firstName
-                }{" "}
-                {
-                  searchData?.requestUserSearchData?.userPersonalDetails
-                    ?.lastName
-                }
+                {requestUserSearchData?.userPersonalDetails?.firstName}{" "}
+                {requestUserSearchData?.userPersonalDetails?.lastName}
               </b>
             </p>
           </Box>

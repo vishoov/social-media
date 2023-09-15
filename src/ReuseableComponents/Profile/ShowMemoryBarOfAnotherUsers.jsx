@@ -1,16 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import { Box, Typography } from "@mui/material";
 import { useGetUserProfileInfo } from "../../SocialMedia/APIs/SocialMediaSearchInterfaceApi";
 import { OtherUsersMemoryImages } from "./OtherUsersMemoryImages";
-import { useSelector } from "react-redux";
+import { Context as SearchContext } from "../../context/SearchContext";
 
 export const ShowMemoryBarOfAnotherUsers = ({ username }) => {
   const [cookies] = useCookies(["avt_token"]);
 
   const { mutate } = useGetUserProfileInfo();
 
-  const search = useSelector((state) => state.search);
+  const {
+    state: { requestUserSearchData },
+  } = useContext(SearchContext);
 
   useEffect(() => {
     console.log("hello:::::");
@@ -37,7 +39,7 @@ export const ShowMemoryBarOfAnotherUsers = ({ username }) => {
         }}
       >
         <div>
-          {search?.requestUserSearchData?.userMemoriesDetails !== undefined ? (
+          {requestUserSearchData?.userMemoriesDetails !== undefined ? (
             <Box display="flex" justifyContent="center">
               <OtherUsersMemoryImages />
             </Box>

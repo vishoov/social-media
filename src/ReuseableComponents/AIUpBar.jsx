@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { AIButton } from "./AIButton";
 import { MoreHorizRounded, SettingsSuggestRounded } from "@mui/icons-material";
 import { useNavigate, useParams } from "react-router-dom";
@@ -11,6 +11,7 @@ import {
 } from "../SocialMedia/APIs/SocialMediaProfileInterfaceAPI";
 import { useCookies } from "react-cookie";
 import { setFollowButtonChange } from "../redux/UtilitiesSlice";
+import { Context as SearchContext } from "../context/SearchContext";
 
 export const AIUpBar = ({
   editProfile,
@@ -33,14 +34,14 @@ export const AIUpBar = ({
   const search = useSelector((state) => state.search);
   const socialMediaUser = useSelector((state) => state.socialMediaUser);
   const auth = useSelector((state) => state.auth);
-  const utilities = useSelector((state) => state.utilities);
+  // const utilities = useSelector((state) => state.utilities);
 
   // useCookies hook
   const [cookies] = useCookies(["avt_token"]);
 
   const dispatch = useDispatch();
 
-  const userId =
+  var userId =
     localStorage.getItem("sm_user_id") ||
     socialMediaUser?.value?.SocialMediaUserData?.userId ||
     auth?.value?.userDetails?.userId;
@@ -57,12 +58,11 @@ export const AIUpBar = ({
     if (userId !== null || userId !== undefined) {
       const json = {
         data: {
-          userId: search?.requestUserSearchData?.userPersonalDetails?.userId,
+          userId: search?.requestedUserSearchdata?.userId,
           followerId: parseInt(userId),
         },
         Authorization: cookies?.avt_token,
       };
-      console.log("hello world!!!1", json);
       mutate(json);
     } else {
       if (requestedUserData === null) {
@@ -72,6 +72,10 @@ export const AIUpBar = ({
       }
     }
   };
+
+  const {
+    state: { requestUserSearchData },
+  } = useContext(SearchContext);
 
   return (
     <>
@@ -93,7 +97,7 @@ export const AIUpBar = ({
               textAlign: "start",
               fontSize: 18,
               color: "black",
-              paddingRight: 25,
+              paddingRight: 23,
             }}
           >
             <b>{userName}</b>
@@ -126,12 +130,10 @@ export const AIUpBar = ({
                 }}
               >
                 <b>
-                  {search?.requestUserSearchData?.userMemoriesDetails?.results?.at(
-                    0
-                  )?.memory_details?.length > 0
-                    ? search?.requestUserSearchData?.userMemoriesDetails?.results?.at(
-                        0
-                      )?.memory_details?.length
+                  {requestUserSearchData?.userMemoriesDetails?.results?.at(0)
+                    ?.memory_details?.length > 0
+                    ? requestUserSearchData?.userMemoriesDetails?.results?.at(0)
+                        ?.memory_details?.length
                     : 0}
                 </b>{" "}
                 Memories
@@ -198,7 +200,17 @@ export const AIUpBar = ({
         )}
         {follow && (
           <Box>
-            {utilities?.profile?.followButtonChanged ? (
+            {search?.isFollowing ? (
+              <AIButton
+                content="Following"
+                style={{
+                  marginLeft: 480,
+                }}
+                onClick={() => {
+                  dispatch(setFollowButtonChange(true));
+                }}
+              />
+            ) : (
               <AIButton
                 content="follow"
                 style={{
@@ -206,16 +218,6 @@ export const AIUpBar = ({
                 }}
                 onClick={() => {
                   followHandler();
-                }}
-              />
-            ) : (
-              <AIButton
-                content="unfollow"
-                style={{
-                  marginLeft: 480,
-                }}
-                onClick={() => {
-                  dispatch(setFollowButtonChange(true));
                 }}
               />
             )}

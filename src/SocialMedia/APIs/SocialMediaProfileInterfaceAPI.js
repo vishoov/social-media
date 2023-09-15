@@ -3,7 +3,7 @@ import { useMutation, useQuery } from "react-query";
 import { setSocialMediaUserData } from "../../redux/SocialMediaUserSlice";
 import { useDispatch } from "react-redux";
 import { OTHER_ERROR, USER_DETAILS } from "../../redux/AuthSlice";
-import { setFollowButtonChange } from "../../redux/UtilitiesSlice";
+import { setIsFollowing } from "../../redux/SearchSlice";
 
 // base urls
 
@@ -47,6 +47,8 @@ const uploadProfilePic = (formData) => {
 };
 
 const getProfileDetails = (formData) => {
+  console.log("hey form", formData);
+
   return url1().get("/get/userbyjwt", {
     headers: {
       Authorization: "Bearer " + formData?.Authorization,
@@ -96,7 +98,7 @@ export const useFollowPerson = () => {
     onSuccess: (data) => {
       console.log("status code :", data?.status);
       if (data?.status === 200) {
-        dispatch(setFollowButtonChange(false));
+        dispatch(setIsFollowing(true));
       } else {
         alert("not found!!!");
       }
@@ -115,6 +117,8 @@ export const useUploadProfilePics = () => {
 export const useGetProfileDetails = (formData) => {
   const dispatch = useDispatch();
 
+  console.log("form data :", formData);
+
   return useQuery(
     ["getProfileDetails", formData],
     () => getProfileDetails(formData),
@@ -124,7 +128,6 @@ export const useGetProfileDetails = (formData) => {
       },
       onSuccess: (data) => {
         if (data?.data?.data !== null || data?.data?.data !== undefined) {
-          console.log("data received from backend");
           dispatch(setSocialMediaUserData(data?.data?.data));
         }
       },

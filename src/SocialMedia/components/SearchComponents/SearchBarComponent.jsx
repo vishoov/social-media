@@ -11,24 +11,42 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import jen1 from "../../../static/images/avatar/jen.jpeg";
 import {
+  useCheckIsUserFollowingTheOtherUser,
   useGetUserBySearch,
   useGetUserProfileInfo,
 } from "../../APIs/SocialMediaSearchInterfaceApi";
 import { useCookies } from "react-cookie";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setIsFollowing,
+  setRequestedUserSearchData,
+} from "../../../redux/SearchSlice";
+import { useNavigate } from "react-router-dom";
+import { Context as SearchContext } from "../../../context/SearchContext";
 
 export const SearchBarComponent = ({ onClose, open }) => {
   const [cookies] = useCookies(["avt_token"]);
   const [token, setToken] = useState(null);
+  const [called, setCalled] = useState(false);
 
   const { mutate } = useGetUserBySearch();
 
-  const { mutate: mutateUserProfile } = useGetUserProfileInfo();
+  const { mutate: mutateUserProfile, data } = useGetUserProfileInfo();
+
+  const { mutate: mutateIsFollowing, data: responseData } =
+    useCheckIsUserFollowingTheOtherUser();
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { setRequestUserSearchData } = useContext(SearchContext);
 
   const search = useSelector((state) => state.search);
+
+  const socialMediaUser = useSelector((state) => state.socialMediaUser);
 
   const handleChange = (search) => {
     const data = {
@@ -42,7 +60,63 @@ export const SearchBarComponent = ({ onClose, open }) => {
     if (token === null) {
       setToken(cookies?.avt_token);
     }
-  }, [cookies.avt_token, token, search]);
+  }, [cookies.avt_token, token]);
+
+  useEffect(() => {
+    if (data?.status === 200) {
+      setRequestUserSearchData(data?.data?.data);
+      if (
+        data?.data?.data?.userPersonalDetails?.userName ===
+        socialMediaUser?.value?.SocialMediaUserData?.userName
+      ) {
+        navigate("/environment/socialMedia/profile");
+      } else {
+        if (called === false) {
+          dispatch(
+            setRequestedUserSearchData(data?.data?.data?.userPersonalDetails)
+          );
+          mutateIsFollowing({
+            Authorization: token,
+            followingdata: {
+              userId: localStorage.getItem("sm_user_id"),
+              followingId: data?.data?.data?.userPersonalDetails?.userId,
+            },
+          });
+        } else {
+          setCalled(true);
+        }
+      }
+    }
+    // eslint-disable-next-line
+  }, [
+    data?.status,
+    data?.data?.data,
+    socialMediaUser?.value?.SocialMediaUserData?.userName,
+    mutateIsFollowing,
+    navigate,
+    token,
+    called,
+  ]);
+
+  useEffect(() => {
+    if (responseData?.status === 200) {
+      dispatch(setIsFollowing(true));
+      navigate(
+        `/environment/socialMedia/profile/${data?.data?.data?.userPersonalDetails?.userName}`
+      );
+    } else if (responseData?.status === 202) {
+      dispatch(setIsFollowing(false));
+      navigate(
+        `/environment/socialMedia/profile/${data?.data?.data?.userPersonalDetails?.userName}`
+      );
+    }
+  }, [
+    responseData?.data?.data,
+    responseData?.status,
+    data?.data?.data?.userPersonalDetails?.userName,
+    dispatch,
+    navigate,
+  ]);
 
   const handleNavigate = (username) => {
     if (username !== null) {
@@ -50,6 +124,7 @@ export const SearchBarComponent = ({ onClose, open }) => {
         username: username,
         Authorization: token,
       });
+      dispatch(setIsFollowing(false));
 
       onClose();
     }

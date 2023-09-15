@@ -1,10 +1,12 @@
 import { ImageList, ImageListItem } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useContext, useState } from "react";
 import { ShowMemoryModel } from "./ShowMemoryModel";
+import { Context as SearchContext } from "../../context/SearchContext";
 
 export const OtherUsersMemoryImages = () => {
-  const search = useSelector((state) => state?.search);
+  const {
+    state: { requestUserSearchData },
+  } = useContext(SearchContext);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImageUrl, setSelectedImageUrl] = useState("");
@@ -19,10 +21,6 @@ export const OtherUsersMemoryImages = () => {
     setIsModalOpen(false);
   };
 
-  useEffect(() => {
-    console.log("search :", search);
-  }, [search]);
-
   return (
     <ImageList
       sx={{
@@ -31,8 +29,8 @@ export const OtherUsersMemoryImages = () => {
       }}
       cols={3}
     >
-      {search !== undefined &&
-        search?.requestUserSearchData?.userMemoriesDetails?.results
+      {requestUserSearchData !== undefined &&
+        requestUserSearchData?.userMemoriesDetails?.results
           ?.at(0)
           ?.memory_details?.map((item) => (
             <ImageListItem key={item?.urls?.at(0)}>

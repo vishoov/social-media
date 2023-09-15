@@ -9,12 +9,10 @@ export const AICheckSession = () => {
   useEffect(() => {
     console.log("AICheckSession");
     if (cookies?.avt_token !== null && cookies?.avt_token !== undefined) {
-      console.log("hiiiii......12322424");
       if (
         localStorage.getItem("soc_ak_code") !== null &&
         localStorage.getItem("soc_ak_code") !== undefined
       ) {
-        console.log("hiiiii......");
         navigate("/environment/socialMedia/home");
       } else {
         navigate("/environment/home");
