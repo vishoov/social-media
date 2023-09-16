@@ -14,9 +14,11 @@ import { ShowLinksBar } from "../../../ReuseableComponents/Profile/ShowLinksBar"
 import { useGetProfileDetails } from "../../APIs/SocialMediaProfileInterfaceAPI";
 import { useCookies } from "react-cookie";
 import { useSelector } from "react-redux";
+import { useGetMemoriesCount } from "../../APIs/SocialMediaMemoryInterfaceAPI";
 
 export const AISocialMediaProfileInterface = () => {
   const [requiredData, setRequiredData] = useState(null);
+  const [requiredData1, setRequiredData1] = useState(null);
 
   const { refetch } = useGetProfileDetails(requiredData);
   const [cookies] = useCookies(["avt_token"]);
@@ -24,11 +26,22 @@ export const AISocialMediaProfileInterface = () => {
   const userData = useSelector((state) => state.socialMediaUser);
   const memories = useSelector((state) => state.memories);
 
-  useEffect(() => {
-    // var isPresent = JSON.parse(
-    //   JSON.parse(localStorage.getItem("persist:root"))?.auth
-    // ).value?.signupData;
+  const { refetch: refetchMemoryCount } = useGetMemoriesCount(requiredData1);
 
+  useEffect(() => {
+    if (requiredData1 === null) {
+      const requestedData = {
+        userId: localStorage.getItem("sm_user_id"),
+        Authorization: cookies.avt_token,
+      };
+
+      setRequiredData1(requestedData);
+    } else {
+      refetchMemoryCount();
+    }
+  }, [cookies.avt_token, refetchMemoryCount, requiredData1]);
+
+  useEffect(() => {
     if (
       userData?.value?.SocialMediaUserData === null ||
       memories?.value?.socialMediaMemories === null
@@ -38,7 +51,6 @@ export const AISocialMediaProfileInterface = () => {
       };
 
       if (requiredData) {
-        console.log("Please provide a required data");
         refetch();
       } else {
         setRequiredData(data);

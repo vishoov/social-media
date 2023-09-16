@@ -4,6 +4,10 @@ import { setSocialMediaUserData } from "../../redux/SocialMediaUserSlice";
 import { useDispatch } from "react-redux";
 import { OTHER_ERROR, USER_DETAILS } from "../../redux/AuthSlice";
 import { setIsFollowing } from "../../redux/SearchSlice";
+import {
+  setProfilePicUploadError,
+  setProfileUserPersonalDataError,
+} from "../../redux/ProfileSlice";
 
 // base urls
 
@@ -47,8 +51,6 @@ const uploadProfilePic = (formData) => {
 };
 
 const getProfileDetails = (formData) => {
-  console.log("hey form", formData);
-
   return url1().get("/get/userbyjwt", {
     headers: {
       Authorization: "Bearer " + formData?.Authorization,
@@ -71,7 +73,6 @@ export const useGetUserDataInProfile = (userData) => {
 
   return useQuery(["getUserData", userData], () => getUserData(userData), {
     onError: (error) => {
-      console.log("error ::::", error);
       dispatch(OTHER_ERROR(error));
     },
     onSuccess: (data) => {
@@ -92,24 +93,21 @@ export const useFollowPerson = () => {
   const dispatch = useDispatch();
 
   return useMutation(followSomeone, {
-    onError: (error) => {
-      console.log(error);
-    },
     onSuccess: (data) => {
-      console.log("status code :", data?.status);
       if (data?.status === 200) {
         dispatch(setIsFollowing(true));
       } else {
-        alert("not found!!!");
+        dispatch(setIsFollowing(false));
       }
     },
   });
 };
 
 export const useUploadProfilePics = () => {
+  const dispatch = useDispatch();
   return useMutation(uploadProfilePic, {
     onError: (error) => {
-      console.log(error);
+      dispatch(setProfilePicUploadError(error?.response?.data?.message));
     },
   });
 };
@@ -117,17 +115,17 @@ export const useUploadProfilePics = () => {
 export const useGetProfileDetails = (formData) => {
   const dispatch = useDispatch();
 
-  console.log("form data :", formData);
-
   return useQuery(
     ["getProfileDetails", formData],
     () => getProfileDetails(formData),
     {
       onError: (error) => {
-        console.log(error);
+        dispatch(
+          setProfileUserPersonalDataError(error?.response?.data?.message)
+        );
       },
       onSuccess: (data) => {
-        if (data?.data?.data !== null || data?.data?.data !== undefined) {
+        if (data?.status === 200) {
           dispatch(setSocialMediaUserData(data?.data?.data));
         }
       },

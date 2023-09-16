@@ -54,9 +54,8 @@ const checkIsUserFollowingTheOtherUser = (user) => {
 
 export const useCheckIsUserFollowingTheOtherUser = () => {
   return useMutation(checkIsUserFollowingTheOtherUser, {
-    onError: (error) => {
-      alert(error.message);
-    },
+    retry: 5,
+    retryDelay: 1000,
   });
 };
 
@@ -65,7 +64,6 @@ export const useGetUserBySearch = () => {
 
   return useMutation(getUserBySearch, {
     onError: (error) => {
-      console.log(error);
       dispatch(setSearchDataError(error));
     },
     onSuccess: (data) => {
@@ -81,8 +79,6 @@ export const useGetUserBySearch = () => {
 
 export const useGetUserProfileInfo = () => {
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
-  // const socialMediaUser = useSelector((state) => state.socialMediaUser);
 
   return useMutation(getUserProfileInfo, {
     onError: (error) => {
@@ -92,27 +88,5 @@ export const useGetUserProfileInfo = () => {
         dispatch(setRequestedUserSearchError("no memories are available"));
       }
     },
-    // onSuccess: (data) => {
-    //   if (data?.status === 200) {
-    //     dispatch(setRequestUserSearchData(data?.data?.data));
-    //     if (
-    //       data?.data?.data?.userPersonalDetails?.userName ===
-    //       socialMediaUser?.value?.SocialMediaUserData?.userName
-    //     ) {
-    //       navigate("/environment/socialMedia/profile");
-    //     } else {
-    //       navigate(
-    //         `/environment/socialMedia/profile/${data?.data?.data?.userPersonalDetails?.userName}`,
-    //         {
-    //           state: {
-    //             data: true,
-    //           },
-    //         }
-    //       );
-    //     }
-    //   } else {
-    //     dispatch(setRequestUserSearchData(data?.data?.message));
-    //   }
-    // },
   });
 };

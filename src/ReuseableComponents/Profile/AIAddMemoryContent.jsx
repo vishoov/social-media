@@ -25,7 +25,7 @@ export const AIAddMemoryContent = ({ updatedCroppedPic, upBarNext1 }) => {
   const { register, handleSubmit } = useForm();
 
   //use share memory hook
-  const { data, isLoading, mutate , isSuccess } = useShareMemory();
+  const { data, isLoading, mutate, isSuccess } = useShareMemory();
 
   const downloadImage = async () => {
     try {
@@ -96,28 +96,12 @@ export const AIAddMemoryContent = ({ updatedCroppedPic, upBarNext1 }) => {
             upBar={newUpBarNext3}
             isLoading={isLoading}
             data={data}
-            isSuccess  = {isSuccess}
+            isSuccess={isSuccess}
           />
         </div>
       ) : (
         <>
           {newUpBarNext2}
-          {/* <Stack
-            sx={{
-              paddingRight: 20,
-            }}
-            direction="row"
-          >
-            <Box>
-              <Avatar
-                variant="square"
-                sx={{
-                  width: 200,
-                  height: 50,
-                }}
-              />
-            </Box>
-          </Stack> */}
           <div>
             <Box
               sx={{

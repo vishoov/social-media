@@ -9,6 +9,7 @@ import SearchReducer from "./redux/SearchSlice";
 import HomeReducer from "./redux/SocialMediaHomeSlice";
 import UtilitiesSlice from "./redux/UtilitiesSlice";
 import NotificationSlice from "./redux/Notifications";
+import profileReducer from "./redux/ProfileSlice";
 
 const persistConfig = {
   key: "root",
@@ -24,6 +25,7 @@ const rootReducer = combineReducers({
   home: HomeReducer,
   utilities: UtilitiesSlice,
   notification: NotificationSlice,
+  profile: profileReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

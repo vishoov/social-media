@@ -7,7 +7,6 @@ export const AICheckSession = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("AICheckSession");
     if (cookies?.avt_token !== null && cookies?.avt_token !== undefined) {
       if (
         localStorage.getItem("soc_ak_code") !== null &&

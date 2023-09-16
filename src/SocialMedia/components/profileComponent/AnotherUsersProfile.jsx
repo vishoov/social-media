@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { AIUpBar } from "../../../ReuseableComponents/AIUpBar";
 import { AISideBar } from "../../../ReuseableComponents/AISideBar";
 import { Avatar, Box, Stack, Typography } from "@mui/material";
@@ -15,6 +15,8 @@ import { Context as SearchContext } from "../../../context/SearchContext";
 import { useParams } from "react-router-dom";
 import { useGetUserProfileInfo } from "../../APIs/SocialMediaSearchInterfaceApi";
 import { useCookies } from "react-cookie";
+import { useSelector } from "react-redux";
+import { useGetMemoriesCount } from "../../APIs/SocialMediaMemoryInterfaceAPI";
 
 export const AnotherUsersProfile = () => {
   const { username } = useParams();
@@ -24,13 +26,15 @@ export const AnotherUsersProfile = () => {
     setRequestUserSearchData,
   } = useContext(SearchContext);
 
+  const [requiredData1, setRequiredData1] = useState(null);
+  const search = useSelector((state) => state.search);
+
   const [cookies] = useCookies(["avt_token"]);
 
   const { mutate: mutateUserProfile, data } = useGetUserProfileInfo();
 
   const callBack = useCallback(() => {
     if (data?.status === 200) {
-      console.log("2");
       setRequestUserSearchData(data?.data?.data);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -38,20 +42,38 @@ export const AnotherUsersProfile = () => {
 
   useEffect(() => {
     if (data?.data?.data === undefined || data?.data?.data === null) {
-      console.log("1");
       mutateUserProfile({
         username: username,
         Authorization: cookies?.avt_token,
       });
     } else {
       if (data?.status === 200) {
-        console.log("2");
         setRequestUserSearchData(data?.data?.data);
       }
     }
     // callBack();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [callBack, data?.status, data?.data?.data]);
+
+  const { refetch: refetchMemoryCount } = useGetMemoriesCount(requiredData1);
+
+  useEffect(() => {
+    if (requiredData1 === null) {
+      const requestedData = {
+        userId: search?.searchData?.at(0)?.userId,
+        Authorization: cookies.avt_token,
+      };
+
+      setRequiredData1(requestedData);
+    } else {
+      refetchMemoryCount();
+    }
+  }, [
+    cookies.avt_token,
+    refetchMemoryCount,
+    requiredData1,
+    search?.searchData,
+  ]);
 
   return (
     <>

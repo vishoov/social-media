@@ -1,7 +1,14 @@
 import axios from "axios";
 import { useMutation, useQuery } from "react-query";
 import { useDispatch } from "react-redux";
-import { setSocialMediaMemories } from "../../redux/SocialMediaMemoriesSlice";
+import {
+  setAbnormalError,
+  setMemoryCreationError,
+  setMemoryNotFoundError,
+  setMemoryNotFoundForOtherUserError,
+} from "../../redux/SocialMediaMemoriesSlice";
+import { useContext } from "react";
+import { Context as MemoryContext } from "../../context/MemoryContext";
 
 const urls = () => {
   return axios.create({
@@ -19,7 +26,19 @@ const shareMemory = (memoryData) => {
 };
 
 const getAllMemories = (memoryData) => {
-  return urls().get("/get/allof", {
+  return urls().get("/get/allof/lazy", {
+    params: {
+      userId: memoryData?.userId,
+      pageNumber: memoryData?.pageNumber,
+    },
+    headers: {
+      Authorization: "Bearer " + memoryData?.Authorization,
+    },
+  });
+};
+
+const getMemoryCount = (memoryData) => {
+  return urls().get("/get/memories/count", {
     params: {
       userId: memoryData?.userId,
     },
@@ -30,35 +49,107 @@ const getAllMemories = (memoryData) => {
 };
 
 export const useShareMemory = () => {
+  const dispatch = useDispatch();
+
   return useMutation(shareMemory, {
-    onError: (error) => console.log(error),
-    retry: 5,
-    retryDelay: 1000,
+    onError: (error) => {
+      dispatch(setMemoryCreationError(error?.response?.data?.message));
+    },
   });
 };
 
 export const useGetAllMemories = (memoryData) => {
   const dispatch = useDispatch();
 
+  const { setSocialMediaMemories } = useContext(MemoryContext);
+
   return useQuery(
     ["getAllMemories", memoryData],
     () => getAllMemories(memoryData),
     {
-      onError: (error) => console.log(error),
+      onError: (error) => {
+        dispatch(setAbnormalError(error?.response?.data?.message));
+      },
       onSuccess: (data) => {
-        console.log("commited data:", data?.data?.data?.results);
+        console.log("hello success", data?.data?.data);
 
-        var wholeData = data?.data?.data?.results?.map((memories) =>
-          memories?.memory_details?.map((memory_details) => {
-            var combained_details = {
-              urls: memory_details?.urls?.at(0),
-              feelings: memory_details?.feelings,
+        if (data?.status === 200 && data?.data?.data?.results?.length > 0) {
+          var wholeData = data?.data?.data?.results?.map((memories) => {
+            var memory_details = {
+              urls: memories?.memory_details?.urls?.at(0),
+              feelings: memories?.memory_details?.feelings,
             };
-            return combained_details;
-          })
-        );
-        localStorage.setItem("done", true);
-        dispatch(setSocialMediaMemories(wholeData));
+            return memory_details;
+          });
+
+          localStorage.setItem("done", true);
+
+          setSocialMediaMemories(wholeData);
+          dispatch(setMemoryNotFoundError(null));
+        } else {
+          dispatch(setMemoryNotFoundError(data?.data?.message));
+        }
+      },
+      refetchOnMount: false,
+      enabled: !!memoryData,
+      retry: 5,
+      retryDelay: 1000,
+    }
+  );
+};
+
+export const useGetMemoriesCount = (memoryData) => {
+  const dispatch = useDispatch();
+  const { setMemoryCount } = useContext(MemoryContext);
+  return useQuery(
+    ["getMemoryCount", memoryData],
+    () => getMemoryCount(memoryData),
+    {
+      onError: (error) => {
+        dispatch(setAbnormalError(error?.response?.data?.message));
+      },
+      onSuccess: (data) => {
+        if (data?.status === 200) {
+          setMemoryCount(data?.data?.data);
+        }
+      },
+      refetchOnMount: false,
+      enabled: !!memoryData,
+      retry: 5,
+      retryDelay: 1000,
+    }
+  );
+};
+
+export const useGetAllMemoriesForOtherUser = (memoryData) => {
+  const dispatch = useDispatch();
+
+  const { setSocialMediaMemoriesOfAnotherUser } = useContext(MemoryContext);
+
+  return useQuery(
+    ["getAllMemories", memoryData],
+    () => getAllMemories(memoryData),
+    {
+      onError: (error) => {
+        dispatch(setAbnormalError(error?.response?.data?.message));
+      },
+      onSuccess: (data) => {
+        console.log("hello success", data?.data?.data);
+
+        if (data?.status === 200 && data?.data?.data?.results?.length > 0) {
+          var wholeData = data?.data?.data?.results?.map((memories) => {
+            var memory_details = {
+              urls: memories?.memory_details?.urls?.at(0),
+              feelings: memories?.memory_details?.feelings,
+            };
+            return memory_details;
+          });
+
+          setSocialMediaMemoriesOfAnotherUser(wholeData);
+          dispatch(setMemoryNotFoundForOtherUserError(null));
+        } else {
+          dispatch(setMemoryNotFoundForOtherUserError(data?.data?.message));
+        }
       },
       refetchOnMount: false,
       enabled: !!memoryData,

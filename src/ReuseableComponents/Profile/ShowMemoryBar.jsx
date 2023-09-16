@@ -1,36 +1,34 @@
 import { AddAPhotoRounded } from "@mui/icons-material";
 import { Box, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import AICreateMemoryModel from "./AICreateMemoryModel";
 import { MemoryImages } from "./MemoryImages";
 import { useGetAllMemories } from "../../SocialMedia/APIs/SocialMediaMemoryInterfaceAPI";
 import { useCookies } from "react-cookie";
-import { useSelector } from "react-redux";
+import { Context as MemoryContext } from "../../context/MemoryContext";
 
 export const ShowMemoryBar = () => {
   const [requiredDataforRequest, setRequiredDataforRequest] = useState(null);
 
   const [cookies] = useCookies(["avt_token"]);
 
+  const {
+    state: { socialMediaMemories },
+  } = useContext(MemoryContext);
+
   const { refetch } = useGetAllMemories(requiredDataforRequest);
 
-  const memories = useSelector((state) => state.memories);
-
-  const random = localStorage.getItem("random");
+  // const random = localStorage.getItem("random");
 
   useEffect(() => {
-    var isPresent = JSON.parse(
-      JSON.parse(localStorage.getItem("persist:root"))?.memories
-    ).value?.socialMediaMemories;
-
     if (
       localStorage.getItem("done") === "false" ||
-      memories?.value?.socialMediaMemories?.length < 0 ||
-      isPresent?.length <= 0
+      socialMediaMemories?.length <= 0
     ) {
       const memoryData = {
         Authorization: cookies?.avt_token,
         userId: localStorage.getItem("sm_user_id"),
+        pageNumber: 1,
       };
 
       if (requiredDataforRequest !== null) {
@@ -43,8 +41,7 @@ export const ShowMemoryBar = () => {
     cookies?.avt_token,
     requiredDataforRequest,
     refetch,
-    memories?.value?.socialMediaMemories?.length,
-    random,
+    socialMediaMemories?.length,
   ]);
 
   return (

@@ -40,15 +40,18 @@ export const useAddSocialMediaUser = () => {
         data?.data?.data?.socialMediaUserId !== undefined
       ) {
         dispatch(setSocialMediaUserData(profileData?.data?.data));
+
         localStorage.setItem("sm_user_id", data?.data?.data?.socialMediaUserId);
+
         navigate("/environment/socialMedia/home");
       } else {
         dispatch(setSocialMediaUserError("invalid credentials"));
+
         navigate("/environment/socialMedia/activate");
       }
     },
     onError: (error) => {
-      console.log(error);
+      dispatch(setSocialMediaUserError(error?.response?.data?.message));
     },
   });
 };

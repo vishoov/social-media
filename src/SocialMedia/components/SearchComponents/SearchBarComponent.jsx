@@ -65,26 +65,20 @@ export const SearchBarComponent = ({ onClose, open }) => {
   useEffect(() => {
     if (data?.status === 200) {
       setRequestUserSearchData(data?.data?.data);
-      if (
-        data?.data?.data?.userPersonalDetails?.userName ===
-        socialMediaUser?.value?.SocialMediaUserData?.userName
-      ) {
-        navigate("/environment/socialMedia/profile");
+
+      if (called === false) {
+        dispatch(
+          setRequestedUserSearchData(data?.data?.data?.userPersonalDetails)
+        );
+        mutateIsFollowing({
+          Authorization: token,
+          followingdata: {
+            userId: localStorage.getItem("sm_user_id"),
+            followingId: data?.data?.data?.userPersonalDetails?.userId,
+          },
+        });
       } else {
-        if (called === false) {
-          dispatch(
-            setRequestedUserSearchData(data?.data?.data?.userPersonalDetails)
-          );
-          mutateIsFollowing({
-            Authorization: token,
-            followingdata: {
-              userId: localStorage.getItem("sm_user_id"),
-              followingId: data?.data?.data?.userPersonalDetails?.userId,
-            },
-          });
-        } else {
-          setCalled(true);
-        }
+        setCalled(true);
       }
     }
     // eslint-disable-next-line
@@ -120,12 +114,15 @@ export const SearchBarComponent = ({ onClose, open }) => {
 
   const handleNavigate = (username) => {
     if (username !== null) {
-      mutateUserProfile({
-        username: username,
-        Authorization: token,
-      });
-      dispatch(setIsFollowing(false));
-
+      if (username === socialMediaUser?.value?.SocialMediaUserData?.userName) {
+        navigate("/environment/socialMedia/profile");
+      } else {
+        mutateUserProfile({
+          username: username,
+          Authorization: token,
+        });
+        dispatch(setIsFollowing(false));
+      }
       onClose();
     }
   };

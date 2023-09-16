@@ -3,6 +3,10 @@ import { useQuery } from "react-query";
 import { useContext } from "react";
 import { Context as HomeContext } from "../../context/HomeContext";
 import { Context as NotificationsContext } from "../../context/NotificationContext";
+import {
+  setAbnormalError,
+  setMemoryNotFoundError,
+} from "../../redux/SocialMediaMemoriesSlice";
 
 // base urls
 const url = () => {
@@ -22,8 +26,7 @@ const getMemoriesWithinAWeek = (data) => {
 };
 
 export const useGetMemoriesWithinAWeek = (requiredData) => {
-  const { setHomeMemoriesContentWithApiCall, setHomeMemoriesContentError } =
-    useContext(HomeContext);
+  const { setHomeMemoriesContentWithApiCall } = useContext(HomeContext);
   const { setMemoriesNotificationsUsingApi } = useContext(NotificationsContext);
 
   return useQuery(
@@ -49,11 +52,11 @@ export const useGetMemoriesWithinAWeek = (requiredData) => {
           setHomeMemoriesContentWithApiCall(wholeData);
           setMemoriesNotificationsUsingApi(wholeData);
         } else {
-          setHomeMemoriesContentError(data?.data?.message);
+          setMemoryNotFoundError(data?.data?.message);
         }
       },
       onError: (error) => {
-        alert(error);
+        setAbnormalError(error?.response?.data?.message);
       },
       retryOnMount: false,
       enabled: !!requiredData,

@@ -1,44 +1,63 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
+import { useGetProfileDetails } from "../SocialMedia/APIs/SocialMediaProfileInterfaceAPI";
+import jen1 from "../static/images/avatar/Jen20.jpeg";
+import { Avatar } from "@mui/material";
+import { useSelector } from "react-redux";
 
-export const AILoader = () => {
-  // const [requiredData1, setRequiredData1] = useState(null);
+export const AILoader = ({ children }) => {
+  const [cookies] = useCookies(["avt_token"]);
 
-  // const { refetch } = useGetProfileDetails(requiredData1);
+  const [requiredData, setRequiredData] = useState({});
 
-  // const [cookies] = useCookies(["avt_token"]);
+  const { isLoading, refetch } = useGetProfileDetails(requiredData);
 
-  // useEffect(() => {
-  //   console.log("required data :", requiredData1);
-  //   if (requiredData1 !== null) {
-  //     console.log("required data ----->:", requiredData1);
+  const socialMediaUser = useSelector((state) => state.socialMediaUser);
 
-  //     refetch();
-  //   } else {
-  //     const reqData = {
-  //       Authorization: cookies?.avt_token,
-  //     };
-  //     console.log("Loading1...", reqData);
-  //     setRequiredData1(reqData);
-  //     console.log("Loading2...", requiredData1);
-  //   }
-  // }, [cookies?.avt_token, requiredData1, refetch]);
+  useEffect(() => {
+    if (
+      Object.keys(requiredData).length > 0 &&
+      socialMediaUser?.value?.SocialMediaUserData !== null
+    ) {
+      if (cookies.avt_token !== null) {
+        refetch();
+      }
+    } else {
+      setRequiredData({
+        Authorization: cookies?.avt_token,
+      });
+    }
+  }, [
+    cookies.avt_token,
+    refetch,
+    requiredData,
+    socialMediaUser?.value?.SocialMediaUserData,
+  ]);
 
   return (
     <>
-      {/* {socialMediaUser?.value?.SocialMediaUserData !== null ? (
-        <Outlet />
-      ) : ( */}
-      <div
-        style={{
-          position: "fixed",
-          width: "100%",
-          height: "100%",
-          backgroundColor: "white",
-        }}
-      >
-        <h3>Logo!!!!</h3>
-      </div>
-      {/* )} */}
+      {isLoading ? (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Avatar
+            variant="square"
+            src={jen1}
+            srcSet={jen1}
+            alt="not found!!!"
+            style={{
+              width: 400,
+              height: 400,
+            }}
+          />
+        </div>
+      ) : (
+        <>{children}</>
+      )}
     </>
   );
 };

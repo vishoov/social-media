@@ -1,14 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import store from "./store";
 import { persistStore } from "redux-persist";
-import { AILoader } from "./ReuseableComponents/AILoader";
+import App from "./App";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const client = new QueryClient();
@@ -16,13 +15,13 @@ const client = new QueryClient();
 const persistor = persistStore(store);
 
 root.render(
-  <Provider store={store}>
-    <PersistGate loading={<AILoader />} persistor={persistor}>
-      <QueryClientProvider client={client}>
+  <QueryClientProvider client={client}>
+    <Provider store={store}>
+      <PersistGate persistor={persistor}>
         <App />
-      </QueryClientProvider>
-    </PersistGate>
-  </Provider>
+      </PersistGate>
+    </Provider>
+  </QueryClientProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

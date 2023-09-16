@@ -11,7 +11,7 @@ import {
 } from "../SocialMedia/APIs/SocialMediaProfileInterfaceAPI";
 import { useCookies } from "react-cookie";
 import { setFollowButtonChange } from "../redux/UtilitiesSlice";
-import { Context as SearchContext } from "../context/SearchContext";
+import { Context as MemoryContext } from "../context/MemoryContext";
 
 export const AIUpBar = ({
   editProfile,
@@ -30,11 +30,13 @@ export const AIUpBar = ({
   const { username } = useParams();
 
   // store variables
-  const memories = useSelector((state) => state.memories);
   const search = useSelector((state) => state.search);
   const socialMediaUser = useSelector((state) => state.socialMediaUser);
   const auth = useSelector((state) => state.auth);
-  // const utilities = useSelector((state) => state.utilities);
+
+  const {
+    state: { socialMediaMemories, memoryCount },
+  } = useContext(MemoryContext);
 
   // useCookies hook
   const [cookies] = useCookies(["avt_token"]);
@@ -72,10 +74,6 @@ export const AIUpBar = ({
       }
     }
   };
-
-  const {
-    state: { requestUserSearchData },
-  } = useContext(SearchContext);
 
   return (
     <>
@@ -129,14 +127,7 @@ export const AIUpBar = ({
                   marginLeft: 30,
                 }}
               >
-                <b>
-                  {requestUserSearchData?.userMemoriesDetails?.results?.at(0)
-                    ?.memory_details?.length > 0
-                    ? requestUserSearchData?.userMemoriesDetails?.results?.at(0)
-                        ?.memory_details?.length
-                    : 0}
-                </b>{" "}
-                Memories
+                <b>{memoryCount}</b> Memories
               </p>
             </Box>
           ) : (
@@ -147,8 +138,8 @@ export const AIUpBar = ({
                 }}
               >
                 <b>
-                  {memories?.value?.socialMediaMemories?.at(0)?.length > 0
-                    ? memories?.value?.socialMediaMemories?.at(0)?.length
+                  {socialMediaMemories?.length
+                    ? socialMediaMemories?.length
                     : 0}
                 </b>{" "}
                 Memories
