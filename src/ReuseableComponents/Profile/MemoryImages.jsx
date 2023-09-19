@@ -6,7 +6,6 @@ import { useGetAllMemories } from "../../SocialMedia/APIs/SocialMediaMemoryInter
 import { useCookies } from "react-cookie";
 import { Context as MemoryContext } from "../../context/MemoryContext";
 import { CircularProgress } from "@mui/material";
-import { useSelector } from "react-redux";
 
 const PAGE_SIZE = 12; // Number of images to load per page
 
@@ -22,10 +21,10 @@ export const MemoryImages = () => {
     // Assuming you have a dispatch function in your context
   } = useContext(MemoryContext);
 
-  const memories = useSelector((state) => state.memories);
+  // const memories = useSelector((state) => state.memories);
 
   console.log("hello another time");
-  const { refetch } = useGetAllMemories(requiredData);
+  const { refetch, isLoading } = useGetAllMemories(requiredData);
 
   const openModel = (item) => {
     setSelectedImageUrl(item);
@@ -48,11 +47,7 @@ export const MemoryImages = () => {
 
     console.log(Math.ceil(scrollHeight - scrollTop));
 
-    if (
-      Math.round(scrollHeight - scrollTop) <= clientHeight &&
-      !loading &&
-      memories?.value?.memoryNotFoundError === null
-    ) {
+    if (Math.round(scrollHeight - scrollTop) <= clientHeight && !loading) {
       // User has scrolled to the end of the ImageList.
       setLoading(true);
 
@@ -72,10 +67,16 @@ export const MemoryImages = () => {
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [requiredData]);
 
   useEffect(() => {
     callBack();
+
+    if (loading) {
+      setTimeout(() => {
+        setLoading(false);
+      }, 3000);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [callBack]);
 
@@ -112,7 +113,7 @@ export const MemoryImages = () => {
             );
           })}
       </ImageList>
-      {loading && <CircularProgress />}
+      {isLoading && <CircularProgress />}
       {isModalOpen && (
         <ShowMemoryModel
           item={selectedImageUrl}

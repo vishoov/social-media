@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect } from "react";
-import { AIUpBar } from "../../../ReuseableComponents/AIUpBar";
+import { AIAnotherUserUpBar } from "../../../ReuseableComponents/AIAnotherUserUpBar";
 import { AISideBar } from "../../../ReuseableComponents/AISideBar";
 import { Avatar, Box, Stack, Typography } from "@mui/material";
 import { ShowLinksBar } from "../../../ReuseableComponents/Profile/ShowLinksBar";
@@ -16,6 +16,7 @@ import { useParams } from "react-router-dom";
 import { useGetUserProfileInfo } from "../../APIs/SocialMediaSearchInterfaceApi";
 import { useCookies } from "react-cookie";
 import { useSelector } from "react-redux";
+import useGetMemoriesCountHook from "../../../hooks/useGetMemoriesCountHook";
 
 export const AnotherUsersProfile = () => {
   const { username } = useParams();
@@ -30,6 +31,8 @@ export const AnotherUsersProfile = () => {
   const [cookies] = useCookies(["avt_token"]);
 
   const { mutate: mutateUserProfile, data } = useGetUserProfileInfo();
+
+  useGetMemoriesCountHook(search?.requestedUserSearchdataForPersist?.userId);
 
   const callBack = useCallback(() => {
     if (data?.status === 200) {
@@ -57,14 +60,13 @@ export const AnotherUsersProfile = () => {
     <>
       <div>
         <span>
-          <AIUpBar
+          <AIAnotherUserUpBar
+            MoreButton={true}
             follow={true}
             message={true}
-            MoreButton={true}
             userName={
               requestUserSearchData?.userPersonalDetails?.userName || username
             }
-            otherUser={true}
           />
         </span>
         <span>

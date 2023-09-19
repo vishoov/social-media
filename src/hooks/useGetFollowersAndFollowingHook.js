@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import {
   useGetFollowers,
@@ -7,6 +7,8 @@ import {
 
 const useGetFollowersAndFollowingHook = (userId) => {
   const [cookies] = useCookies(["avt_token"]);
+
+  console.log("userId :", userId);
 
   const { refetch: refetchFollowers } = useGetFollowers({
     userId: userId,
@@ -18,10 +20,21 @@ const useGetFollowersAndFollowingHook = (userId) => {
     Authorization: cookies?.avt_token,
   });
 
-  useEffect(() => {
+  const callBack1 = useCallback(() => {
     refetchFollowers();
+  }, [refetchFollowers]);
+
+  const callBack2 = useCallback(() => {
     refetchFollowing();
-  }, [userId, refetchFollowers, refetchFollowing]);
+  }, [refetchFollowing]);
+
+  useEffect(() => {
+    callBack1();
+  }, [callBack1]);
+
+  useEffect(() => {
+    callBack2();
+  }, [callBack2]);
 };
 
 export default useGetFollowersAndFollowingHook;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { AISideBar } from "../../../ReuseableComponents/AISideBar";
 import { AIUpBar } from "../../../ReuseableComponents/AIUpBar";
 import { Avatar, Box, Stack, Typography } from "@mui/material";
@@ -11,20 +11,27 @@ import TabsComponent from "../../../ReuseableComponents/Tabs";
 import { ShowMemoryBar } from "../../../ReuseableComponents/Profile/ShowMemoryBar";
 import { ShowSavedMemories } from "../../../ReuseableComponents/Profile/ShowSavedMemories";
 import { ShowLinksBar } from "../../../ReuseableComponents/Profile/ShowLinksBar";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useGetFollowersAndFollowingHook from "../../../hooks/useGetFollowersAndFollowingHook";
 import useGetMemoriesCountHook from "../../../hooks/useGetMemoriesCountHook";
 import useGetProfileDetailsHook from "../../../hooks/useGetProfileDetailsHook";
+import { setRequestedUserSearchDataForPersist } from "../../../redux/SearchSlice";
 
 export const AISocialMediaProfileInterface = () => {
   // redux variables
   const userData = useSelector((state) => state.socialMediaUser);
 
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setRequestedUserSearchDataForPersist(null));
+  }, []);
+
   useGetProfileDetailsHook();
 
   useGetMemoriesCountHook(localStorage.getItem("sm_user_id"));
 
-  useGetFollowersAndFollowingHook();
+  useGetFollowersAndFollowingHook(localStorage.getItem("sm_user_id"));
 
   return (
     <>
@@ -34,7 +41,6 @@ export const AISocialMediaProfileInterface = () => {
             editProfile={true}
             settingsSuggested={true}
             shareMemory={true}
-            MoreButton={false}
             userName={userData?.value?.SocialMediaUserData?.userName}
           />
         </span>

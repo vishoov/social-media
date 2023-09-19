@@ -1,5 +1,5 @@
-import { ImageList, ImageListItem } from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
+import { CircularProgress, ImageList, ImageListItem } from "@mui/material";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { ShowMemoryModel } from "./ShowMemoryModel";
 import { useCookies } from "react-cookie";
 import { useSelector } from "react-redux";
@@ -28,7 +28,7 @@ export const OtherUsersMemoryImages = () => {
   const search = useSelector((state) => state.search);
   const memory = useSelector((state) => state.memories);
 
-  const { refetch } = useGetAllMemoriesForOtherUser(requiredData);
+  const { refetch, isLoading } = useGetAllMemoriesForOtherUser(requiredData);
 
   const openModel = (item) => {
     setSelectedImageUrl(item);
@@ -53,7 +53,7 @@ export const OtherUsersMemoryImages = () => {
       const memoryData = {
         Authorization: cookies?.avt_token,
         userId:
-          search?.searchData?.at(0)?.userId ||
+          search?.requestedUserSearchdataForPersist?.userId ||
           requestUserSearchData?.userPersonalDetails?.userId,
         pageNumber:
           Math.ceil(socialMediaMemoriesOfAnotherUser?.length / PAGE_SIZE) + 1,
@@ -62,13 +62,19 @@ export const OtherUsersMemoryImages = () => {
     }
   };
 
-  useEffect(() => {
+  const callBack = useCallback(() => {
     if (requiredData) {
       // Fetch more memories using your API and append them to socialMediaMemories
       refetch();
       setLoading(false);
     }
-  }, [requiredData, refetch]);
+
+    // eslint-disable-next-line no-unused-expressions
+  }, [requiredData]);
+
+  useEffect(() => {
+    callBack();
+  }, []);
 
   return (
     <ImageList
@@ -97,6 +103,7 @@ export const OtherUsersMemoryImages = () => {
             />
           </ImageListItem>
         ))}
+      {isLoading && <CircularProgress />}
       {isModalOpen && (
         <ShowMemoryModel
           item={selectedImageUrl}

@@ -140,8 +140,8 @@ export const useGetAllMemoriesForOtherUser = (memoryData) => {
         dispatch(setAbnormalError(error?.response?.data?.message));
       },
       onSuccess: (data) => {
-        console.log("status: " + data?.status);
-        if (data?.status.valueOf() === 200) {
+        console.log("sucessfully data :", data?.data?.data);
+        if (data?.status === 200 && data?.data?.data?.results?.length > 0) {
           var wholeData = data?.data?.data?.results?.map((memories) => {
             var memory_details = {
               urls: memories?.memory_details?.urls?.at(0),
@@ -157,7 +157,7 @@ export const useGetAllMemoriesForOtherUser = (memoryData) => {
         }
       },
       refetchOnMount: false,
-      enabled: !!memoryData,
+      enabled: false,
       retry: 5,
       retryDelay: 1000,
     }

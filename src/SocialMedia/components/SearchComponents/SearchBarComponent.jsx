@@ -26,10 +26,8 @@ import {
 } from "../../../redux/SearchSlice";
 import { useNavigate } from "react-router-dom";
 import { Context as SearchContext } from "../../../context/SearchContext";
-// import { Context as MemoryContext } from "../../../context/MemoryContext";
 import useGetFollowersAndFollowingHook from "../../../hooks/useGetFollowersAndFollowingHook";
 import useGetMemoriesCountHook from "../../../hooks/useGetMemoriesCountHook";
-// import useFetchAnotherUsersMemoryHook from "../../../hooks/useFetchAnotherUsersMemoryHook";
 
 export const SearchBarComponent = ({ onClose, open }) => {
   const [cookies] = useCookies(["avt_token"]);
@@ -53,10 +51,10 @@ export const SearchBarComponent = ({ onClose, open }) => {
     setSearchData,
   } = useContext(SearchContext);
 
-  useGetMemoriesCountHook();
+  useGetMemoriesCountHook(search.requestedUserSearchdataForPersist?.userId);
 
   useGetFollowersAndFollowingHook(
-    search?.requestedUserSearchdataForPersist?.userId
+    search.requestedUserSearchdataForPersist?.userId
   );
 
   const { setRequestUserSearchData } = useContext(SearchContext);

@@ -141,6 +141,8 @@ export const useGetFollowings = (userData) => {
     () => getFollowingsOfUser(userData),
     {
       onSuccess: (success) => {
+        console.log("success in followings :", success?.data);
+
         if (success?.status === 200) {
           setFollowingsCount(
             success?.data?.data?.following?.followingsData?.length
@@ -177,7 +179,7 @@ export const useGetUserDataInProfile = (userData) => {
     retry: 5,
     retryDelay: 1000,
     refetchOnMount: false,
-    enabled: !!userData,
+    enabled: false,
   });
 };
 
@@ -187,6 +189,7 @@ export const useFollowPerson = () => {
   return useMutation(followSomeone, {
     onSuccess: (data) => {
       if (data?.status === 200) {
+        console.log("Success in following people!!!");
         dispatch(setIsFollowing(true));
       } else {
         dispatch(setIsFollowing(false));
