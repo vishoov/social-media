@@ -2,13 +2,20 @@ import { Avatar } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useUploadProfilePics } from "../SocialMedia/APIs/SocialMediaProfileInterfaceAPI";
 import { useCookies } from "react-cookie";
+import { useGetUserProfileInfo } from "../SocialMedia/APIs/SocialMediaSearchInterfaceApi";
+import { useSelector } from "react-redux";
 
 export const AvatarFileInput = ({ firstName, lastName }) => {
-  const [selectedImage, setSelectedImage] = useState(undefined);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [shouldFetch, setShouldFetch] = useState(false);
 
   const [cookies] = useCookies(["avt_token"]);
+  const socialMediaUser = useSelector((state) => state.socialMediaUser);
 
   const { mutate, data } = useUploadProfilePics();
+
+  const { mutate: mutateProfileInfo, data: profileInfoData } =
+    useGetUserProfileInfo();
 
   const handleImageChange = async (event) => {
     const file = event.target.files[0];
@@ -25,7 +32,11 @@ export const AvatarFileInput = ({ firstName, lastName }) => {
   };
 
   useEffect(() => {
-    if (data?.data?.data?.urls?.length > 0) {
+    if (
+      data?.status === 200 &&
+      data?.data?.data?.urls &&
+      profileInfoData?.status !== 200
+    ) {
       if ("caches" in window) {
         caches.open("my-cache").then((cache) => {
           // Store data in the cache
@@ -33,9 +44,16 @@ export const AvatarFileInput = ({ firstName, lastName }) => {
             profilePicUrl: data?.data?.data?.urls,
           };
 
-          console.log("json data :", jsonData);
+          console.log("json data :---->", jsonData);
           const json = JSON.stringify(jsonData);
-          cache.put("/profilePics.json", new Response(json));
+
+          const response = new Response(json, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+
+          cache.put("/profilePics.json", response);
         });
       }
     } else {
@@ -47,16 +65,36 @@ export const AvatarFileInput = ({ firstName, lastName }) => {
                 const jsonData = {
                   profilePicUrl: data?.profilePicUrl,
                 };
-                console.log("profilePicUrl :", jsonData);
                 setSelectedImage(jsonData?.profilePicUrl?.[0]);
               });
             }
           });
+
+          setShouldFetch(true);
         });
       }
     }
     setSelectedImage(data?.data?.data?.urls?.[0]);
-  }, [data]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data?.data?.data?.urls, profileInfoData?.data?.data]);
+
+  useEffect(() => {
+    if (profileInfoData?.status !== 200 && shouldFetch) {
+      mutateProfileInfo({
+        username: socialMediaUser?.value?.SocialMediaUserData?.userName,
+        Authorization: cookies?.avt_token,
+      });
+      setShouldFetch(false);
+    } else if (profileInfoData?.status === 200) {
+      setSelectedImage(
+        profileInfoData?.data?.data?.userProfilePics
+          ?.at(0)
+          ?.profile_details?.at(0)
+          ?.urls?.at(0)
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedImage]);
 
   const handleAvatarClick = () => {
     // Trigger the hidden file input
@@ -69,16 +107,16 @@ export const AvatarFileInput = ({ firstName, lastName }) => {
         type="file"
         id="avatar-input"
         accept="image/*"
-        style={{ display: "none" }}
+        style={{ display: "none", cursor: "pointer" }}
         onChange={handleImageChange}
       />
       <Avatar
         alt="Avatar"
         id="avatar"
-        src={selectedImage}
+        src={selectedImage && selectedImage}
         sx={{
-          width: 300,
-          height: 300,
+          width: 280,
+          height: 280,
           cursor: "pointer",
         }}
         style={{
@@ -88,7 +126,8 @@ export const AvatarFileInput = ({ firstName, lastName }) => {
       />
       <p
         style={{
-          marginLeft: 115,
+          display: "flex",
+          justifyContent: "center",
         }}
       >
         <b>

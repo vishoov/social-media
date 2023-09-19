@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect } from "react";
 import { AIUpBar } from "../../../ReuseableComponents/AIUpBar";
 import { AISideBar } from "../../../ReuseableComponents/AISideBar";
 import { Avatar, Box, Stack, Typography } from "@mui/material";
@@ -16,7 +16,6 @@ import { useParams } from "react-router-dom";
 import { useGetUserProfileInfo } from "../../APIs/SocialMediaSearchInterfaceApi";
 import { useCookies } from "react-cookie";
 import { useSelector } from "react-redux";
-import { useGetMemoriesCount } from "../../APIs/SocialMediaMemoryInterfaceAPI";
 
 export const AnotherUsersProfile = () => {
   const { username } = useParams();
@@ -26,7 +25,6 @@ export const AnotherUsersProfile = () => {
     setRequestUserSearchData,
   } = useContext(SearchContext);
 
-  const [requiredData1, setRequiredData1] = useState(null);
   const search = useSelector((state) => state.search);
 
   const [cookies] = useCookies(["avt_token"]);
@@ -43,7 +41,7 @@ export const AnotherUsersProfile = () => {
   useEffect(() => {
     if (data?.data?.data === undefined || data?.data?.data === null) {
       mutateUserProfile({
-        username: username,
+        username: search?.requestedUserSearchdataForPersist?.userName,
         Authorization: cookies?.avt_token,
       });
     } else {
@@ -54,26 +52,6 @@ export const AnotherUsersProfile = () => {
     // callBack();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [callBack, data?.status, data?.data?.data]);
-
-  const { refetch: refetchMemoryCount } = useGetMemoriesCount(requiredData1);
-
-  useEffect(() => {
-    if (requiredData1 === null) {
-      const requestedData = {
-        userId: search?.searchData?.at(0)?.userId,
-        Authorization: cookies.avt_token,
-      };
-
-      setRequiredData1(requestedData);
-    } else {
-      refetchMemoryCount();
-    }
-  }, [
-    cookies.avt_token,
-    refetchMemoryCount,
-    requiredData1,
-    search?.searchData,
-  ]);
 
   return (
     <>
@@ -97,7 +75,6 @@ export const AnotherUsersProfile = () => {
           sx={{
             justifyContent: "space-between",
             alignItems: "start",
-            paddingBottom: 30,
           }}
         >
           <Box>
@@ -110,7 +87,7 @@ export const AnotherUsersProfile = () => {
               position="fixed"
             >
               <Stack direction="row" spacing={3}>
-                <Box alignItems="center" display="flex" flexDirection="column">
+                <Box alignItems="center" flexDirection="column">
                   <Avatar
                     alt="Jenna"
                     src={jenPic1}
@@ -170,19 +147,33 @@ export const AnotherUsersProfile = () => {
                 </Box>
               </Stack>
 
-              <Box>
-                <p
-                  style={{
-                    fontSize: 15,
-                    fontWeight: "bold",
-                    color: "black",
-                    marginLeft: 60,
-                    paddingBottom: 200,
-                  }}
-                >
-                  About Me
-                </p>
-              </Box>
+              <Stack direction="column">
+                <Box>
+                  <p
+                    style={{
+                      fontSize: 15,
+                      fontWeight: "bold",
+                      color: "black",
+                      paddingLeft: 85,
+                    }}
+                  >
+                    About Me
+                  </p>
+                </Box>
+                <Box>
+                  <Typography
+                    sx={{
+                      color: "black",
+                      marginLeft: 10,
+                      fontSize: "14px",
+                      maxWidth: 500,
+                    }}
+                  >
+                    🚀 🌎 Exploring the universe and our home planet.
+                    Verification: nasa.gov/socialmedia
+                  </Typography>
+                </Box>
+              </Stack>
             </Stack>
           </Box>
           <Box
@@ -208,7 +199,8 @@ export const AnotherUsersProfile = () => {
             />
             <p
               style={{
-                marginLeft: 110,
+                display: "flex",
+                justifyContent: "center",
               }}
             >
               <b>
@@ -230,7 +222,7 @@ export const AnotherUsersProfile = () => {
             }}
           >
             <TabsComponent
-              firstTab={<ShowMemoryBarOfAnotherUsers username={username} />}
+              firstTab={<ShowMemoryBarOfAnotherUsers userName={username} />}
               secondTab={<ShowLinksBar />}
               thirdTab={<ShowSavedMemories />}
             />

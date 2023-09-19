@@ -5,7 +5,7 @@ const initialState = {
   searchError: null,
   requestedUserSearchError: null,
   isFollowing: false,
-  requestedUserSearchdata: null,
+  requestedUserSearchdataForPersist: null,
 };
 
 export const searchSlice = createSlice({
@@ -24,8 +24,8 @@ export const searchSlice = createSlice({
     setIsFollowing: (state, action) => {
       state.isFollowing = action.payload;
     },
-    setRequestedUserSearchData: (state, action) => {
-      state.requestedUserSearchdata = action.payload;
+    setRequestedUserSearchDataForPersist: (state, action) => {
+      state.requestedUserSearchdataForPersist = action.payload;
     },
   },
 });
@@ -35,6 +35,6 @@ export const {
   setSearchDataError,
   setRequestedUserSearchError,
   setIsFollowing,
-  setRequestedUserSearchData,
+  setRequestedUserSearchDataForPersist,
 } = searchSlice.actions;
 export default searchSlice.reducer;

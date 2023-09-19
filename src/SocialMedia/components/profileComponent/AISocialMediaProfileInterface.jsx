@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { AISideBar } from "../../../ReuseableComponents/AISideBar";
 import { AIUpBar } from "../../../ReuseableComponents/AIUpBar";
 import { Avatar, Box, Stack, Typography } from "@mui/material";
@@ -11,58 +11,21 @@ import TabsComponent from "../../../ReuseableComponents/Tabs";
 import { ShowMemoryBar } from "../../../ReuseableComponents/Profile/ShowMemoryBar";
 import { ShowSavedMemories } from "../../../ReuseableComponents/Profile/ShowSavedMemories";
 import { ShowLinksBar } from "../../../ReuseableComponents/Profile/ShowLinksBar";
-import { useGetProfileDetails } from "../../APIs/SocialMediaProfileInterfaceAPI";
-import { useCookies } from "react-cookie";
 import { useSelector } from "react-redux";
-import { useGetMemoriesCount } from "../../APIs/SocialMediaMemoryInterfaceAPI";
+import useGetFollowersAndFollowingHook from "../../../hooks/useGetFollowersAndFollowingHook";
+import useGetMemoriesCountHook from "../../../hooks/useGetMemoriesCountHook";
+import useGetProfileDetailsHook from "../../../hooks/useGetProfileDetailsHook";
 
 export const AISocialMediaProfileInterface = () => {
-  const [requiredData, setRequiredData] = useState(null);
-  const [requiredData1, setRequiredData1] = useState(null);
-
-  const { refetch } = useGetProfileDetails(requiredData);
-  const [cookies] = useCookies(["avt_token"]);
-
+  // redux variables
   const userData = useSelector((state) => state.socialMediaUser);
-  const memories = useSelector((state) => state.memories);
 
-  const { refetch: refetchMemoryCount } = useGetMemoriesCount(requiredData1);
+  useGetProfileDetailsHook();
 
-  useEffect(() => {
-    if (requiredData1 === null) {
-      const requestedData = {
-        userId: localStorage.getItem("sm_user_id"),
-        Authorization: cookies.avt_token,
-      };
+  useGetMemoriesCountHook(localStorage.getItem("sm_user_id"));
 
-      setRequiredData1(requestedData);
-    } else {
-      refetchMemoryCount();
-    }
-  }, [cookies.avt_token, refetchMemoryCount, requiredData1]);
+  useGetFollowersAndFollowingHook();
 
-  useEffect(() => {
-    if (
-      userData?.value?.SocialMediaUserData === null ||
-      memories?.value?.socialMediaMemories === null
-    ) {
-      const data = {
-        Authorization: cookies?.avt_token,
-      };
-
-      if (requiredData) {
-        refetch();
-      } else {
-        setRequiredData(data);
-      }
-    }
-  }, [
-    requiredData,
-    cookies,
-    refetch,
-    userData?.value?.SocialMediaUserData,
-    memories?.value?.socialMediaMemories,
-  ]);
   return (
     <>
       <div>
@@ -83,7 +46,6 @@ export const AISocialMediaProfileInterface = () => {
           sx={{
             justifyContent: "space-between",
             alignItems: "start",
-            paddingBottom: 30,
           }}
         >
           <Box>
@@ -96,7 +58,7 @@ export const AISocialMediaProfileInterface = () => {
               position="fixed"
             >
               <Stack direction="row" spacing={3}>
-                <Box alignItems="center" display="flex" flexDirection="column">
+                <Box alignItems="center" flexDirection="column">
                   <Avatar
                     alt="Jenna"
                     src={jenPic1}
@@ -155,20 +117,33 @@ export const AISocialMediaProfileInterface = () => {
                   <Typography variant="subtitle2">work mood</Typography>
                 </Box>
               </Stack>
-
-              <Box>
-                <p
-                  style={{
-                    fontSize: 15,
-                    fontWeight: "bold",
-                    color: "black",
-                    marginLeft: 60,
-                    paddingBottom: 200,
-                  }}
-                >
-                  About Me
-                </p>
-              </Box>
+              <Stack direction="column">
+                <Box>
+                  <p
+                    style={{
+                      fontSize: 15,
+                      fontWeight: "bold",
+                      color: "black",
+                      paddingLeft: 85,
+                    }}
+                  >
+                    About Me
+                  </p>
+                </Box>
+                <Box>
+                  <Typography
+                    sx={{
+                      color: "black",
+                      marginLeft: 10,
+                      fontSize: "14px",
+                      maxWidth: 500,
+                    }}
+                  >
+                    🚀 🌎 Exploring the universe and our home planet.
+                    Verification: nasa.gov/socialmedia
+                  </Typography>
+                </Box>
+              </Stack>
             </Stack>
           </Box>
           <Box

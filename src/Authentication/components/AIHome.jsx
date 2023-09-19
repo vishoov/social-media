@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { AIButton } from "../../ReuseableComponents/AIButton";
 import { AIVoiceAssist } from "../../ReuseableComponents/AIVoiceAssist";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { Context as UserContext } from "../../context/UserContext";
 
 export const AIHome = () => {
-  // state variable
-  const [firstName, setFirstName] = useState(null);
+  const {
+    state: { shouldSpeak },
+  } = useContext(UserContext);
 
   // use selector hook
   const auth = useSelector((state) => state.auth);
@@ -14,22 +16,14 @@ export const AIHome = () => {
   // use navigate hook
   const navigate = useNavigate();
 
-  // useEffect hook
-  useEffect(() => {
-    console.log(auth?.value?.signupData);
-    if (auth?.value?.signupData?.firstName !== null) {
-      setFirstName(auth?.value?.signupData?.firstName);
-    }
-  }, [auth]);
-
   return (
     <>
       <div>
         <h1 style={{ textAlign: "center" }}>Home</h1>
       </div>
 
-      {auth?.value?.signupData !== null && auth?.value?.signinData === null && (
-        <AIVoiceAssist name={firstName} />
+      {auth?.value?.signupData !== null && shouldSpeak && (
+        <AIVoiceAssist name={auth?.value?.signupData?.firstName} />
       )}
       <AIButton
         content="Initiate Social Media user interface"

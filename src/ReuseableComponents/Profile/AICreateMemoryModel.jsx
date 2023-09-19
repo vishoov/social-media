@@ -50,7 +50,7 @@ export default function AICreateMemoryModel({ isEmpty, isOpen, isClose }) {
           title="Add"
           arrow
           sx={{
-            marginLeft: 60,
+            marginLeft: 50,
           }}
         >
           <Button onClick={handleClickOpen}>share your first memory</Button>

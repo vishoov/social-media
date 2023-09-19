@@ -12,13 +12,11 @@ export const AIVoiceAssist = ({ name }) => {
 
     const newUtterance = new SpeechSynthesisUtterance();
 
-    console.log(voice);
-
     if (browserName === "Safari") {
       voiceAssist = voice.at(51);
       voiceText = `Hello ${name}, welcome to our integrated and interactive environment of AI, my name is samantha and I'm your personal voice assistant`;
     } else if (browserName === "Chrome") {
-      voiceAssist = voice.at(146);
+      voiceAssist = voice.at(160);
       voiceText = `Hello ${name}, welcome to our integrated and interactive environment of AI, my name is William and I'm your personal voice assistant`;
     }
 
@@ -31,7 +29,8 @@ export const AIVoiceAssist = ({ name }) => {
   useEffect(() => {
     populateVoiceList();
     speech.onvoiceschanged = () => populateVoiceList();
-  }, [populateVoiceList]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return <></>;
 };

@@ -20,6 +20,11 @@ const MEMORY_REDUCER = (state, action) => {
         ...state,
         memoryCount: action.payload,
       };
+    case "SET_SOCIAL_MEDIA_MEMORIES_OF_ANOTHER_USER_FIRST_TIME":
+      return {
+        ...state,
+        socialMediaMemoriesOfAnotherUser: action.payload,
+      };
     default:
       return state;
   }
@@ -39,6 +44,14 @@ const setSocialMediaMemoriesOfAnotherUser = (dispatch) => (payload) => {
   });
 };
 
+const setSocialMediaMemoriesOfAnotherUserFirstTime =
+  (dispatch) => (payload) => {
+    dispatch({
+      type: "SET_SOCIAL_MEDIA_MEMORIES_OF_ANOTHER_USER_FIRST_TIME",
+      payload: payload,
+    });
+  };
+
 const setMemoryCount = (dispatch) => (payload) => {
   dispatch({
     type: "SET_MEMORY_COUNT",
@@ -53,6 +66,7 @@ export const { Context, Provider } = createDataContext(
     setSocialMediaMemories,
     setSocialMediaMemoriesOfAnotherUser,
     setMemoryCount,
+    setSocialMediaMemoriesOfAnotherUserFirstTime,
   },
   {
     // all states

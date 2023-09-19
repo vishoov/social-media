@@ -22,10 +22,14 @@ import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setIsFollowing,
-  setRequestedUserSearchData,
+  setRequestedUserSearchDataForPersist,
 } from "../../../redux/SearchSlice";
 import { useNavigate } from "react-router-dom";
 import { Context as SearchContext } from "../../../context/SearchContext";
+// import { Context as MemoryContext } from "../../../context/MemoryContext";
+import useGetFollowersAndFollowingHook from "../../../hooks/useGetFollowersAndFollowingHook";
+import useGetMemoriesCountHook from "../../../hooks/useGetMemoriesCountHook";
+// import useFetchAnotherUsersMemoryHook from "../../../hooks/useFetchAnotherUsersMemoryHook";
 
 export const SearchBarComponent = ({ onClose, open }) => {
   const [cookies] = useCookies(["avt_token"]);
@@ -42,9 +46,20 @@ export const SearchBarComponent = ({ onClose, open }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { setRequestUserSearchData } = useContext(SearchContext);
-
   const search = useSelector((state) => state.search);
+
+  const {
+    state: { searchData },
+    setSearchData,
+  } = useContext(SearchContext);
+
+  useGetMemoriesCountHook();
+
+  useGetFollowersAndFollowingHook(
+    search?.requestedUserSearchdataForPersist?.userId
+  );
+
+  const { setRequestUserSearchData } = useContext(SearchContext);
 
   const socialMediaUser = useSelector((state) => state.socialMediaUser);
 
@@ -68,7 +83,9 @@ export const SearchBarComponent = ({ onClose, open }) => {
 
       if (called === false) {
         dispatch(
-          setRequestedUserSearchData(data?.data?.data?.userPersonalDetails)
+          setRequestedUserSearchDataForPersist(
+            data?.data?.data?.userPersonalDetails
+          )
         );
         mutateIsFollowing({
           Authorization: token,
@@ -112,6 +129,8 @@ export const SearchBarComponent = ({ onClose, open }) => {
     navigate,
   ]);
 
+  // useFetchAnotherUsersMemoryHook(data?.data?.data?.userPersonalDetails?.userId);
+
   const handleNavigate = (username) => {
     if (username !== null) {
       if (username === socialMediaUser?.value?.SocialMediaUserData?.userName) {
@@ -123,6 +142,7 @@ export const SearchBarComponent = ({ onClose, open }) => {
         });
         dispatch(setIsFollowing(false));
       }
+      setSearchData([]);
       onClose();
     }
   };
@@ -179,8 +199,8 @@ export const SearchBarComponent = ({ onClose, open }) => {
         <Stack direction="row">
           <Box>
             <List>
-              {search?.searchData?.length > 0 ? (
-                search?.searchData?.map((searchResults) => {
+              {searchData?.length > 0 ? (
+                searchData?.map((searchResults) => {
                   return (
                     <ListItem disablePadding key={searchResults?.userName}>
                       <ListItemButton

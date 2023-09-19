@@ -15,13 +15,13 @@ const client = new QueryClient();
 const persistor = persistStore(store);
 
 root.render(
-  <QueryClientProvider client={client}>
-    <Provider store={store}>
-      <PersistGate persistor={persistor}>
+  <Provider store={store}>
+    <PersistGate persistor={persistor}>
+      <QueryClientProvider client={client}>
         <App />
-      </PersistGate>
-    </Provider>
-  </QueryClientProvider>
+      </QueryClientProvider>
+    </PersistGate>
+  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function

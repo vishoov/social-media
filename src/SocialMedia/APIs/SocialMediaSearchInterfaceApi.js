@@ -1,8 +1,10 @@
 import axios from "axios";
 import { useMutation } from "react-query";
 import { useDispatch } from "react-redux";
-import { setSearchDataError, setSearchData } from "../../redux/SearchSlice";
+import { setSearchDataError } from "../../redux/SearchSlice";
 import { setRequestedUserSearchError } from "../../redux/SearchSlice";
+import { useContext } from "react";
+import { Context as SearchContext } from "../../context/SearchContext";
 
 const urls = () => {
   return axios.create({
@@ -23,33 +25,39 @@ const followersURL = () => {
 };
 
 const getUserBySearch = (searchdata) => {
-  return urls().post("/get/user/bysearchkeyword", null, {
-    headers: {
-      Authorization: "Bearer " + searchdata?.Authorization,
-    },
-    params: {
-      search: searchdata?.search,
-    },
-  });
+  if (searchdata?.Authorization && searchdata?.search) {
+    return urls().post("/get/user/bysearchkeyword", null, {
+      headers: {
+        Authorization: "Bearer " + searchdata?.Authorization,
+      },
+      params: {
+        search: searchdata?.search,
+      },
+    });
+  }
 };
 
 const getUserProfileInfo = (searchdata) => {
-  return urls1().post("/userdetailswithmemories", null, {
-    headers: {
-      Authorization: "Bearer " + searchdata?.Authorization,
-    },
-    params: {
-      username: searchdata?.username,
-    },
-  });
+  if (searchdata?.Authorization && searchdata?.username) {
+    return urls1().post("/userdetailswithmemories", null, {
+      headers: {
+        Authorization: "Bearer " + searchdata?.Authorization,
+      },
+      params: {
+        username: searchdata?.username,
+      },
+    });
+  }
 };
 
 const checkIsUserFollowingTheOtherUser = (user) => {
-  return followersURL().post("/check/isfollowing", user?.followingdata, {
-    headers: {
-      Authorization: "Bearer " + user?.Authorization,
-    },
-  });
+  if (user?.followingdata && user?.Authorization) {
+    return followersURL().post("/check/isfollowing", user?.followingdata, {
+      headers: {
+        Authorization: "Bearer " + user?.Authorization,
+      },
+    });
+  }
 };
 
 export const useCheckIsUserFollowingTheOtherUser = () => {
@@ -62,6 +70,8 @@ export const useCheckIsUserFollowingTheOtherUser = () => {
 export const useGetUserBySearch = () => {
   const dispatch = useDispatch();
 
+  const { setSearchData } = useContext(SearchContext);
+
   return useMutation(getUserBySearch, {
     onError: (error) => {
       dispatch(setSearchDataError(error));
@@ -69,9 +79,9 @@ export const useGetUserBySearch = () => {
     onSuccess: (data) => {
       const empty = [];
       if (data?.status === 202) {
-        dispatch(setSearchData(empty));
+        setSearchData(empty);
       } else {
-        dispatch(setSearchData(data?.data?.data));
+        setSearchData(data?.data?.data);
       }
     },
   });

@@ -26,6 +26,7 @@ export const OtherUsersMemoryImages = () => {
   const [cookies] = useCookies();
 
   const search = useSelector((state) => state.search);
+  const memory = useSelector((state) => state.memories);
 
   const { refetch } = useGetAllMemoriesForOtherUser(requiredData);
 
@@ -62,13 +63,6 @@ export const OtherUsersMemoryImages = () => {
   };
 
   useEffect(() => {
-    console.log(
-      "socialMediaMemoriesOfAnotherUser",
-      socialMediaMemoriesOfAnotherUser
-    );
-  }, [socialMediaMemoriesOfAnotherUser]);
-
-  useEffect(() => {
     if (requiredData) {
       // Fetch more memories using your API and append them to socialMediaMemories
       refetch();
@@ -79,13 +73,13 @@ export const OtherUsersMemoryImages = () => {
   return (
     <ImageList
       sx={{
-        width: 1200,
+        width: 975,
         height: 600,
       }}
       cols={3}
       onScroll={(e) => handleScroll(e)}
     >
-      {socialMediaMemoriesOfAnotherUser !== undefined &&
+      {memory?.value?.MemoryNotFoundForOtherUserError === null &&
         socialMediaMemoriesOfAnotherUser?.map((item) => (
           <ImageListItem key={item?.urls}>
             <img
@@ -94,10 +88,9 @@ export const OtherUsersMemoryImages = () => {
               alt="imageNotFound"
               loading="lazy"
               style={{
-                marginTop: 10,
-                marginLeft: 10,
-                width: 390,
-                height: 390,
+                padding: 1,
+                width: 320,
+                height: 320,
                 cursor: "pointer",
               }}
               onClick={() => openModel(item)}

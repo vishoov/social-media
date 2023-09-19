@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import { AISideBar } from "../../../ReuseableComponents/AISideBar";
-// import { useSelector } from "react-redux";
 import {
   Alert,
   Avatar,
@@ -23,6 +22,7 @@ import { useNavigate } from "react-router-dom";
 import useMemoriesSubscribeHook from "../../../hooks/useMemoriesSubscribeHook";
 import useGetMemoriesWithinAWeekHook from "../../../hooks/useGetMemoriesWithinAWeekHook";
 import { Context as HomeContext } from "../../../context/HomeContext";
+import { useSelector } from "react-redux";
 
 export const SocialMediaHome = () => {
   // live memories updates
@@ -31,6 +31,8 @@ export const SocialMediaHome = () => {
   const {
     state: { HomeMemoriesContent },
   } = useContext(HomeContext);
+
+  const memory = useSelector((state) => state.memories);
 
   // const HOME = useSelector((state) => state.home);
 
@@ -53,6 +55,7 @@ export const SocialMediaHome = () => {
         }}
         direction="column"
       >
+        <Typography>{memory?.value?.memoryNotFoundError}</Typography>
         <List>
           {HomeMemoriesContent?.length > 0 &&
             HomeMemoriesContent?.map((memories) => {

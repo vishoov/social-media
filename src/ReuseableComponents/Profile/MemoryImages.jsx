@@ -1,118 +1,4 @@
-// import React, { useContext, useEffect, useState } from "react";
-// import ImageList from "@mui/material/ImageList";
-// import ImageListItem from "@mui/material/ImageListItem";
-// import { ShowMemoryModel } from "./ShowMemoryModel";
-// import { useGetAllMemories } from "../../SocialMedia/APIs/SocialMediaMemoryInterfaceAPI";
-// import { useCookies } from "react-cookie";
-// import { Context as MemoryContext } from "../../context/MemoryContext";
-
-// const PAGE_SIZE = 12;
-
-// export const MemoryImages = () => {
-//   const [isModalOpen, setIsModalOpen] = useState(false);
-//   const [selectedImageUrl, setSelectedImageUrl] = useState("");
-//   const [loading, setLoading] = useState(false);
-//   const [requiredData, setRequiredData] = useState(null);
-
-//   const [cookies] = useCookies();
-//   const {
-//     state: { socialMediaMemories },
-//   } = useContext(MemoryContext);
-
-//   const { refetch } = useGetAllMemories(requiredData);
-
-//   const openModel = (item) => {
-//     setSelectedImageUrl(item);
-//     setIsModalOpen(true);
-//   };
-
-//   const closeModal = () => {
-//     setSelectedImageUrl("");
-//     setIsModalOpen(false);
-//   };
-
-//   const handleScroll = () => {
-//     const scrollTop =
-//       document.documentElement.scrollTop || document.body.scrollTop;
-//     const scrollHeight =
-//       document.documentElement.scrollHeight || document.body.scrollHeight;
-//     const clientHeight =
-//       document.documentElement.clientHeight || document.body.clientHeight;
-
-//     if (scrollHeight - scrollTop === clientHeight && !loading) {
-//       // User has scrolled to the bottom.
-//       setLoading(true);
-
-//       console.log("hello world!");
-
-//       const memoryData = {
-//         Authorization: cookies?.avt_token,
-//         userId: localStorage.getItem("sm_user_id"),
-//         pageNumber: pageNumber++,
-//       };
-//       setRequiredData(memoryData);
-
-//       if (requiredData !== null) {
-//         refetch();
-//       }
-
-//       // Fetch more memories using your Redux action.
-//       // dispatch(fetchMoreMemories()).then(() => {
-//       //   setLoading(false);
-//       // });
-//     }
-//   };
-
-//   useEffect(() => {
-//     console.log("hello world!111");
-//     console.log("hello world!222", socialMediaMemories);
-//   }, [socialMediaMemories]);
-
-//   return (
-//     <ImageList
-//       sx={{
-//         width: 1200,
-//         height: 600,
-//       }}
-//       cols={3}
-//       onScroll={() => handleScroll()}
-//     >
-//       {socialMediaMemories !== undefined &&
-//         socialMediaMemories?.map((images) => {
-//           return (
-//             <ImageListItem key={images?.urls}>
-//               <img
-//                 src={images?.urls}
-//                 srcSet={images?.urls}
-//                 alt="imageNotFound"
-//                 loading="lazy"
-//                 style={{
-//                   marginTop: 10,
-//                   marginLeft: 10,
-//                   width: 390,
-//                   height: 390,
-//                   cursor: "pointer",
-//                 }}
-//                 onClick={() => openModel(images)}
-//               />
-//             </ImageListItem>
-//           );
-//         })}
-//       {loading && <h2>hello</h2>}
-//       {isModalOpen && (
-//         <ShowMemoryModel
-//           item={selectedImageUrl}
-//           open={isModalOpen}
-//           onClose={closeModal}
-//           username="JennaOrtega"
-//           other={false}
-//         />
-//       )}
-//     </ImageList>
-//   );
-// };
-
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import { ShowMemoryModel } from "./ShowMemoryModel";
@@ -138,6 +24,7 @@ export const MemoryImages = () => {
 
   const memories = useSelector((state) => state.memories);
 
+  console.log("hello another time");
   const { refetch } = useGetAllMemories(requiredData);
 
   const openModel = (item) => {
@@ -178,24 +65,31 @@ export const MemoryImages = () => {
     }
   };
 
-  useEffect(() => {
+  const callBack = useCallback(() => {
     if (requiredData) {
       // Fetch more memories using your API and append them to socialMediaMemories
       refetch();
       setLoading(false);
     }
-  }, [requiredData, refetch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    callBack();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [callBack]);
 
   return (
     <div>
       <ImageList
         className="my-image-list" // Add a class name for targeting the ImageList
         sx={{
-          width: 1200,
+          width: 975,
           height: 600,
         }}
         cols={3}
         onScroll={(e) => handleScroll(e)}
+        gap={1}
       >
         {socialMediaMemories !== undefined &&
           socialMediaMemories.map((images) => {
@@ -207,10 +101,9 @@ export const MemoryImages = () => {
                   alt="imageNotFound"
                   loading="lazy"
                   style={{
-                    marginTop: 10,
-                    marginLeft: 10,
-                    width: 390,
-                    height: 390,
+                    padding: 1,
+                    width: 320,
+                    height: 320,
                     cursor: "pointer",
                   }}
                   onClick={() => openModel(images)}

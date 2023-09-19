@@ -17,35 +17,41 @@ const urls = () => {
 };
 
 const shareMemory = (memoryData) => {
-  return urls().post("/share", memoryData?.fileData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-      Authorization: "Bearer " + memoryData?.Authorization,
-    },
-  });
+  if (memoryData?.fileData && memoryData?.Authorization) {
+    return urls().post("/share", memoryData?.fileData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + memoryData?.Authorization,
+      },
+    });
+  }
 };
 
 const getAllMemories = (memoryData) => {
-  return urls().get("/get/allof/lazy", {
-    params: {
-      userId: memoryData?.userId,
-      pageNumber: memoryData?.pageNumber,
-    },
-    headers: {
-      Authorization: "Bearer " + memoryData?.Authorization,
-    },
-  });
+  if (memoryData?.userId && memoryData?.Authorization) {
+    return urls().get("/get/allof/lazy", {
+      params: {
+        userId: memoryData?.userId,
+        pageNumber: memoryData?.pageNumber,
+      },
+      headers: {
+        Authorization: "Bearer " + memoryData?.Authorization,
+      },
+    });
+  }
 };
 
 const getMemoryCount = (memoryData) => {
-  return urls().get("/get/memories/count", {
-    params: {
-      userId: memoryData?.userId,
-    },
-    headers: {
-      Authorization: "Bearer " + memoryData?.Authorization,
-    },
-  });
+  if (memoryData?.userId && memoryData?.Authorization) {
+    return urls().get("/get/memories/count", {
+      params: {
+        userId: memoryData?.userId,
+      },
+      headers: {
+        Authorization: "Bearer " + memoryData?.Authorization,
+      },
+    });
+  }
 };
 
 export const useShareMemory = () => {
@@ -71,8 +77,6 @@ export const useGetAllMemories = (memoryData) => {
         dispatch(setAbnormalError(error?.response?.data?.message));
       },
       onSuccess: (data) => {
-        console.log("hello success", data?.data?.data);
-
         if (data?.status === 200 && data?.data?.data?.results?.length > 0) {
           var wholeData = data?.data?.data?.results?.map((memories) => {
             var memory_details = {
@@ -91,7 +95,7 @@ export const useGetAllMemories = (memoryData) => {
         }
       },
       refetchOnMount: false,
-      enabled: !!memoryData,
+      enabled: false,
       retry: 5,
       retryDelay: 1000,
     }
@@ -111,10 +115,12 @@ export const useGetMemoriesCount = (memoryData) => {
       onSuccess: (data) => {
         if (data?.status === 200) {
           setMemoryCount(data?.data?.data);
+        } else {
+          setMemoryCount(0);
         }
       },
       refetchOnMount: false,
-      enabled: !!memoryData,
+      enabled: false,
       retry: 5,
       retryDelay: 1000,
     }
@@ -134,9 +140,8 @@ export const useGetAllMemoriesForOtherUser = (memoryData) => {
         dispatch(setAbnormalError(error?.response?.data?.message));
       },
       onSuccess: (data) => {
-        console.log("hello success", data?.data?.data);
-
-        if (data?.status === 200 && data?.data?.data?.results?.length > 0) {
+        console.log("status: " + data?.status);
+        if (data?.status.valueOf() === 200) {
           var wholeData = data?.data?.data?.results?.map((memories) => {
             var memory_details = {
               urls: memories?.memory_details?.urls?.at(0),

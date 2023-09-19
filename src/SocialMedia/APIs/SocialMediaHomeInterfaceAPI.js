@@ -7,6 +7,7 @@ import {
   setAbnormalError,
   setMemoryNotFoundError,
 } from "../../redux/SocialMediaMemoriesSlice";
+import { useDispatch } from "react-redux";
 
 // base urls
 const url = () => {
@@ -16,7 +17,7 @@ const url = () => {
 };
 
 const getMemoriesWithinAWeek = (data) => {
-  if (data !== null && data !== undefined) {
+  if (data?.Authorization) {
     return url().get("/get/memories/between", {
       headers: {
         Authorization: "Bearer " + data?.Authorization,
@@ -28,6 +29,7 @@ const getMemoriesWithinAWeek = (data) => {
 export const useGetMemoriesWithinAWeek = (requiredData) => {
   const { setHomeMemoriesContentWithApiCall } = useContext(HomeContext);
   const { setMemoriesNotificationsUsingApi } = useContext(NotificationsContext);
+  const dispatch = useDispatch();
 
   return useQuery(
     ["getMemoriesWithinAWeek", requiredData],
@@ -52,7 +54,7 @@ export const useGetMemoriesWithinAWeek = (requiredData) => {
           setHomeMemoriesContentWithApiCall(wholeData);
           setMemoriesNotificationsUsingApi(wholeData);
         } else {
-          setMemoryNotFoundError(data?.data?.message);
+          dispatch(setMemoryNotFoundError(data?.data?.message));
         }
       },
       onError: (error) => {
@@ -60,7 +62,7 @@ export const useGetMemoriesWithinAWeek = (requiredData) => {
       },
       retryOnMount: false,
       enabled: !!requiredData,
-      retry: 5,
+      retry: 3,
       retryDelay: 2000,
     }
   );

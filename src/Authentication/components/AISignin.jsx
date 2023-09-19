@@ -1,63 +1,28 @@
-import React, { useEffect } from "react";
+import React, { useContext } from "react";
 import { AIInput } from "../../ReuseableComponents/AIInput";
 import { useForm } from "react-hook-form";
 import { Card } from "@mui/material";
 import { AIButton } from "../../ReuseableComponents/AIButton";
 import { useVerifyUserData } from "../apis/userAPIs";
-import { useDispatch, useSelector } from "react-redux";
-import { DO_SIGNIN, SIGNIN_ERROR } from "../../redux/AuthSlice";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
-import { useCookies } from "react-cookie";
+import { Context as UserContext } from "../../context/UserContext";
 
 export const AISignin = () => {
   // useForm Hook
   const { register, handleSubmit } = useForm();
 
-  // useNavigate hook
-  const navigate = useNavigate();
-
-  const [cookies, setCookie] = useCookies([""]);
+  const {
+    state: { signinError },
+  } = useContext(UserContext);
 
   // useVerifyUserData Hook
-  const { data, isError, isLoading, error, mutate } = useVerifyUserData();
-
-  // useDispatch Hook
-  const dispatch = useDispatch();
-
-  const auth = useSelector((state) => state.auth);
+  const { isError, isLoading, mutate } = useVerifyUserData();
 
   // Handle Submit
   const submit = (data) => {
     mutate(data);
   };
-
-  useEffect(() => {
-    if (error?.response?.data?.error === "INVALID_EMAIL_OR_PASSWORD") {
-      dispatch(SIGNIN_ERROR("Invalid Email or Password!"));
-    } else {
-      if (data !== undefined && data !== null) {
-        dispatch(DO_SIGNIN(data?.data?.data));
-
-        dispatch(SIGNIN_ERROR(null));
-
-        setCookie("avt_token", data?.data?.data?.jwtToken, {
-          // expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
-        });
-        navigate("/environment/home");
-      }
-    }
-  }, [
-    data,
-    isError,
-    isLoading,
-    dispatch,
-    error,
-    navigate,
-    auth,
-    setCookie,
-    cookies,
-  ]);
 
   return (
     <>
@@ -93,10 +58,8 @@ export const AISignin = () => {
           }}
         >
           <form onSubmit={handleSubmit(submit)}>
-            {auth?.value?.signinError == null ? null : (
-              <p style={{ color: "red", textAlign: "center" }}>
-                {auth?.value?.signinError}
-              </p>
+            {signinError == null ? null : (
+              <p style={{ color: "red", textAlign: "center" }}>{signinError}</p>
             )}
             <AIInput
               inputName="userName"

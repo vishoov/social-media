@@ -1,11 +1,23 @@
+import { Box, Typography } from "@mui/material";
 import React from "react";
 
 export const ShowSavedMemories = () => {
   return (
-    <div
+    <Box
       style={{
-        marginTop: 632,
+        marginTop: 614,
       }}
-    ></div>
+    >
+      <Typography
+        variant="body2"
+        sx={{
+          textAlign: "center",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        No Saved Memories
+      </Typography>
+    </Box>
   );
 };

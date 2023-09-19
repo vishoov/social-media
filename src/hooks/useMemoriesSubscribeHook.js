@@ -1,5 +1,5 @@
 import { useCallback, useContext, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
 // import { setHomeMemoriesContent } from "../redux/SocialMediaHomeSlice";
@@ -10,8 +10,6 @@ import { Context as NotificationsContext } from "../context/NotificationContext"
 const useMemoriesSubscribeHook = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-
-  const dispatch = useDispatch();
 
   // context variables
   const { setHomeMemoriesContent } = useContext(HomeContext);
@@ -67,8 +65,9 @@ const useMemoriesSubscribeHook = () => {
     });
 
     // when i wrote above line now i didn't need to include setHomeMemoriesContent to dependency array
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [socialMediaUser?.value?.SocialMediaUserData?.userId, dispatch]);
+  }, [socialMediaUser?.value?.SocialMediaUserData?.userId]);
 
   useEffect(() => {
     callBackForSocketConnection();

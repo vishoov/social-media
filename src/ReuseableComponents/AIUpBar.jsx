@@ -1,10 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AIButton } from "./AIButton";
-import { MoreHorizRounded, SettingsSuggestRounded } from "@mui/icons-material";
+import { MoreHorizRounded } from "@mui/icons-material";
 import { useNavigate, useParams } from "react-router-dom";
 import AICreateMemoryModel from "./Profile/AICreateMemoryModel";
 import { useDispatch, useSelector } from "react-redux";
-import { Box, IconButton, Stack } from "@mui/material";
+import { Box, IconButton, Stack, Typography } from "@mui/material";
 import {
   useFollowPerson,
   useGetUserDataInProfile,
@@ -12,6 +12,7 @@ import {
 import { useCookies } from "react-cookie";
 import { setFollowButtonChange } from "../redux/UtilitiesSlice";
 import { Context as MemoryContext } from "../context/MemoryContext";
+import { Context as profileContext } from "../context/ProfileContext";
 
 export const AIUpBar = ({
   editProfile,
@@ -21,7 +22,6 @@ export const AIUpBar = ({
   message,
   MoreButton,
   userName,
-  otherUser,
 }) => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
@@ -35,8 +35,14 @@ export const AIUpBar = ({
   const auth = useSelector((state) => state.auth);
 
   const {
-    state: { socialMediaMemories, memoryCount },
+    state: { memoryCount },
   } = useContext(MemoryContext);
+
+  const {
+    state: { FollowersCount, FollowingsCount },
+  } = useContext(profileContext);
+
+  useEffect(() => {}, [FollowersCount, FollowingsCount]);
 
   // useCookies hook
   const [cookies] = useCookies(["avt_token"]);
@@ -105,54 +111,103 @@ export const AIUpBar = ({
           <Box>
             <p
               style={{
-                marginLeft: 200,
+                marginLeft: 225,
               }}
             >
-              <b>0</b> Followers
-            </p>
-          </Box>
-          <Box>
-            <p
-              style={{
-                marginLeft: 30,
-              }}
-            >
-              <b>0</b> Followings
-            </p>
-          </Box>
-          {otherUser ? (
-            <Box>
-              <p
-                style={{
-                  marginLeft: 30,
-                }}
-              >
-                <b>{memoryCount}</b> Memories
-              </p>
-            </Box>
-          ) : (
-            <Box>
-              <p
-                style={{
-                  marginLeft: 30,
-                }}
-              >
-                <b>
-                  {socialMediaMemories?.length
-                    ? socialMediaMemories?.length
+              <Stack direction="row" spacing={1} alignItems="center">
+                <Typography
+                  sx={{
+                    fontWeight: "bold",
+                  }}
+                >
+                  {FollowersCount !== null || FollowersCount !== undefined
+                    ? FollowersCount
                     : 0}
-                </b>{" "}
-                Memories
-              </p>
-            </Box>
-          )}
+                </Typography>
+                <Typography
+                  sx={{
+                    fontSize: "14px",
+                  }}
+                >
+                  Followers
+                </Typography>
+              </Stack>
+            </p>
+          </Box>
           <Box>
             <p
               style={{
                 marginLeft: 30,
               }}
             >
-              <b>0</b> Links
+              <Stack direction="row" spacing={1} alignItems="center">
+                <Typography
+                  sx={{
+                    fontWeight: "bold",
+                  }}
+                >
+                  {FollowingsCount !== null || FollowingsCount !== undefined
+                    ? FollowingsCount
+                    : 0}
+                </Typography>
+                <Typography
+                  sx={{
+                    fontSize: "14px",
+                  }}
+                >
+                  Followings
+                </Typography>
+              </Stack>
+            </p>
+          </Box>
+          <Box>
+            <p
+              style={{
+                marginLeft: 30,
+              }}
+            >
+              <Stack direction="row" spacing={1} alignItems="center">
+                <Typography
+                  sx={{
+                    fontWeight: "bold",
+                  }}
+                >
+                  {memoryCount !== null && memoryCount !== undefined
+                    ? memoryCount
+                    : 0}
+                </Typography>
+                <Typography
+                  sx={{
+                    fontSize: "14px",
+                  }}
+                >
+                  Memories
+                </Typography>
+              </Stack>
+            </p>
+          </Box>
+          <Box>
+            <p
+              style={{
+                marginLeft: 30,
+              }}
+            >
+              <Stack direction="row" spacing={1} alignItems="center">
+                <Typography
+                  sx={{
+                    fontWeight: "bold",
+                  }}
+                >
+                  0
+                </Typography>
+                <Typography
+                  sx={{
+                    fontSize: "14px",
+                  }}
+                >
+                  Links
+                </Typography>
+              </Stack>
             </p>
           </Box>
         </Stack>
@@ -182,7 +237,7 @@ export const AIUpBar = ({
         )}
         {settingsSuggested && (
           <Box>
-            <SettingsSuggestRounded
+            <MoreHorizRounded
               style={{
                 marginLeft: 30,
               }}

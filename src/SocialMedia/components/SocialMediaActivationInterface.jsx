@@ -1,5 +1,5 @@
-import { Avatar, Card, CircularProgress } from "@mui/material";
-import React, { useState } from "react";
+import { Avatar, Card, CircularProgress, Typography } from "@mui/material";
+import React, { useContext, useState } from "react";
 import salvare from "../../static/images/avatar/salvare.jpeg";
 import { AIInput } from "../../ReuseableComponents/AIInput";
 import { useForm } from "react-hook-form";
@@ -7,6 +7,8 @@ import { AIButton } from "../../ReuseableComponents/AIButton";
 import { useAddSocialMediaUser } from "../APIs/SocialMediaUserInterfaceAPIs";
 import { useCookies } from "react-cookie";
 import { useGetActivationKey } from "../../Authentication/apis/IntermediateAPIs";
+import { Context as UserContext } from "../../context/UserContext";
+import useGetProfileDetailsHook from "../../hooks/useGetProfileDetailsHook";
 
 export const SocialMediaActivationInterface = () => {
   // useForm hook
@@ -17,6 +19,12 @@ export const SocialMediaActivationInterface = () => {
   const [cookies] = useCookies(["avt_token"]);
 
   const { mutate, isLoading } = useAddSocialMediaUser();
+
+  useGetProfileDetailsHook();
+
+  const {
+    state: { socialMediaUserError },
+  } = useContext(UserContext);
 
   const [userId, setUserId] = useState(null);
 
@@ -130,6 +138,9 @@ export const SocialMediaActivationInterface = () => {
               marginBottom: 40,
             }}
           >
+            <Typography>
+              {socialMediaUserError === null ? null : socialMediaUserError}
+            </Typography>
             <Avatar
               alt="salvare"
               src={salvare}

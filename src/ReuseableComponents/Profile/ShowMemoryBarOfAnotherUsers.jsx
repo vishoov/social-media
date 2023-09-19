@@ -1,17 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { Box, Typography } from "@mui/material";
-import { useGetUserProfileInfo } from "../../SocialMedia/APIs/SocialMediaSearchInterfaceApi";
 import { OtherUsersMemoryImages } from "./OtherUsersMemoryImages";
 import { Context as SearchContext } from "../../context/SearchContext";
 import { useGetAllMemoriesForOtherUser } from "../../SocialMedia/APIs/SocialMediaMemoryInterfaceAPI";
 import { Context as MemoryContext } from "../../context/MemoryContext";
 import { useSelector } from "react-redux";
 
-export const ShowMemoryBarOfAnotherUsers = ({ username }) => {
+export const ShowMemoryBarOfAnotherUsers = ({ userName }) => {
   const [cookies] = useCookies(["avt_token"]);
-
-  const { mutate } = useGetUserProfileInfo();
 
   const [requiredDataforRequest, setRequiredDataforRequest] = useState(null);
 
@@ -19,26 +16,13 @@ export const ShowMemoryBarOfAnotherUsers = ({ username }) => {
     state: { socialMediaMemoriesOfAnotherUser },
   } = useContext(MemoryContext);
 
+  const memory = useSelector((state) => state.memories);
+
   const {
     state: { requestUserSearchData },
   } = useContext(SearchContext);
 
   const search = useSelector((state) => state.search);
-
-  useEffect(() => {
-    var isPresent = JSON.parse(
-      JSON.parse(localStorage.getItem("persist:root"))?.search
-    ).userMemoriesDetails;
-
-    if (isPresent === null || isPresent === undefined) {
-      if (username !== null || username !== undefined) {
-        mutate({
-          username: username,
-          Authorization: cookies?.avt_token,
-        });
-      }
-    }
-  }, [cookies?.avt_token, mutate, username]);
 
   const { refetch } = useGetAllMemoriesForOtherUser(requiredDataforRequest);
 
@@ -46,9 +30,7 @@ export const ShowMemoryBarOfAnotherUsers = ({ username }) => {
     if (socialMediaMemoriesOfAnotherUser?.length <= 0) {
       const memoryData = {
         Authorization: cookies?.avt_token,
-        userId:
-          search?.searchData?.at(0)?.userId ||
-          requestUserSearchData?.userPersonalDetails?.userId,
+        userId: search?.requestedUserSearchdataForPersist?.userId,
         pageNumber: 1,
       };
 
@@ -64,7 +46,8 @@ export const ShowMemoryBarOfAnotherUsers = ({ username }) => {
     refetch,
     socialMediaMemoriesOfAnotherUser?.length,
     requestUserSearchData?.userPersonalDetails?.userId,
-    search?.searchData,
+    search?.requestedUserSearchdataForPersist?.userId,
+    userName,
   ]);
 
   return (
@@ -76,7 +59,7 @@ export const ShowMemoryBarOfAnotherUsers = ({ username }) => {
         }}
       >
         <div>
-          {socialMediaMemoriesOfAnotherUser?.length > 0 ? (
+          {memory?.value?.MemoryNotFoundForOtherUserError === null ? (
             <Box display="flex" justifyContent="center">
               <OtherUsersMemoryImages />
             </Box>

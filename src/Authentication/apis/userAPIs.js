@@ -1,10 +1,17 @@
 import axios from "axios";
 import { useMutation } from "react-query";
-import { OTHER_ERROR, USER_DETAILS } from "../../redux/AuthSlice";
+import {
+  DO_SIGNIN,
+  DO_SIGNUP,
+  OTHER_ERROR,
+  USER_DETAILS,
+} from "../../redux/AuthSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { addAuthData, deleteAuthData } from "../../IndexDB";
+import { useContext } from "react";
+import { Context as UserContext } from "../../context/UserContext";
 
 const URLs = () => {
   return axios.create({
@@ -55,12 +62,66 @@ const changePassword = (data) => {
 
 // useAddUserData hooks
 export const useAddUserData = () => {
-  return useMutation(addUserData);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [, setCookie] = useCookies(["avt_token"]);
+  const { setSignUpError, setShouldSpeak } = useContext(UserContext);
+
+  return useMutation(addUserData, {
+    onSuccess: (data) => {
+      if (data?.status === 200) {
+        dispatch(DO_SIGNUP(data?.data?.data));
+
+        setCookie("avt_token", data?.data?.data?.jwtToken, {
+          expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+        });
+        navigate("/environment/home");
+        setShouldSpeak(true);
+      } else {
+        setSignUpError("email already in use");
+      }
+    },
+    onError: (error) => {
+      if (error?.response?.status === 500) {
+        setSignUpError(error?.response?.data?.message);
+      }
+    },
+    retry: 5,
+    retryDelay: 10000,
+  });
 };
 
 // useVerifyUserData hooks
 export const useVerifyUserData = () => {
-  return useMutation(verifyUserData);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [, setCookie] = useCookies(["avt_token"]);
+  const { setSignInError } = useContext(UserContext);
+
+  return useMutation(verifyUserData, {
+    onSuccess: (data) => {
+      if (data?.status === 200) {
+        dispatch(DO_SIGNIN(data?.data?.data));
+
+        setCookie("avt_token", data?.data?.data?.jwtToken, {
+          expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+        });
+        navigate("/environment/home", {
+          state: {
+            data: true,
+          },
+        });
+      } else {
+      }
+    },
+    onError: (error) => {
+      if (error?.response?.status === 400) {
+        setSignInError("invalid username or password");
+      } else {
+        setSignInError(error?.response?.data?.message);
+      }
+    },
+  });
 };
 
 // useGenerateCode hooks
