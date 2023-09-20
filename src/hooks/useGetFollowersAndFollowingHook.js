@@ -8,8 +8,6 @@ import {
 const useGetFollowersAndFollowingHook = (userId) => {
   const [cookies] = useCookies(["avt_token"]);
 
-  console.log("userId :", userId);
-
   const { refetch: refetchFollowers } = useGetFollowers({
     userId: userId,
     Authorization: cookies?.avt_token,

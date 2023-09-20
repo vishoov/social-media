@@ -9,7 +9,6 @@ import {
 import React from "react";
 import jen from "../../static/images/avatar/jen.jpeg";
 import { MoreHorizRounded } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
 
 export const ShowMemoryModel = ({ open, onClose, item, username, other }) => {
   return (
@@ -74,13 +73,11 @@ export const ShowMemoryModel = ({ open, onClose, item, username, other }) => {
               {username}
             </Typography>
           </Stack>
-          <IconButton
+          <MoreHorizRounded
             onClick={() => {
               alert("Not implemented yet");
             }}
-          >
-            <MoreHorizRounded />
-          </IconButton>
+          />
         </Stack>
         <Stack
           sx={{
@@ -133,11 +130,11 @@ export const ShowMemoryModel = ({ open, onClose, item, username, other }) => {
               p: 3,
             }}
           >
-            <Stack direction="row" spacing={1}>
+            <Stack direction="row" spacing={1} alignItems="center">
               <TextField label="Share your thoughts..." fullWidth />
-              <IconButton>
-                <Typography>Share</Typography>
-              </IconButton>
+              <Typography onClick={() => alert("not implemented yet...")}>
+                Share
+              </Typography>
             </Stack>
           </Box>
         </Stack>

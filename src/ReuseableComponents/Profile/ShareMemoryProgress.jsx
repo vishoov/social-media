@@ -1,9 +1,19 @@
 import { Box, CircularProgress } from "@mui/material";
 import React, { useEffect } from "react";
 import completeImage from "../../static/images/utils/complete.svg";
+import { useDispatch } from "react-redux";
+import { setMemoryNotFoundError } from "../../redux/SocialMediaMemoriesSlice";
 
 export const ShareMemoryProgress = ({ upBar, isLoading, data, isSuccess }) => {
-  useEffect(() => {}, [isLoading, data]);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (isSuccess) {
+      console.log("new data :", data);
+      dispatch(setMemoryNotFoundError(null));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading, data, isSuccess]);
 
   return (
     <>

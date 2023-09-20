@@ -141,8 +141,6 @@ export const useGetFollowings = (userData) => {
     () => getFollowingsOfUser(userData),
     {
       onSuccess: (success) => {
-        console.log("success in followings :", success?.data);
-
         if (success?.status === 200) {
           setFollowingsCount(
             success?.data?.data?.following?.followingsData?.length

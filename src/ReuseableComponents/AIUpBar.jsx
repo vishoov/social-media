@@ -1,16 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AIButton } from "./AIButton";
 import { MoreHorizRounded } from "@mui/icons-material";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import AICreateMemoryModel from "./Profile/AICreateMemoryModel";
-import { useDispatch, useSelector } from "react-redux";
 import { Box, IconButton, Stack, Typography } from "@mui/material";
-import {
-  useFollowPerson,
-  useGetUserDataInProfile,
-} from "../SocialMedia/APIs/SocialMediaProfileInterfaceAPI";
-import { useCookies } from "react-cookie";
-import { setFollowButtonChange } from "../redux/UtilitiesSlice";
 import { Context as MemoryContext } from "../context/MemoryContext";
 import { Context as profileContext } from "../context/ProfileContext";
 
@@ -23,14 +16,6 @@ export const AIUpBar = ({
 }) => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  // const [requestedUserData, setRequestedUserData] = useState(null);
-
-  // const { username } = useParams();
-
-  // store variables
-  // const search = useSelector((state) => state.search);
-  // const socialMediaUser = useSelector((state) => state.socialMediaUser);
-  // const auth = useSelector((state) => state.auth);
 
   const {
     state: { memoryCount },
@@ -42,44 +27,9 @@ export const AIUpBar = ({
 
   useEffect(() => {}, [FollowersCount, FollowingsCount]);
 
-  // useCookies hook
-  // const [cookies] = useCookies(["avt_token"]);
-
-  // const dispatch = useDispatch();
-
-  // var userId =
-  //   localStorage.getItem("sm_user_id") ||
-  //   socialMediaUser?.value?.SocialMediaUserData?.userId ||
-  //   auth?.value?.userDetails?.userId;
-
   const handleModelClose = () => {
     setIsOpen(false);
   };
-
-  // const { refetch } = useGetUserDataInProfile(requestedUserData);
-
-  // const { mutate } = useFollowPerson();
-
-  // const followHandler = () => {
-  //   if (userId && search?.requestedUserSearchdataForPersist?.userId) {
-  //     console.log("No userId or search data1");
-  //     const json = {
-  //       data: {
-  //         userId: search?.requestedUserSearchdataForPersist?.userId,
-  //         followerId: parseInt(userId),
-  //       },
-  //       Authorization: cookies?.avt_token,
-  //     };
-  //     mutate(json);
-  //   } else {
-  //     console.log("No userId or search data");
-  //     if (requestedUserData === null) {
-  //       setRequestedUserData(username || userName);
-  //     } else {
-  //       refetch();
-  //     }
-  //   }
-  // };
 
   return (
     <>
@@ -240,6 +190,9 @@ export const AIUpBar = ({
             <MoreHorizRounded
               style={{
                 marginLeft: 30,
+              }}
+              onClick={() => {
+                alert("not implemented yet");
               }}
             />
           </Box>

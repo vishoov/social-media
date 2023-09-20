@@ -12,7 +12,6 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
-import jen1 from "../../../static/images/avatar/jen.jpeg";
 import {
   useCheckIsUserFollowingTheOtherUser,
   useGetUserBySearch,
@@ -216,7 +215,8 @@ export const SearchBarComponent = ({ onClose, open }) => {
                           }}
                         >
                           <Avatar
-                            srcSet={jen1}
+                            srcSet={searchResults?.profilePic}
+                            src={searchResults?.profilePic}
                             sx={{
                               width: 50,
                               height: 50,

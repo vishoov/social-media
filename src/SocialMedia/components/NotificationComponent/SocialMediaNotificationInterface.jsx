@@ -9,7 +9,7 @@ import { Context as NotificationContext } from "../../../context/NotificationCon
 export const SocialMediaNotificationInterface = () => {
   useMemoriesSubscribeHook();
 
-  useGetMemoriesWithinAWeekHook();
+  const [isLoading] = useGetMemoriesWithinAWeekHook();
 
   const {
     state: { memoriesNotification },
@@ -69,6 +69,20 @@ export const SocialMediaNotificationInterface = () => {
           </Stack>
         </Box>
       </Stack>
+      {isLoading && (
+        <Typography
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "70vh",
+            fontSize: "1.5rem",
+          }}
+        >
+          {" "}
+          Loading...
+        </Typography>
+      )}
       {/* below upbar stack */}
       <Stack direction="row">
         <Stack

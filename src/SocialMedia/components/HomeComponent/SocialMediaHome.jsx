@@ -41,7 +41,7 @@ export const SocialMediaHome = () => {
 
   const handleSnackbarClose = () => {};
 
-  useGetMemoriesWithinAWeekHook();
+  const [isLoading] = useGetMemoriesWithinAWeekHook();
 
   return (
     <>
@@ -56,6 +56,20 @@ export const SocialMediaHome = () => {
         direction="column"
       >
         <Typography>{memory?.value?.memoryNotFoundError}</Typography>
+        {isLoading && (
+          <Typography
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "70vh",
+              fontSize: "1.5rem",
+            }}
+          >
+            {" "}
+            Loading...
+          </Typography>
+        )}
         <List>
           {HomeMemoriesContent?.length > 0 &&
             HomeMemoriesContent?.map((memories) => {

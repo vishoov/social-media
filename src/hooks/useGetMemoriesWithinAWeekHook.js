@@ -9,7 +9,7 @@ const useGetMemoriesWithinAWeekHook = () => {
   // useCookies hook
   const [cookies] = useCookies(["avt_token"]);
 
-  const { refetch } = useGetMemoriesWithinAWeek(requiredData);
+  const { refetch, isLoading } = useGetMemoriesWithinAWeek(requiredData);
 
   const callBack = useCallback(() => {
     const jsonData = {
@@ -26,6 +26,8 @@ const useGetMemoriesWithinAWeekHook = () => {
   useEffect(() => {
     callBack();
   }, [callBack]);
+
+  return [isLoading];
 };
 
 export default useGetMemoriesWithinAWeekHook;

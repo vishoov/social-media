@@ -81,7 +81,15 @@ export const useGetUserBySearch = () => {
       if (data?.status === 202) {
         setSearchData(empty);
       } else {
-        setSearchData(data?.data?.data);
+        const wholeData = data?.data?.data?.results?.map((item) => {
+          const newJson = {
+            userName: item?.userName,
+            profilePic: item?.profile_details?.at(0)?.urls?.at(0),
+          };
+          return newJson;
+        });
+
+        setSearchData(wholeData);
       }
     },
   });

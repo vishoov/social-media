@@ -23,7 +23,6 @@ export const MemoryImages = () => {
 
   // const memories = useSelector((state) => state.memories);
 
-  console.log("hello another time");
   const { refetch, isLoading } = useGetAllMemories(requiredData);
 
   const openModel = (item) => {

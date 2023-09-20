@@ -53,6 +53,7 @@ export const useGetMemoriesWithinAWeek = (requiredData) => {
 
           setHomeMemoriesContentWithApiCall(wholeData);
           setMemoriesNotificationsUsingApi(wholeData);
+          dispatch(setMemoryNotFoundError(null));
         } else {
           dispatch(setMemoryNotFoundError(data?.data?.message));
         }
