@@ -34,6 +34,16 @@ const ProfileReducer = (state, action) => {
         ...state,
         FollowingsCountError: action.payload,
       };
+    case "SET_FOLLOWINGS_WITH_PROFILE":
+      return {
+        ...state,
+        Followings: action.payload,
+      };
+    case "SET_FOLLOWERS_WITH_PROFILE":
+      return {
+        ...state,
+        Followers: action.payload,
+      };
     default:
       return state;
   }
@@ -42,10 +52,6 @@ const ProfileReducer = (state, action) => {
 const openModel = (dispatch) => (what) => {
   dispatch({ type: "OPEN_MODEL", payload: what });
 };
-
-// const editStyle = (dispatch) => (newStyle) => {
-//   dispatch({ type: "EDIT_STYLE", payload: newStyle });
-// };
 
 const showMemories = (dispatch) => (open) => {
   dispatch({ type: "SHOW_MEMORIES", payload: open });
@@ -78,6 +84,21 @@ const setFollowingsCountError = (dispatch) => (payload) => {
     payload: payload,
   });
 };
+
+const setFollowingsWithProfile = (dispatch) => (payload) => {
+  dispatch({
+    type: "SET_FOLLOWINGS_WITH_PROFILE",
+    payload: payload,
+  });
+};
+
+const setFollowersWithProfile = (dispatch) => (payload) => {
+  dispatch({
+    type: "SET_FOLLOWERS_WITH_PROFILE",
+    payload: payload,
+  });
+};
+
 export const { Context, Provider } = createDataContext(
   ProfileReducer,
   {
@@ -87,6 +108,8 @@ export const { Context, Provider } = createDataContext(
     setFollowingsCount,
     setFollowersCountError,
     setFollowingsCountError,
+    setFollowingsWithProfile,
+    setFollowersWithProfile,
   },
   {
     open: false,
@@ -95,5 +118,7 @@ export const { Context, Provider } = createDataContext(
     FollowingsCount: 0,
     FollowersCountError: null,
     FollowingsCountError: null,
+    Followings: [],
+    Followers: [],
   }
 );

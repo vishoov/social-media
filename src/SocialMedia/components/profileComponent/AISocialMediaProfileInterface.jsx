@@ -1,7 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { AISideBar } from "../../../ReuseableComponents/AISideBar";
 import { AIUpBar } from "../../../ReuseableComponents/AIUpBar";
-import { Avatar, Box, Stack, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  CircularProgress,
+  Stack,
+  Typography,
+} from "@mui/material";
 import jenPic1 from "../../../static/images/avatar/jen1.jpeg";
 import jenPic2 from "../../../static/images/avatar/jen2.jpeg";
 import jenPic3 from "../../../static/images/avatar/jen3.jpeg";
@@ -16,15 +22,26 @@ import useGetFollowersAndFollowingHook from "../../../hooks/useGetFollowersAndFo
 import useGetMemoriesCountHook from "../../../hooks/useGetMemoriesCountHook";
 import useGetProfileDetailsHook from "../../../hooks/useGetProfileDetailsHook";
 import { setRequestedUserSearchDataForPersist } from "../../../redux/SearchSlice";
+import { AIShowFollowingList } from "../../../ReuseableComponents/Profile/AIShowFollowingList";
+import { useCookies } from "react-cookie";
+import { Context as MemoryContext } from "../../../context/MemoryContext";
+import { useGetAllMemories } from "../../APIs/SocialMediaMemoryInterfaceAPI";
+import { AIShowFollowersList } from "../../../ReuseableComponents/Profile/AIShowFollowersList";
+
+const PAGE_SIZE = 12;
 
 export const AISocialMediaProfileInterface = () => {
   // redux variables
   const userData = useSelector((state) => state.socialMediaUser);
 
+  const [renderFollowingList, setRenderFollowingList] = useState(false);
+  const [renderFollowersList, setRenderFollowersList] = useState(false);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(setRequestedUserSearchDataForPersist(null));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useGetProfileDetailsHook();
@@ -33,20 +50,83 @@ export const AISocialMediaProfileInterface = () => {
 
   useGetFollowersAndFollowingHook(localStorage.getItem("sm_user_id"));
 
+  const [loading, setLoading] = useState(false);
+  const [requiredData, setRequiredData] = useState(null);
+
+  const [cookies] = useCookies();
+  const {
+    state: { socialMediaMemories },
+    // Assuming you have a dispatch function in your context
+  } = useContext(MemoryContext);
+
+  const { refetch } = useGetAllMemories(requiredData);
+
+  const handleScroll = (e) => {
+    const target = e.target;
+    const scrollTop = target.scrollTop;
+    const scrollHeight = target.scrollHeight;
+    const clientHeight = target.clientHeight;
+
+    if (Math.round(scrollHeight - scrollTop) - 1 <= clientHeight && !loading) {
+      console.log("reached end");
+      // User has scrolled to the end of the ImageList.
+      setLoading(true);
+
+      const memoryData = {
+        Authorization: cookies?.avt_token,
+        userId: localStorage.getItem("sm_user_id"),
+        pageNumber: Math.ceil(socialMediaMemories?.length / PAGE_SIZE) + 1,
+      };
+      setRequiredData(memoryData);
+    }
+  };
+
+  const callBack = useCallback(() => {
+    if (requiredData && loading === true) {
+      // Fetch more memories using your API and append them to socialMediaMemories
+      refetch();
+      setLoading(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [requiredData]);
+
+  useEffect(() => {
+    callBack();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [callBack]);
+
   return (
     <>
-      <div>
-        <span>
-          <AIUpBar
-            editProfile={true}
-            settingsSuggested={true}
-            shareMemory={true}
-            userName={userData?.value?.SocialMediaUserData?.userName}
+      <AISideBar />
+      <div
+        onScroll={handleScroll}
+        style={{ height: "100vh", overflowY: "auto" }}
+      >
+        <AIUpBar
+          editProfile={true}
+          settingsSuggested={true}
+          shareMemory={true}
+          userName={userData?.value?.SocialMediaUserData?.userName}
+          onClickOfFollowingList={() => setRenderFollowingList(true)}
+          onClickOfFollowersList={() => setRenderFollowersList(true)}
+        />
+        {/* components which should be render on some event */}
+        {renderFollowingList && (
+          <AIShowFollowingList
+            closeEvent={() => setRenderFollowingList(false)}
+            userId={localStorage.getItem("sm_user_id")}
           />
-        </span>
-        <span>
-          <AISideBar />
-        </span>
+        )}
+
+        {renderFollowersList && (
+          <AIShowFollowersList
+            closeEvent={() => setRenderFollowersList(false)}
+            userId={localStorage.getItem("sm_user_id")}
+          />
+        )}
+
+        {loading && <CircularProgress />}
         <Stack
           direction="row"
           sx={{
@@ -61,10 +141,9 @@ export const AISocialMediaProfileInterface = () => {
               sx={{
                 marginLeft: 40,
               }}
-              position="fixed"
             >
               <Stack direction="row" spacing={3}>
-                <Box alignItems="center" flexDirection="column">
+                <Box alignItems="center" display="flex" flexDirection="column">
                   <Avatar
                     alt="Jenna"
                     src={jenPic1}
@@ -152,11 +231,7 @@ export const AISocialMediaProfileInterface = () => {
               </Stack>
             </Stack>
           </Box>
-          <Box
-            sx={{
-              paddingRight: 3,
-            }}
-          >
+          <Box>
             <AvatarFileInput
               firstName={userData?.value?.SocialMediaUserData?.firstName}
               lastName={userData?.value?.SocialMediaUserData?.lastName}
@@ -165,15 +240,10 @@ export const AISocialMediaProfileInterface = () => {
         </Stack>
         <Stack
           sx={{
-            justifyContent: "center",
             alignItems: "center",
           }}
         >
-          <Box
-            sx={{
-              position: "fixed",
-            }}
-          >
+          <Box>
             <TabsComponent
               firstTab={<ShowMemoryBar />}
               secondTab={<ShowLinksBar />}

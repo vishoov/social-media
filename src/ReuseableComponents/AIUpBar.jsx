@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { AIButton } from "./AIButton";
 import { MoreHorizRounded } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
@@ -13,6 +13,8 @@ export const AIUpBar = ({
   settingsSuggested,
   MoreButton,
   userName,
+  onClickOfFollowingList,
+  onClickOfFollowersList,
 }) => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
@@ -25,148 +27,120 @@ export const AIUpBar = ({
     state: { FollowersCount, FollowingsCount },
   } = useContext(profileContext);
 
-  useEffect(() => {}, [FollowersCount, FollowingsCount]);
-
   const handleModelClose = () => {
     setIsOpen(false);
   };
 
   return (
-    <>
-      <Stack
-        sx={{
-          borderBottom: 1,
-          borderRadius: 2,
-          borderBottomStyle: "solid",
-          borderBottomColor: "lightBlue",
-          width: "83.5%",
-          marginLeft: "auto",
-          alignItems: "center",
-        }}
-        direction="row"
-      >
-        <Box>
-          <p
+    <Stack
+      sx={{
+        borderBottom: 1,
+        borderRadius: 2,
+        borderBottomStyle: "solid",
+        borderBottomColor: "lightBlue",
+        width: "83.5%",
+        marginLeft: "auto",
+      }}
+      direction="row"
+      spacing={32}
+    >
+      <Box>
+        <p
+          style={{
+            fontSize: 18,
+          }}
+        >
+          <b>{userName}</b>
+        </p>
+      </Box>
+      <Stack direction="row">
+        <Stack direction="row" spacing={1} alignItems="center">
+          <span
             style={{
-              textAlign: "start",
-              fontSize: 18,
-              color: "black",
-              paddingRight: 23,
+              fontWeight: "bold",
+              paddingRight: 5,
             }}
           >
-            <b>{userName}</b>
-          </p>
-        </Box>
-        <Stack direction="row">
-          <Box>
-            <p
-              style={{
-                marginLeft: 225,
-              }}
-            >
-              <Stack direction="row" spacing={1} alignItems="center">
-                <Typography
-                  sx={{
-                    fontWeight: "bold",
-                  }}
-                >
-                  {FollowersCount !== null || FollowersCount !== undefined
-                    ? FollowersCount
-                    : 0}
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: "14px",
-                  }}
-                >
-                  Followers
-                </Typography>
-              </Stack>
-            </p>
-          </Box>
-          <Box>
-            <p
-              style={{
-                marginLeft: 30,
-              }}
-            >
-              <Stack direction="row" spacing={1} alignItems="center">
-                <Typography
-                  sx={{
-                    fontWeight: "bold",
-                  }}
-                >
-                  {FollowingsCount !== null || FollowingsCount !== undefined
-                    ? FollowingsCount
-                    : 0}
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: "14px",
-                  }}
-                >
-                  Followings
-                </Typography>
-              </Stack>
-            </p>
-          </Box>
-          <Box>
-            <p
-              style={{
-                marginLeft: 30,
-              }}
-            >
-              <Stack direction="row" spacing={1} alignItems="center">
-                <Typography
-                  sx={{
-                    fontWeight: "bold",
-                  }}
-                >
-                  {memoryCount !== null && memoryCount !== undefined
-                    ? memoryCount
-                    : 0}
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: "14px",
-                  }}
-                >
-                  Memories
-                </Typography>
-              </Stack>
-            </p>
-          </Box>
-          <Box>
-            <p
-              style={{
-                marginLeft: 30,
-              }}
-            >
-              <Stack direction="row" spacing={1} alignItems="center">
-                <Typography
-                  sx={{
-                    fontWeight: "bold",
-                  }}
-                >
-                  0
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: "14px",
-                  }}
-                >
-                  Links
-                </Typography>
-              </Stack>
-            </p>
-          </Box>
+            {FollowersCount !== null || FollowersCount !== undefined
+              ? FollowersCount
+              : 0}
+          </span>
+          <span
+            style={{
+              fontSize: "14px",
+              cursor: "pointer",
+            }}
+            onClick={onClickOfFollowersList}
+          >
+            Followers
+          </span>
         </Stack>
+        <Stack direction="row" spacing={1} alignItems="center" marginLeft={4}>
+          <Typography
+            sx={{
+              fontWeight: "bold",
+            }}
+          >
+            {FollowingsCount !== null || FollowingsCount !== undefined
+              ? FollowingsCount
+              : 0}
+          </Typography>
+          <Typography
+            sx={{
+              fontSize: "14px",
+              cursor: "pointer",
+            }}
+            onClick={onClickOfFollowingList}
+          >
+            Followings
+          </Typography>
+        </Stack>
+
+        <Stack direction="row" spacing={1} alignItems="center" marginLeft={4}>
+          <Typography
+            sx={{
+              fontWeight: "bold",
+            }}
+          >
+            {memoryCount !== null && memoryCount !== undefined
+              ? memoryCount
+              : 0}
+          </Typography>
+          <Typography
+            sx={{
+              fontSize: "14px",
+              cursor: "pointer",
+            }}
+          >
+            Memories
+          </Typography>
+        </Stack>
+
+        <Stack direction="row" spacing={1} alignItems="center" marginLeft={4}>
+          <Typography
+            sx={{
+              fontWeight: "bold",
+            }}
+          >
+            0
+          </Typography>
+          <Typography
+            sx={{
+              fontSize: "14px",
+              cursor: "pointer",
+            }}
+          >
+            Links
+          </Typography>
+        </Stack>
+      </Stack>
+      <Stack direction="row" alignItems="center">
         {editProfile && (
           <Box>
             <AIButton
               content="Edit Profile"
               style={{
-                marginLeft: 400,
+                marginLeft: 150,
               }}
               onClick={() => navigate("/environment/socialmedia/profile/edit")}
             />
@@ -197,7 +171,6 @@ export const AIUpBar = ({
             />
           </Box>
         )}
-
         <Box>
           <AICreateMemoryModel
             isEmpty={true}
@@ -221,6 +194,6 @@ export const AIUpBar = ({
           </Box>
         )}
       </Stack>
-    </>
+    </Stack>
   );
 };

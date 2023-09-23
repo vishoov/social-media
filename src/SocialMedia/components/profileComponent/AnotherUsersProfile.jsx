@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { AIAnotherUserUpBar } from "../../../ReuseableComponents/AIAnotherUserUpBar";
 import { AISideBar } from "../../../ReuseableComponents/AISideBar";
 import { Avatar, Box, Stack, Typography } from "@mui/material";
@@ -11,14 +11,21 @@ import jenPic3 from "../../../static/images/avatar/jen3.jpeg";
 import jenPic4 from "../../../static/images/avatar/jen4.jpeg";
 import { ShowMemoryBarOfAnotherUsers } from "../../../ReuseableComponents/Profile/ShowMemoryBarOfAnotherUsers";
 import { Context as SearchContext } from "../../../context/SearchContext";
+import { Context as MemoryContext } from "../../../context/MemoryContext";
 
 import { useParams } from "react-router-dom";
 import { useGetUserProfileInfo } from "../../APIs/SocialMediaSearchInterfaceApi";
 import { useCookies } from "react-cookie";
 import { useSelector } from "react-redux";
 import useGetMemoriesCountHook from "../../../hooks/useGetMemoriesCountHook";
+import { useGetAllMemoriesForOtherUser } from "../../APIs/SocialMediaMemoryInterfaceAPI";
+import { AIShowFollowingList } from "../../../ReuseableComponents/Profile/AIShowFollowingList";
+
+const PAGE_SIZE = 12;
 
 export const AnotherUsersProfile = () => {
+  const [renderFollowingList, setRenderFollowingList] = useState(false);
+
   const { username } = useParams();
 
   const {
@@ -56,22 +63,72 @@ export const AnotherUsersProfile = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [callBack, data?.status, data?.data?.data]);
 
+  const {
+    state: { socialMediaMemoriesOfAnotherUser },
+  } = useContext(MemoryContext);
+
+  const [loading, setLoading] = useState(false);
+  const [requiredData, setRequiredData] = useState(null);
+
+  const { refetch } = useGetAllMemoriesForOtherUser(requiredData);
+
+  const handleScroll = (e) => {
+    const target = e.target;
+    const scrollTop = target.scrollTop;
+    const scrollHeight = target.scrollHeight;
+    const clientHeight = target.clientHeight;
+
+    if (Math.round(scrollHeight - scrollTop) <= clientHeight && !loading) {
+      // User has scrolled to the end of the ImageList.
+      setLoading(true);
+
+      const memoryData = {
+        Authorization: cookies?.avt_token,
+        userId:
+          search?.requestedUserSearchdataForPersist?.userId ||
+          requestUserSearchData?.userPersonalDetails?.userId,
+        pageNumber:
+          Math.ceil(socialMediaMemoriesOfAnotherUser?.length / PAGE_SIZE) + 1,
+      };
+      setRequiredData(memoryData);
+    }
+  };
+
+  const callBack1 = useCallback(() => {
+    if (requiredData) {
+      // Fetch more memories using your API and append them to socialMediaMemories
+      refetch();
+      setLoading(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [requiredData]);
+
+  useEffect(() => {
+    callBack1();
+  }, [callBack1]);
+
   return (
     <>
-      <div>
-        <span>
-          <AIAnotherUserUpBar
-            MoreButton={true}
-            follow={true}
-            message={true}
-            userName={
-              requestUserSearchData?.userPersonalDetails?.userName || username
-            }
+      <AISideBar />
+      <div
+        onScroll={handleScroll}
+        style={{ height: "100vh", overflowY: "auto" }}
+      >
+        <AIAnotherUserUpBar
+          MoreButton={true}
+          follow={true}
+          message={true}
+          userName={
+            requestUserSearchData?.userPersonalDetails?.userName || username
+          }
+          onClickOfFollowingList={() => setRenderFollowingList(true)}
+        />
+        {renderFollowingList && (
+          <AIShowFollowingList
+            closeEvent={() => setRenderFollowingList(false)}
+            userId={search?.requestedUserSearchdataForPersist?.userId}
           />
-        </span>
-        <span>
-          <AISideBar />
-        </span>
+        )}
         <Stack
           direction="row"
           sx={{
@@ -86,7 +143,6 @@ export const AnotherUsersProfile = () => {
               sx={{
                 marginLeft: 40,
               }}
-              position="fixed"
             >
               <Stack direction="row" spacing={3}>
                 <Box alignItems="center" flexDirection="column">
@@ -178,11 +234,7 @@ export const AnotherUsersProfile = () => {
               </Stack>
             </Stack>
           </Box>
-          <Box
-            sx={{
-              paddingRight: 4,
-            }}
-          >
+          <Box>
             <Avatar
               alt="Avatar"
               id="avatar"
@@ -191,12 +243,12 @@ export const AnotherUsersProfile = () => {
                 ?.profile_details?.at(0)
                 ?.urls?.at(0)}
               sx={{
-                width: 300,
-                height: 300,
+                width: 280,
+                height: 280,
                 cursor: "pointer",
               }}
               style={{
-                margin: 15,
+                margin: 10,
               }}
             />
             <p
@@ -214,15 +266,10 @@ export const AnotherUsersProfile = () => {
         </Stack>
         <Stack
           sx={{
-            justifyContent: "center",
             alignItems: "center",
           }}
         >
-          <Box
-            sx={{
-              position: "fixed",
-            }}
-          >
+          <Box>
             <TabsComponent
               firstTab={<ShowMemoryBarOfAnotherUsers userName={username} />}
               secondTab={<ShowLinksBar />}

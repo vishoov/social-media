@@ -1,29 +1,18 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
-import ImageList from "@mui/material/ImageList";
-import ImageListItem from "@mui/material/ImageListItem";
+import React, { useContext, useState } from "react";
 import { ShowMemoryModel } from "./ShowMemoryModel";
-import { useGetAllMemories } from "../../SocialMedia/APIs/SocialMediaMemoryInterfaceAPI";
-import { useCookies } from "react-cookie";
 import { Context as MemoryContext } from "../../context/MemoryContext";
-import { CircularProgress } from "@mui/material";
+import { Grid } from "@mui/material";
 
-const PAGE_SIZE = 12; // Number of images to load per page
+// const PAGE_SIZE = 12; // Number of images to load per page
 
 export const MemoryImages = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImageUrl, setSelectedImageUrl] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [requiredData, setRequiredData] = useState(null);
 
-  const [cookies] = useCookies();
   const {
     state: { socialMediaMemories },
     // Assuming you have a dispatch function in your context
   } = useContext(MemoryContext);
-
-  // const memories = useSelector((state) => state.memories);
-
-  const { refetch, isLoading } = useGetAllMemories(requiredData);
 
   const openModel = (item) => {
     setSelectedImageUrl(item);
@@ -35,84 +24,35 @@ export const MemoryImages = () => {
     setIsModalOpen(false);
   };
 
-  const handleScroll = (e) => {
-    const target = e.target;
-    const scrollTop = target.scrollTop;
-    const scrollHeight = target.scrollHeight;
-    const clientHeight = target.clientHeight;
-
-    console.log(Math.ceil(scrollHeight - scrollTop) <= clientHeight);
-    console.log(!loading);
-
-    console.log(Math.ceil(scrollHeight - scrollTop));
-
-    if (Math.round(scrollHeight - scrollTop) <= clientHeight && !loading) {
-      // User has scrolled to the end of the ImageList.
-      setLoading(true);
-
-      const memoryData = {
-        Authorization: cookies?.avt_token,
-        userId: localStorage.getItem("sm_user_id"),
-        pageNumber: Math.ceil(socialMediaMemories?.length / PAGE_SIZE) + 1,
-      };
-      setRequiredData(memoryData);
-    }
-  };
-
-  const callBack = useCallback(() => {
-    if (requiredData) {
-      // Fetch more memories using your API and append them to socialMediaMemories
-      refetch();
-      setLoading(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [requiredData]);
-
-  useEffect(() => {
-    callBack();
-
-    if (loading) {
-      setTimeout(() => {
-        setLoading(false);
-      }, 3000);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [callBack]);
-
   return (
     <div>
-      <ImageList
-        className="my-image-list" // Add a class name for targeting the ImageList
+      <Grid
         sx={{
-          width: 975,
-          height: 600,
+          width: 1000,
+          paddingTop: 1,
         }}
-        cols={3}
-        onScroll={(e) => handleScroll(e)}
-        gap={1}
+        spacing={3}
       >
-        {socialMediaMemories !== undefined &&
-          socialMediaMemories.map((images) => {
-            return (
-              <ImageListItem key={images?.urls}>
+        <Grid container justifyContent="center">
+          {socialMediaMemories !== undefined &&
+            socialMediaMemories.map((images) => {
+              return (
                 <img
                   src={images?.urls}
                   srcSet={images?.urls}
                   alt="imageNotFound"
                   loading="lazy"
                   style={{
-                    padding: 1,
+                    margin: 1.5,
                     width: 320,
                     height: 320,
-                    cursor: "pointer",
                   }}
                   onClick={() => openModel(images)}
                 />
-              </ImageListItem>
-            );
-          })}
-      </ImageList>
-      {isLoading && <CircularProgress />}
+              );
+            })}
+        </Grid>
+      </Grid>
       {isModalOpen && (
         <ShowMemoryModel
           item={selectedImageUrl}

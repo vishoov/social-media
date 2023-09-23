@@ -5,19 +5,13 @@ export const ShowSavedMemories = () => {
   return (
     <Box
       style={{
-        marginTop: 614,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: 100,
       }}
     >
-      <Typography
-        variant="body2"
-        sx={{
-          textAlign: "center",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        No Saved Memories
-      </Typography>
+      <Typography variant="body2">No Saved Memories</Typography>
     </Box>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AISideBar } from "../../../ReuseableComponents/AISideBar";
 import {
   Alert,
@@ -18,11 +18,11 @@ import {
   SendRounded,
   TvRounded,
 } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
 import useMemoriesSubscribeHook from "../../../hooks/useMemoriesSubscribeHook";
 import useGetMemoriesWithinAWeekHook from "../../../hooks/useGetMemoriesWithinAWeekHook";
 import { Context as HomeContext } from "../../../context/HomeContext";
-import { useSelector } from "react-redux";
+import useNavigateByUsingUserName from "../../../hooks/useNavigateByUsingUserName";
+// import { useSelector } from "react-redux";
 
 export const SocialMediaHome = () => {
   // live memories updates
@@ -32,44 +32,45 @@ export const SocialMediaHome = () => {
     state: { HomeMemoriesContent },
   } = useContext(HomeContext);
 
-  const memory = useSelector((state) => state.memories);
-
-  // const HOME = useSelector((state) => state.home);
-
-  // useNavigate hook
-  const navigate = useNavigate();
-
   const handleSnackbarClose = () => {};
 
   const [isLoading] = useGetMemoriesWithinAWeekHook();
+
+  const [username, setUsername] = useState("");
+
+  useEffect(() => {
+    console.log("User", username);
+  }, [username]);
+
+  useNavigateByUsingUserName(username);
 
   return (
     <>
       <Box>
         <AISideBar />
       </Box>
+      {isLoading && (
+        <Typography
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "85vh",
+            fontSize: "1.5rem",
+          }}
+        >
+          {" "}
+          Loading...
+        </Typography>
+      )}
       <Stack
         sx={{
-          marginLeft: 45,
+          marginLeft: 70,
           paddingTop: 15,
         }}
         direction="column"
       >
-        <Typography>{memory?.value?.memoryNotFoundError}</Typography>
-        {isLoading && (
-          <Typography
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "70vh",
-              fontSize: "1.5rem",
-            }}
-          >
-            {" "}
-            Loading...
-          </Typography>
-        )}
+        {/* <Typography>{memory?.value?.memoryNotFoundError}</Typography> */}
         <List>
           {HomeMemoriesContent?.length > 0 &&
             HomeMemoriesContent?.map((memories) => {
@@ -109,8 +110,8 @@ export const SocialMediaHome = () => {
                             srcSet={memories?.profileUrl}
                             alt="nothing"
                             sx={{
-                              width: 35,
-                              height: 35,
+                              width: 25,
+                              height: 25,
                             }}
                           />
                         </Box>
@@ -122,11 +123,7 @@ export const SocialMediaHome = () => {
                               color: "black",
                               cursor: "pointer",
                             }}
-                            onClick={() => {
-                              navigate(
-                                `/environment/socialMedia/profile/username`
-                              );
-                            }}
+                            onClick={() => setUsername(memories?.userName)}
                           >
                             {memories?.userName}
                           </Typography>

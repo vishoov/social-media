@@ -20,6 +20,7 @@ export const AIAnotherUserUpBar = ({
   message,
   MoreButton,
   userName,
+  onClickOfFollowingList,
 }) => {
   //   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
@@ -72,7 +73,6 @@ export const AIAnotherUserUpBar = ({
       };
       mutate(json);
     } else {
-      console.log("No userId or search data");
       if (requestedUserData === null) {
         setRequestedUserData(username || userName);
       } else {
@@ -127,6 +127,7 @@ export const AIAnotherUserUpBar = ({
                 <Typography
                   sx={{
                     fontSize: "14px",
+                    cursor: "pointer",
                   }}
                 >
                   Followers
@@ -153,7 +154,9 @@ export const AIAnotherUserUpBar = ({
                 <Typography
                   sx={{
                     fontSize: "14px",
+                    cursor: "pointer",
                   }}
+                  onClick={onClickOfFollowingList}
                 >
                   Followings
                 </Typography>
@@ -179,6 +182,7 @@ export const AIAnotherUserUpBar = ({
                 <Typography
                   sx={{
                     fontSize: "14px",
+                    cursor: "pointer",
                   }}
                 >
                   Memories
@@ -203,6 +207,7 @@ export const AIAnotherUserUpBar = ({
                 <Typography
                   sx={{
                     fontSize: "14px",
+                    cursor: "pointer",
                   }}
                 >
                   Links

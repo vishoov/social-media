@@ -6,19 +6,13 @@ export const ShowLinksBar = () => {
     <>
       <Box
         style={{
-          marginTop: 614,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: 100,
         }}
       >
-        <Typography
-          variant="body2"
-          sx={{
-            textAlign: "center",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          No implemented yet.
-        </Typography>
+        <Typography variant="body2">No implemented yet.</Typography>
       </Box>
     </>
   );

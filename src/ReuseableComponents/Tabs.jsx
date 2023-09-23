@@ -10,21 +10,15 @@ const TabsComponent = ({ firstTab, secondTab, style, thirdTab }) => {
 
   return (
     <div style={style}>
-      <Tabs
-        value={selectedTab}
-        onChange={handleTabChange}
-        centered
-        sx={{
-          marginTop: 60,
-        }}
-      >
+      <Tabs value={selectedTab} onChange={handleTabChange} centered>
         <Tab label="MEMORIES" />
         <Tab label="LINKS" />
         <Tab label="SAVED" />
       </Tabs>
       <Divider
         sx={{
-          width: 975,
+          width: 965,
+          marginLeft: 2,
         }}
       />
       {selectedTab === 0 && firstTab}

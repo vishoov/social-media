@@ -46,6 +46,32 @@ const getUserData = (userData) => {
   }
 };
 
+const getFollowingsWithProfilePics = (userData) => {
+  if (userData?.Authorization && userData?.userId) {
+    return followersUrl().get("/get/all/followings/with/profilepics", {
+      headers: {
+        Authorization: "Bearer " + userData?.Authorization,
+      },
+      params: {
+        userId: userData?.userId,
+      },
+    });
+  }
+};
+
+const getFollowersWithProfilePics = (profile) => {
+  if (profile?.Authorization && profile?.userId) {
+    return followersUrl().get("/get/all/followers/with/profilepics", {
+      headers: {
+        Authorization: "Bearer " + profile?.Authorization,
+      },
+      params: {
+        userId: profile?.userId,
+      },
+    });
+  }
+};
+
 const getFollowersOfUser = (userData) => {
   if (userData?.userId && userData?.Authorization) {
     return followersUrl().get("/get/allfollowers", {
@@ -103,6 +129,76 @@ const followSomeone = (formData) => {
 };
 
 // hooks
+
+export const useGetFollowingsWithProfilePics = (userData) => {
+  const { setFollowingsWithProfile } = useContext(profileContext);
+
+  return useQuery(
+    ["getFollowingsWithProfilePics", userData],
+    () => getFollowingsWithProfilePics(userData),
+    {
+      onSuccess: (success) => {
+        if (success?.status === 200) {
+          var wholeData = success?.data?.data?.results?.map((item) =>
+            item?.profile_details?.map((ithData) => {
+              return {
+                userName: item?.userName,
+                profileUrl: ithData?.urls.at(0),
+              };
+            })
+          );
+
+          console.log("whole data", wholeData);
+          setFollowingsWithProfile(wholeData);
+        } else {
+          setFollowingsWithProfile([]);
+        }
+      },
+      onError: (error) => {
+        setFollowingsWithProfile([]);
+      },
+      refetchOnMount: false,
+      enabled: false,
+      retry: 5,
+      retryDelay: 1000,
+    }
+  );
+};
+
+export const useGetFollowersWithProfilePics = (userData) => {
+  const { setFollowersWithProfile } = useContext(profileContext);
+
+  return useQuery(
+    ["getFollowingsWithProfilePics", userData],
+    () => getFollowersWithProfilePics(userData),
+    {
+      onSuccess: (success) => {
+        if (success?.status === 200) {
+          var wholeData = success?.data?.data?.results?.map((item) =>
+            item?.profile_details?.map((ithData) => {
+              return {
+                userName: item?.userName,
+                profileUrl: ithData?.urls.at(0),
+              };
+            })
+          );
+
+          console.log("whole data", wholeData);
+          setFollowersWithProfile(wholeData);
+        } else {
+          setFollowersWithProfile([]);
+        }
+      },
+      onError: (error) => {
+        setFollowersWithProfile([]);
+      },
+      refetchOnMount: false,
+      enabled: false,
+      retry: 5,
+      retryDelay: 1000,
+    }
+  );
+};
 
 export const useGetFollowers = (userData) => {
   const { setFollowersCount, setFollowersCountError } =

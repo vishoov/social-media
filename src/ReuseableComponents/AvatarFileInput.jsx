@@ -120,7 +120,7 @@ export const AvatarFileInput = ({ firstName, lastName }) => {
           cursor: "pointer",
         }}
         style={{
-          margin: 15,
+          margin: 10,
         }}
         onClick={handleAvatarClick}
       />

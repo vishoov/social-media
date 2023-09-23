@@ -16,8 +16,6 @@ export const ShowMemoryBarOfAnotherUsers = ({ userName }) => {
     state: { socialMediaMemoriesOfAnotherUser },
   } = useContext(MemoryContext);
 
-  const memory = useSelector((state) => state.memories);
-
   const {
     state: { requestUserSearchData },
   } = useContext(SearchContext);
@@ -59,7 +57,7 @@ export const ShowMemoryBarOfAnotherUsers = ({ userName }) => {
         }}
       >
         <div>
-          {memory?.value?.MemoryNotFoundForOtherUserError === null ? (
+          {socialMediaMemoriesOfAnotherUser?.length > 0 ? (
             <Box display="flex" justifyContent="center">
               <OtherUsersMemoryImages />
             </Box>
