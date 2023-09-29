@@ -8,10 +8,14 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import jenPic1 from "../../../static/images/avatar/jen1.jpeg";
-import jenPic2 from "../../../static/images/avatar/jen2.jpeg";
-import jenPic3 from "../../../static/images/avatar/jen3.jpeg";
-import jenPic4 from "../../../static/images/avatar/jen4.jpeg";
+// import jenPic1 from "../../../static/images/avatar/jen1.jpeg";
+// import jenPic2 from "../../../static/images/avatar/jen2.jpeg";
+// import jenPic3 from "../../../static/images/avatar/jen3.jpeg";
+// import jenPic4 from "../../../static/images/avatar/jen4.jpeg";
+import jenPic1 from "../../../static/images/avatar/jen2.jpeg";
+import jenPic2 from "../../../static/images/avatar/jen3.jpeg";
+import jenPic3 from "../../../static/images/avatar/jen4.jpeg";
+import jenPic4 from "../../../static/images/avatar/jen5.jpeg";
 import { AvatarFileInput } from "../../../ReuseableComponents/AvatarFileInput";
 import TabsComponent from "../../../ReuseableComponents/Tabs";
 import { ShowMemoryBar } from "../../../ReuseableComponents/Profile/ShowMemoryBar";
@@ -137,7 +141,8 @@ export const AISocialMediaProfileInterface = () => {
           <Box>
             <Stack
               direction="row"
-              spacing={3}
+              // spacing={3}
+              spacing={8}
               sx={{
                 marginLeft: 40,
               }}
@@ -210,6 +215,7 @@ export const AISocialMediaProfileInterface = () => {
                       fontWeight: "bold",
                       color: "black",
                       paddingLeft: 85,
+                      // paddingLeft: 85,
                     }}
                   >
                     About Me
@@ -220,6 +226,7 @@ export const AISocialMediaProfileInterface = () => {
                     sx={{
                       color: "black",
                       marginLeft: 10,
+                      // marginLeft: 10,
                       fontSize: "14px",
                       maxWidth: 500,
                     }}

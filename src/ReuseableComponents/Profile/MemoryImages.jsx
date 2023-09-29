@@ -29,9 +29,14 @@ export const MemoryImages = () => {
       <Grid
         sx={{
           width: 1000,
+<<<<<<< HEAD
           paddingTop: 1,
         }}
         spacing={3}
+=======
+          paddingTop: 3,
+        }}
+>>>>>>> 1c23d29 (NewCommits)
       >
         <Grid container justifyContent="center">
           {socialMediaMemories !== undefined &&

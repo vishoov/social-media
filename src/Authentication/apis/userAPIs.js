@@ -19,6 +19,7 @@ const URLs = () => {
   });
 };
 
+<<<<<<< HEAD
 // const userVerificationForgotPassword = (user) => {
 //   return URLs().post("/forgotPassword/apply", user);
 // };
@@ -40,6 +41,8 @@ const URLs = () => {
 
 // };
 
+=======
+>>>>>>> 1c23d29 (NewCommits)
 // helper methods
 
 const addUserData = (user) => {
