@@ -40,13 +40,9 @@ export const useAddSocialMediaUser = () => {
       }
     },
     onError: () => {
-<<<<<<< HEAD
-      setSocialMediaUserError("something went wrong");
-=======
       setSocialMediaUserError(
         "unable to load your social media user interface..."
       );
->>>>>>> 1c23d29 (NewCommits)
     },
   });
 };

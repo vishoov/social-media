@@ -81,10 +81,8 @@ export const AISideBar = () => {
                   size="medium"
                   style={{ width: 300, marginBottom: 10 }}
                   startIcon={<ChatBubbleOutlineRounded />}
-<<<<<<< HEAD
-=======
                   onClick={() => navigate("/environment/socialMedia/message")}
->>>>>>> 1c23d29 (NewCommits)
+                  s
                 >
                   <p
                     style={{

@@ -15,10 +15,7 @@ import { AISocialMediaProfileInterface } from "./SocialMedia/components/profileC
 import { AISocialMediaEditProfile } from "./SocialMedia/components/profileComponent/AISocialMediaEditProfile";
 import { AnotherUsersProfile } from "./SocialMedia/components/profileComponent/AnotherUsersProfile";
 import { SocialMediaNotificationInterface } from "./SocialMedia/components/NotificationComponent/SocialMediaNotificationInterface";
-<<<<<<< HEAD
-=======
 import { MessagingComponent } from "./SocialMedia/components/MessagingComponents/MessagingComponent";
->>>>>>> 1c23d29 (NewCommits)
 
 export const Routes = ({ children }) => {
   const routes = createBrowserRouter([
@@ -112,8 +109,6 @@ export const Routes = ({ children }) => {
                 </AIAuthentication>
               ),
             },
-<<<<<<< HEAD
-=======
             {
               path: "message",
               element: (
@@ -122,7 +117,6 @@ export const Routes = ({ children }) => {
                 </AIAuthentication>
               ),
             },
->>>>>>> 1c23d29 (NewCommits)
           ],
         },
       ],
