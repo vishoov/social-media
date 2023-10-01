@@ -138,7 +138,13 @@ export const SocialMediaActivationInterface = () => {
               marginBottom: 40,
             }}
           >
-            <Typography>
+            <Typography
+              sx={{
+                marginRight: 20,
+                color: "red",
+              }}
+              variant="subtitle1"
+            >
               {socialMediaUserError === null ? null : socialMediaUserError}
             </Typography>
             <Avatar

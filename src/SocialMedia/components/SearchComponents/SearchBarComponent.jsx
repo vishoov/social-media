@@ -5,7 +5,9 @@ import {
   InputAdornment,
   List,
   ListItem,
+  ListItemAvatar,
   ListItemButton,
+  ListItemText,
   Modal,
   Stack,
   TextField,
@@ -207,13 +209,7 @@ export const SearchBarComponent = ({ onClose, open }) => {
                         }}
                         onClick={() => handleNavigate(searchResults?.userName)}
                       >
-                        <Stack
-                          spacing={2}
-                          direction="row"
-                          sx={{
-                            alignItems: "center",
-                          }}
-                        >
+                        <ListItemAvatar>
                           <Avatar
                             srcSet={searchResults?.profilePic}
                             src={searchResults?.profilePic}
@@ -223,8 +219,11 @@ export const SearchBarComponent = ({ onClose, open }) => {
                             }}
                             alt="userNotFound"
                           />
-                          <Typography>{searchResults?.userName}</Typography>
-                        </Stack>
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={searchResults?.userName}
+                          secondary={searchResults?.userName}
+                        />
                       </ListItemButton>
                     </ListItem>
                   );

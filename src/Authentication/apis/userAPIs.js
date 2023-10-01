@@ -112,11 +112,14 @@ export const useVerifyUserData = () => {
           },
         });
       } else {
+        setSignInError("invalid username or password");
       }
     },
     onError: (error) => {
       if (error?.response?.status === 400) {
         setSignInError("invalid username or password");
+      } else if (error.response?.status === 503) {
+        setSignInError("service unavailable");
       } else {
         setSignInError(error?.response?.data?.message);
       }

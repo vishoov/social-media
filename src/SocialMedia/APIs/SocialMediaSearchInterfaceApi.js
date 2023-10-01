@@ -78,6 +78,7 @@ export const useGetUserBySearch = () => {
     },
     onSuccess: (data) => {
       const empty = [];
+
       if (data?.status === 202) {
         setSearchData(empty);
       } else {
@@ -90,6 +91,35 @@ export const useGetUserBySearch = () => {
         });
 
         setSearchData(wholeData);
+      }
+    },
+  });
+};
+
+export const useGetUserBySearchForMessages = () => {
+  const dispatch = useDispatch();
+
+  const { setSearchDataForMessages } = useContext(SearchContext);
+
+  return useMutation(getUserBySearch, {
+    onError: (error) => {
+      dispatch(setSearchDataError(error));
+    },
+    onSuccess: (data) => {
+      const empty = [];
+      if (data?.status === 202) {
+        setSearchDataForMessages(empty);
+      } else {
+        const wholeData = data?.data?.data?.results?.map((item) => {
+          const newJson = {
+            userName: item?.userName,
+            profilePic: item?.profile_details?.at(0)?.urls?.at(0),
+            userId: item?.userId,
+          };
+          return newJson;
+        });
+
+        setSearchDataForMessages(wholeData);
       }
     },
   });
