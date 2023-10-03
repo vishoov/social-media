@@ -63,6 +63,7 @@ export const WelcomeMessaging = () => {
       userName: communications?.userName,
       profilePic: communications?.profilePic,
       conversationId: generateUniqueNumber(),
+      userId: communications?.userId,
     };
 
     dispatch(setSelectedConversation(generatedData));
