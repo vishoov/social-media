@@ -3,10 +3,14 @@ import createDataContext from "./createDataContext";
 const MESSAGE_REDUCER = (state, action) => {
   switch (action.type) {
     case "SET_SENT_MESSAGES":
-      return {
-        ...state,
-        sent_messages: [...state.sent_messages, action.payload],
-      };
+      if (action?.payload?.should_be_empty) {
+        return [];
+      } else {
+        return {
+          ...state,
+          sent_messages: [...state.sent_messages, action.payload],
+        };
+      }
     case "SET_RECEIVED_MESSAGES":
       return {
         ...state,
@@ -16,6 +20,11 @@ const MESSAGE_REDUCER = (state, action) => {
       return {
         ...state,
         error: action.payload,
+      };
+    case "SET_ALL_CONVERSATIONS":
+      return {
+        ...state,
+        all_conversations: [...state.all_conversations, action.payload],
       };
     default:
       return state;
@@ -43,6 +52,13 @@ const set_error = (dispatch) => (payload) => {
   });
 };
 
+const set_all_conversations = (dispatch) => (payload) => {
+  dispatch({
+    type: "SET_ALL_CONVERSATIONS",
+    payload: payload,
+  });
+};
+
 export const { Context, Provider } = createDataContext(
   MESSAGE_REDUCER,
   {
@@ -50,11 +66,13 @@ export const { Context, Provider } = createDataContext(
     set_sent_messages,
     set_received_messages,
     set_error,
+    set_all_conversations,
   },
   {
     // all states
     sent_messages: [],
     received_messages: [],
     error: null,
+    all_conversations: [],
   }
 );

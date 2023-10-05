@@ -47,15 +47,8 @@ const useMemoriesSubscribeHook = () => {
             created: data?.created,
           };
 
-          // setHomeMemoriesContent(jsonData);
-
           setHomeMemoriesContent(jsonData);
           setMemoriesNotification(jsonData);
-
-          // callBackForHomeMemoriesContent(jsonData);
-
-          // dispatch(setHomeMemoriesContent(jsonData));
-          // dispatch(setMemoriesNotification(jsonData));
 
           // Show a Snackbar notification
           setSnackbarMessage(`${data?.userName} just shared a memory`);

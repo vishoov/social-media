@@ -1,63 +1,62 @@
-import React, { useEffect, useState } from "react";
-import { useCookies } from "react-cookie";
-import { useGetProfileDetails } from "../SocialMedia/APIs/SocialMediaProfileInterfaceAPI";
-import jen1 from "../static/images/avatar/Jen20.jpeg";
-import { Avatar } from "@mui/material";
+import React, { useEffect } from "react";
+import space from "../static/images/utils/spacex.svg";
+import { Avatar, Stack, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
+import { useGet_all_conversations_of_specific_user } from "../SocialMedia/APIs/SocialMediaMessageInterfaceAPI";
+import { useCookies } from "react-cookie";
 
-export const AILoader = ({ children }) => {
+export const AILoader = () => {
+  const select = useSelector((state) => state.utilities);
+
   const [cookies] = useCookies(["avt_token"]);
 
-  const [requiredData, setRequiredData] = useState({});
-
-  const { isLoading, refetch } = useGetProfileDetails(requiredData);
-
-  const socialMediaUser = useSelector((state) => state.socialMediaUser);
+  const { refetch: refetchForMessagingInterface } =
+    useGet_all_conversations_of_specific_user({
+      Authorization: cookies?.avt_token,
+      userId: localStorage.getItem("sm_user_id"),
+    });
 
   useEffect(() => {
-    if (
-      Object.keys(requiredData).length > 0 &&
-      socialMediaUser?.value?.SocialMediaUserData !== null
-    ) {
-      if (cookies.avt_token !== null) {
-        refetch();
-      }
-    } else {
-      setRequiredData({
-        Authorization: cookies?.avt_token,
-      });
+    switch (select?.currentInterface) {
+      case "MESSAGING_INTERFACE":
+        refetchForMessagingInterface();
+        break;
+      default:
+        break;
     }
-  }, [
-    cookies.avt_token,
-    refetch,
-    requiredData,
-    socialMediaUser?.value?.SocialMediaUserData,
-  ]);
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <>
-      {isLoading ? (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
+      <Stack
+        style={{
+          height: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+        spacing={60}
+      >
+        <Avatar
+          variant="square"
+          src={space}
+          srcSet={space}
+          alt="not found!"
+          sx={{
+            width: 250,
+            height: 250,
           }}
+        />
+        <Typography
+          variant="subtitle1"
+          color="lightgray"
+          justifyContent="center"
         >
-          <Avatar
-            variant="square"
-            src={jen1}
-            srcSet={jen1}
-            alt="not found!!!"
-            style={{
-              width: 400,
-              height: 400,
-            }}
-          />
-        </div>
-      ) : (
-        <>{children}</>
-      )}
+          from
+        </Typography>
+      </Stack>
     </>
   );
 };

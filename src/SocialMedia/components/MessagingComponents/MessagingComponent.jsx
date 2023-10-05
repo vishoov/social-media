@@ -83,19 +83,19 @@ export const MessagingComponent = () => {
 
     set_sent_messages({ message: data?.message });
 
-    if (sent_messages?.length < 1) {
-      stompClient.send(
-        `/create/conversation/${conversationId}`,
-        {},
-        JSON.stringify(buildMessage)
-      );
-    } else {
-      stompClient.send(
-        `/update/conversation/${conversationId}`,
-        {},
-        JSON.stringify(buildMessage)
-      );
-    }
+    // if (sent_messages?.length < 1) {
+    stompClient.send(
+      `/create/conversation/${conversationId}`,
+      {},
+      JSON.stringify(buildMessage)
+    );
+    // } else {
+    //   stompClient.send(
+    //     `/update/conversation/${conversationId}`,
+    //     {},
+    //     JSON.stringify(buildMessage)
+    //   );
+    // }
   };
 
   return (
@@ -133,6 +133,7 @@ export const MessagingComponent = () => {
                 paddingRight: "300px",
                 paddingTop: "20px",
                 paddingBottom: "20px",
+                fontWeight: "bold",
               }}
             />
             <Stack direction="row" spacing={2} alignItems="center">

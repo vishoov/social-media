@@ -14,11 +14,15 @@ import {
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { SearchBarComponent } from "../SocialMedia/components/SearchComponents/SearchBarComponent";
+import { useDispatch } from "react-redux";
+import { setCurrentInterface } from "../redux/UtilitiesSlice";
 
 export const AISideBar = () => {
   const navigate = useNavigate();
 
   const [IsModalOpenForSearch, setIsModalOpenForSearch] = useState(false);
+
+  const dispatch = useDispatch();
 
   return (
     <>
@@ -81,7 +85,10 @@ export const AISideBar = () => {
                   size="medium"
                   style={{ width: 300, marginBottom: 10 }}
                   startIcon={<ChatBubbleOutlineRounded />}
-                  onClick={() => navigate("/environment/socialMedia/message")}
+                  onClick={() => {
+                    navigate("/environment/socialMedia/message");
+                    dispatch(setCurrentInterface("MESSAGING_INTERFACE"));
+                  }}
                   s
                 >
                   <p

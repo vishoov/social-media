@@ -42,8 +42,8 @@ export const ModelForMaintainingTheConversations = ({ open, handleClose }) => {
             transform: "translate(-50%, -50%)",
             width: 1250,
             height: 800,
-            // bgcolor: "background.paper",
-            bgcolor: "transparent",
+            bgcolor: "background.paper",
+            // bgcolor: "transparent",
             boxShadow: 10,
             // p: 1,
             borderRadius: 2,
@@ -60,13 +60,13 @@ export const ModelForMaintainingTheConversations = ({ open, handleClose }) => {
                 fontWeight: "bold",
                 display: "flex",
                 justifyContent: "center",
-                color: "white",
+                // color: "white",
                 padding: 1,
               }}
             >
               Send a message
             </Typography>
-            <Divider color="white" />
+            <Divider />
             <List
               sx={{
                 overflowY: "scroll", // Make the table body scrollable
@@ -98,22 +98,24 @@ export const ModelForMaintainingTheConversations = ({ open, handleClose }) => {
                           variant="subtitle2"
                           sx={{
                             fontWeight: "bold",
-                            color: "white",
+                            // color: "white",
                           }}
                         >
                           {communications?.username}
                         </Typography>
                         <Typography
                           variant="caption"
-                          sx={{
-                            color: "white",
-                          }}
+                          sx={
+                            {
+                              // color: "white",
+                            }
+                          }
                         >
                           You: {communications?.message}
                         </Typography>
                       </ListItemText>
                       <ListItemIcon>
-                        <VideocamRounded htmlColor="white" />
+                        <VideocamRounded />
                       </ListItemIcon>
                     </ListItemButton>
                   </ListItem>
@@ -121,7 +123,7 @@ export const ModelForMaintainingTheConversations = ({ open, handleClose }) => {
               })}
             </List>
           </Grid>
-          <Divider orientation="vertical" color="white" flexItem />
+          <Divider orientation="vertical" flexItem />
           <Grid
             sx={{
               width: 775,

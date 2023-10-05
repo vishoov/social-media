@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { AISideBar } from "../../../ReuseableComponents/AISideBar";
 import {
   Alert,
@@ -22,7 +22,6 @@ import useMemoriesSubscribeHook from "../../../hooks/useMemoriesSubscribeHook";
 import useGetMemoriesWithinAWeekHook from "../../../hooks/useGetMemoriesWithinAWeekHook";
 import { Context as HomeContext } from "../../../context/HomeContext";
 import useNavigateByUsingUserName from "../../../hooks/useNavigateByUsingUserName";
-// import { useSelector } from "react-redux";
 
 export const SocialMediaHome = () => {
   // live memories updates
@@ -38,12 +37,7 @@ export const SocialMediaHome = () => {
 
   const [username, setUsername] = useState("");
 
-  useEffect(() => {
-    console.log("User", username);
-  }, [username]);
-
   useNavigateByUsingUserName(username);
-
   return (
     <>
       <Box>
@@ -59,7 +53,6 @@ export const SocialMediaHome = () => {
             fontSize: "1.5rem",
           }}
         >
-          {" "}
           Loading...
         </Typography>
       )}
