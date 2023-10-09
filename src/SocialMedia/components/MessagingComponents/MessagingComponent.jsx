@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React, { useContext, useEffect } from "react";
+=======
+import React, { useState } from "react";
+>>>>>>> defdabe (NEW)
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
 import { AISideBar } from "../../../ReuseableComponents/AISideBar";
@@ -24,6 +28,7 @@ import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { ModelForMaintainingTheConversations } from "../../../ReuseableComponents/Messaging/ModelForMaintainingTheConversations";
+<<<<<<< HEAD
 import { Context as MessageContext } from "../../../context/MessageContext";
 import { RealMessageShowingPenal } from "../../../ReuseableComponents/Messaging/RealMessageShowingPenal";
 import { useGetMessageOfParticularConversation } from "../../APIs/SocialMediaMessageInterfaceAPI";
@@ -32,6 +37,25 @@ import { useCookies } from "react-cookie";
 export const MessagingComponent = () => {
   const { set_sent_messages } = useContext(MessageContext);
 
+=======
+import { RealMessageShowingPenal } from "../../../ReuseableComponents/Messaging/RealMessageShowingPenal";
+import { Provider as MessageProvider } from "../../../context/MessageContext";
+
+const socketForSendMessage1 = new SockJS("http://localhost:9988/websocket");
+
+// Create a Stomp client over the SockJS WebSocket connection
+const stompClientForSendMessage1 = Stomp.over(socketForSendMessage1);
+
+const RealMessageShowingPenalHandler = React.memo(() => {
+  return (
+    <MessageProvider>
+      <RealMessageShowingPenal />
+    </MessageProvider>
+  );
+});
+
+export const MessagingComponent = () => {
+>>>>>>> defdabe (NEW)
   const { register, handleSubmit, reset } = useForm({
     defaultValues: {
       message: "",
@@ -39,6 +63,7 @@ export const MessagingComponent = () => {
   });
 
   const { conversationId } = useParams();
+<<<<<<< HEAD
 
   const {
     state: { sent_messages },
@@ -65,10 +90,16 @@ export const MessagingComponent = () => {
   const stompClient = Stomp.over(socket);
 
   const [open, setOpen] = React.useState(false);
+=======
+  const message = useSelector((state) => state.message);
+
+  const [open, setOpen] = useState(false);
+>>>>>>> defdabe (NEW)
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const submit = (data) => {
+<<<<<<< HEAD
     const buildMessage = {
       primaryKeys: {
         userId: parseInt(localStorage.getItem("sm_user_id")),
@@ -96,6 +127,28 @@ export const MessagingComponent = () => {
     //     JSON.stringify(buildMessage)
     //   );
     // }
+=======
+    if (data && data?.message) {
+      const buildMessage = {
+        primaryKeys: {
+          userId: parseInt(localStorage.getItem("sm_user_id")),
+          type: "TEXT",
+        },
+        visibleConversationId: parseInt(
+          message?.selectedConversation?.conversationId || conversationId
+        ),
+        message: data?.message,
+        receiverUserId: message?.selectedConversation?.userId,
+      };
+      stompClientForSendMessage1.send(
+        `/conversation/${
+          message?.selectedConversation?.conversationId || conversationId
+        }`,
+        {},
+        JSON.stringify(buildMessage)
+      );
+    }
+>>>>>>> defdabe (NEW)
   };
 
   return (
@@ -152,8 +205,13 @@ export const MessagingComponent = () => {
               width: 1540,
             }}
           />
+<<<<<<< HEAD
           <RealMessageShowingPenal />
 
+=======
+
+          <RealMessageShowingPenalHandler />
+>>>>>>> defdabe (NEW)
           <Stack
             direction="row"
             spacing={4}

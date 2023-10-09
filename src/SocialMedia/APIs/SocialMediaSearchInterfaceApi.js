@@ -8,19 +8,19 @@ import { Context as SearchContext } from "../../context/SearchContext";
 
 const urls = () => {
   return axios.create({
-    baseURL: "http://localhost:9999/ai/socialmedia/api/v1/private/search",
+    baseURL: `${process.env.REACT_APP_API_HOST_NAME}/ai/socialmedia/api/v1/private/search`,
   });
 };
 
 const urls1 = () => {
   return axios.create({
-    baseURL: "http://localhost:9999/ai/socialmedia/api/v1/private/customjoin",
+    baseURL: `${process.env.REACT_APP_API_HOST_NAME}/ai/socialmedia/api/v1/private/customjoin`,
   });
 };
 
 const followersURL = () => {
   return axios.create({
-    baseURL: "http://localhost:9999/ai/socialmedia/api/v1/private/followers",
+    baseURL: `${process.env.REACT_APP_API_HOST_NAME}/ai/socialmedia/api/v1/private/followers`,
   });
 };
 

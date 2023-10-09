@@ -1,11 +1,19 @@
+<<<<<<< HEAD
 import React, { useContext, useState } from "react";
+=======
+import React, { useState } from "react";
+>>>>>>> defdabe (NEW)
 import { AIButton } from "./AIButton";
 import { MoreHorizRounded } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import AICreateMemoryModel from "./Profile/AICreateMemoryModel";
 import { Box, IconButton, Stack, Typography } from "@mui/material";
+<<<<<<< HEAD
 import { Context as MemoryContext } from "../context/MemoryContext";
 import { Context as profileContext } from "../context/ProfileContext";
+=======
+import { useSelector } from "react-redux";
+>>>>>>> defdabe (NEW)
 
 export const AIUpBar = ({
   editProfile,
@@ -19,6 +27,7 @@ export const AIUpBar = ({
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
+<<<<<<< HEAD
   const {
     state: { memoryCount },
   } = useContext(MemoryContext);
@@ -26,6 +35,11 @@ export const AIUpBar = ({
   const {
     state: { FollowersCount, FollowingsCount },
   } = useContext(profileContext);
+=======
+  const NonPersistMemories = useSelector((state) => state.NonPersistMemories);
+
+  const NonPersistProfile = useSelector((state) => state.NonPersistProfile);
+>>>>>>> defdabe (NEW)
 
   const handleModelClose = () => {
     setIsOpen(false);
@@ -61,8 +75,14 @@ export const AIUpBar = ({
               paddingRight: 5,
             }}
           >
+<<<<<<< HEAD
             {FollowersCount !== null || FollowersCount !== undefined
               ? FollowersCount
+=======
+            {NonPersistProfile?.FollowersCount !== null ||
+            NonPersistProfile?.FollowersCount !== undefined
+              ? NonPersistProfile?.FollowersCount
+>>>>>>> defdabe (NEW)
               : 0}
           </span>
           <span
@@ -81,8 +101,14 @@ export const AIUpBar = ({
               fontWeight: "bold",
             }}
           >
+<<<<<<< HEAD
             {FollowingsCount !== null || FollowingsCount !== undefined
               ? FollowingsCount
+=======
+            {NonPersistProfile?.FollowingsCount !== null ||
+            NonPersistProfile?.FollowingsCount !== undefined
+              ? NonPersistProfile?.FollowingsCount
+>>>>>>> defdabe (NEW)
               : 0}
           </Typography>
           <Typography
@@ -102,8 +128,14 @@ export const AIUpBar = ({
               fontWeight: "bold",
             }}
           >
+<<<<<<< HEAD
             {memoryCount !== null && memoryCount !== undefined
               ? memoryCount
+=======
+            {NonPersistMemories?.memoryCount !== null &&
+            NonPersistMemories?.memoryCount !== undefined
+              ? NonPersistMemories?.memoryCount
+>>>>>>> defdabe (NEW)
               : 0}
           </Typography>
           <Typography

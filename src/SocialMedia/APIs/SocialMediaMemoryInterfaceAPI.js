@@ -7,12 +7,15 @@ import {
   setMemoryNotFoundError,
   setMemoryNotFoundForOtherUserError,
 } from "../../redux/SocialMediaMemoriesSlice";
-import { useContext } from "react";
-import { Context as MemoryContext } from "../../context/MemoryContext";
+import {
+  setMemoryCount,
+  setSocialMediaMemories,
+  setSocialMediaMemoriesOfAnotherUser,
+} from "../../reduxNonPersist/NonPersistMemoriesSlice";
 
 const urls = () => {
   return axios.create({
-    baseURL: "http://localhost:9999/ai/socialmedia/api/v1/private/memory",
+    baseURL: `${process.env.REACT_APP_API_HOST_NAME}/ai/socialmedia/api/v1/private/memory`,
   });
 };
 
@@ -67,8 +70,6 @@ export const useShareMemory = () => {
 export const useGetAllMemories = (memoryData) => {
   const dispatch = useDispatch();
 
-  const { setSocialMediaMemories } = useContext(MemoryContext);
-
   return useQuery(
     ["getAllMemories", memoryData],
     () => getAllMemories(memoryData),
@@ -88,7 +89,7 @@ export const useGetAllMemories = (memoryData) => {
 
           localStorage.setItem("done", true);
 
-          setSocialMediaMemories(wholeData);
+          dispatch(setSocialMediaMemories(wholeData));
           dispatch(setMemoryNotFoundError(null));
         } else {
           dispatch(setMemoryNotFoundError(data?.data?.message));
@@ -104,7 +105,6 @@ export const useGetAllMemories = (memoryData) => {
 
 export const useGetMemoriesCount = (memoryData) => {
   const dispatch = useDispatch();
-  const { setMemoryCount } = useContext(MemoryContext);
   return useQuery(
     ["getMemoryCount", memoryData],
     () => getMemoryCount(memoryData),
@@ -114,9 +114,9 @@ export const useGetMemoriesCount = (memoryData) => {
       },
       onSuccess: (data) => {
         if (data?.status === 200) {
-          setMemoryCount(data?.data?.data);
+          dispatch(setMemoryCount(data?.data?.data));
         } else {
-          setMemoryCount(0);
+          dispatch(setMemoryCount(0));
         }
       },
       refetchOnMount: false,
@@ -129,8 +129,6 @@ export const useGetMemoriesCount = (memoryData) => {
 
 export const useGetAllMemoriesForOtherUser = (memoryData) => {
   const dispatch = useDispatch();
-
-  const { setSocialMediaMemoriesOfAnotherUser } = useContext(MemoryContext);
 
   return useQuery(
     ["getAllMemories", memoryData],
@@ -150,7 +148,7 @@ export const useGetAllMemoriesForOtherUser = (memoryData) => {
             return memory_details;
           });
 
-          setSocialMediaMemoriesOfAnotherUser(wholeData);
+          dispatch(setSocialMediaMemoriesOfAnotherUser(wholeData));
           dispatch(setMemoryNotFoundForOtherUserError(null));
         } else {
           dispatch(setMemoryNotFoundForOtherUserError(data?.data?.message));

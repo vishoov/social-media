@@ -6,8 +6,7 @@ import { Context as UserContext } from "../../context/UserContext";
 
 const URLs = () => {
   return axios.create({
-    baseURL:
-      "http://localhost:9999/ai/socialmedia/api/v1/private/socialmediausers",
+    baseURL: `${process.env.REACT_APP_API_HOST_NAME}/ai/socialmedia/api/v1/private/socialmediausers`,
   });
 };
 

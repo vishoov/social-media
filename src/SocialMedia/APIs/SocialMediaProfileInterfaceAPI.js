@@ -8,26 +8,31 @@ import {
   setProfilePicUploadError,
   setProfileUserPersonalDataError,
 } from "../../redux/ProfileSlice";
-import { useContext } from "react";
-import { Context as profileContext } from "../../context/ProfileContext";
+
+import {
+  setFollowersCount,
+  setFollowingsCount,
+  setFollowingsWithProfile,
+  setFollowersWithProfile,
+} from "../../reduxNonPersist/NonPersistProfileSlice";
 
 // base urls
 
 const URLs = () => {
   return axios.create({
-    baseURL: "http://localhost:9999/ai/socialmedia/api/v1/private/profile",
+    baseURL: `${process.env.REACT_APP_API_HOST_NAME}/ai/socialmedia/api/v1/private/profile`,
   });
 };
 
 const url1 = () => {
   return axios.create({
-    baseURL: "http://localhost:9999/ai/environment/api/v1/public/user",
+    baseURL: `${process.env.REACT_APP_API_HOST_NAME}/ai/environment/api/v1/public/user`,
   });
 };
 
 const followersUrl = () => {
   return axios.create({
-    baseURL: "http://localhost:9999/ai/socialmedia/api/v1/private/followers",
+    baseURL: `${process.env.REACT_APP_API_HOST_NAME}/ai/socialmedia/api/v1/private/followers`,
   });
 };
 
@@ -131,7 +136,7 @@ const followSomeone = (formData) => {
 // hooks
 
 export const useGetFollowingsWithProfilePics = (userData) => {
-  const { setFollowingsWithProfile } = useContext(profileContext);
+  const dispatch = useDispatch();
 
   return useQuery(
     ["getFollowingsWithProfilePics", userData],
@@ -149,13 +154,14 @@ export const useGetFollowingsWithProfilePics = (userData) => {
           );
 
           console.log("whole data", wholeData);
-          setFollowingsWithProfile(wholeData);
+
+          dispatch(setFollowingsWithProfile(wholeData));
         } else {
-          setFollowingsWithProfile([]);
+          dispatch(setFollowingsWithProfile([]));
         }
       },
       onError: (error) => {
-        setFollowingsWithProfile([]);
+        dispatch(setFollowingsWithProfile([]));
       },
       refetchOnMount: false,
       enabled: false,
@@ -166,7 +172,7 @@ export const useGetFollowingsWithProfilePics = (userData) => {
 };
 
 export const useGetFollowersWithProfilePics = (userData) => {
-  const { setFollowersWithProfile } = useContext(profileContext);
+  const dispatch = useDispatch();
 
   return useQuery(
     ["getFollowingsWithProfilePics", userData],
@@ -184,13 +190,14 @@ export const useGetFollowersWithProfilePics = (userData) => {
           );
 
           console.log("whole data", wholeData);
-          setFollowersWithProfile(wholeData);
+
+          dispatch(setFollowersWithProfile(wholeData));
         } else {
-          setFollowersWithProfile([]);
+          dispatch(setFollowersWithProfile([]));
         }
       },
       onError: (error) => {
-        setFollowersWithProfile([]);
+        dispatch(setFollowersWithProfile([]));
       },
       refetchOnMount: false,
       enabled: false,
@@ -201,8 +208,7 @@ export const useGetFollowersWithProfilePics = (userData) => {
 };
 
 export const useGetFollowers = (userData) => {
-  const { setFollowersCount, setFollowersCountError } =
-    useContext(profileContext);
+  const dispatch = useDispatch();
 
   return useQuery(
     ["getFollowersOfUser", userData],
@@ -210,16 +216,16 @@ export const useGetFollowers = (userData) => {
     {
       onSuccess: (success) => {
         if (success?.status === 200) {
-          setFollowersCount(
-            success?.data?.data?.followers?.followersData?.length
+          dispatch(
+            setFollowersCount(
+              success?.data?.data?.followers?.followersData?.length
+            )
           );
         } else {
-          setFollowersCount(0);
+          dispatch(setFollowersCount(0));
         }
       },
-      onError: (error) => {
-        setFollowersCountError(error?.response?.data?.message);
-      },
+      onError: (error) => {},
       refetchOnMount: false,
       enabled: false,
       retry: 5,
@@ -229,8 +235,7 @@ export const useGetFollowers = (userData) => {
 };
 
 export const useGetFollowings = (userData) => {
-  const { setFollowingsCount, setFollowingsCountError } =
-    useContext(profileContext);
+  const dispatch = useDispatch();
 
   return useQuery(
     ["getFollowingsOfUser", userData],
@@ -238,16 +243,16 @@ export const useGetFollowings = (userData) => {
     {
       onSuccess: (success) => {
         if (success?.status === 200) {
-          setFollowingsCount(
-            success?.data?.data?.following?.followingsData?.length
+          dispatch(
+            setFollowingsCount(
+              success?.data?.data?.following?.followingsData?.length
+            )
           );
         } else {
-          setFollowingsCount(0);
+          dispatch(setFollowingsCount(0));
         }
       },
-      onError: (error) => {
-        setFollowingsCountError(error?.response?.data?.message);
-      },
+      onError: (error) => {},
       refetchOnMount: false,
       enabled: false,
       retry: 5,

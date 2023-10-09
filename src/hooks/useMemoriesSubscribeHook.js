@@ -1,25 +1,23 @@
-import { useCallback, useContext, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
-// import { setHomeMemoriesContent } from "../redux/SocialMediaHomeSlice";
-// import { setMemoriesNotification } from "../redux/Notifications";
-import { Context as HomeContext } from "../context/HomeContext";
-import { Context as NotificationsContext } from "../context/NotificationContext";
+import { setHomeMemoriesContent } from "../reduxNonPersist/NonPersistForHomeSlice";
+import { setMemoriesNotification } from "../reduxNonPersist/NonPersistNotificationSlice";
 
 const useMemoriesSubscribeHook = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
 
-  // context variables
-  const { setHomeMemoriesContent } = useContext(HomeContext);
-  const { setMemoriesNotification } = useContext(NotificationsContext);
+  const dispatch = useDispatch();
 
   // useSelector hooks to get the current state of the store
   const socialMediaUser = useSelector((state) => state.socialMediaUser);
 
   const callBackForSocketConnection = useCallback(() => {
-    const socket = new SockJS("http://localhost:9989/websocket");
+    const socket = new SockJS(
+      `${process.env.REACT_APP_WEBSOCKET_FOR_MEMORIES}`
+    );
 
     // Create a Stomp client over the SockJS WebSocket connection
     const stompClient = Stomp.over(socket);
@@ -47,8 +45,8 @@ const useMemoriesSubscribeHook = () => {
             created: data?.created,
           };
 
-          setHomeMemoriesContent(jsonData);
-          setMemoriesNotification(jsonData);
+          dispatch(setHomeMemoriesContent(jsonData));
+          dispatch(setMemoriesNotification(jsonData));
 
           // Show a Snackbar notification
           setSnackbarMessage(`${data?.userName} just shared a memory`);

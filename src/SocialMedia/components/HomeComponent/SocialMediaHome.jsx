@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { AISideBar } from "../../../ReuseableComponents/AISideBar";
 import {
   Alert,
@@ -20,16 +20,14 @@ import {
 } from "@mui/icons-material";
 import useMemoriesSubscribeHook from "../../../hooks/useMemoriesSubscribeHook";
 import useGetMemoriesWithinAWeekHook from "../../../hooks/useGetMemoriesWithinAWeekHook";
-import { Context as HomeContext } from "../../../context/HomeContext";
 import useNavigateByUsingUserName from "../../../hooks/useNavigateByUsingUserName";
+import { useSelector } from "react-redux";
 
 export const SocialMediaHome = () => {
   // live memories updates
   const { snackbarMessage, snackbarOpen } = useMemoriesSubscribeHook();
 
-  const {
-    state: { HomeMemoriesContent },
-  } = useContext(HomeContext);
+  const NonPersistForHome = useSelector((state) => state.NonPersistForHome);
 
   const handleSnackbarClose = () => {};
 
@@ -38,6 +36,7 @@ export const SocialMediaHome = () => {
   const [username, setUsername] = useState("");
 
   useNavigateByUsingUserName(username);
+
   return (
     <>
       <Box>
@@ -65,8 +64,8 @@ export const SocialMediaHome = () => {
       >
         {/* <Typography>{memory?.value?.memoryNotFoundError}</Typography> */}
         <List>
-          {HomeMemoriesContent?.length > 0 &&
-            HomeMemoriesContent?.map((memories) => {
+          {NonPersistForHome?.HomeMemoriesContent?.length > 0 &&
+            NonPersistForHome?.HomeMemoriesContent?.map((memories) => {
               return (
                 <ListItem key={memories?.urls}>
                   <Stack

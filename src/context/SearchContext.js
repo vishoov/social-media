@@ -22,6 +22,7 @@ const SEARCH_REDUCER = (state, action) => {
   }
 };
 
+<<<<<<< HEAD
 const setRequestUserSearchData = (dispatch) => (payload) => {
   dispatch({
     type: "REQUEST_USER_SEARCH_DATA",
@@ -29,6 +30,8 @@ const setRequestUserSearchData = (dispatch) => (payload) => {
   });
 };
 
+=======
+>>>>>>> defdabe (NEW)
 const setSearchData = (dispatch) => (payload) => {
   dispatch({
     type: "SET_SEARCH_DATA",
@@ -47,13 +50,19 @@ export const { Context, Provider } = createDataContext(
   SEARCH_REDUCER,
   {
     // all actions
+<<<<<<< HEAD
     setRequestUserSearchData,
+=======
+>>>>>>> defdabe (NEW)
     setSearchData,
     setSearchDataForMessages,
   },
   {
     // all states
+<<<<<<< HEAD
     requestUserSearchData: null,
+=======
+>>>>>>> defdabe (NEW)
     searchData: [],
     searchDataForMessages: [],
   }

@@ -3,22 +3,23 @@ import { useContext } from "react";
 import { useQuery } from "react-query";
 import { Context as MessageContext } from "../../context/MessageContext";
 
+import { useDispatch } from "react-redux";
+import { set_all_messages } from "../../reduxNonPersist/NonPersistMessages";
+import { set_all_conversations } from "../../reduxNonPersist/NonPersistConversationSlice";
+
 const url = () => {
   return axios.create({
-    baseURL: "http://localhost:9999/ai/socialmedia/api/v1/private/messages",
+    baseURL: `${process.env.REACT_APP_API_HOST_NAME}/ai/socialmedia/api/v1/private/messages`,
   });
 };
 
 const url1 = () => {
   return axios.create({
-    baseURL:
-      "http://localhost:9999/ai/socialmedia/api/v1/private/conversations",
+    baseURL: `${process.env.REACT_APP_API_HOST_NAME}/ai/socialmedia/api/v1/private/conversations`,
   });
 };
 
 const getMessagesOfParticularConversation = (requiredData) => {
-  console.log("useGetMessageOfParticularConversation1111", requiredData);
-
   if (requiredData?.Authorization && requiredData?.conversation_id) {
     return url().get("/get/messages/of/conversation", {
       headers: {
@@ -45,8 +46,8 @@ const get_all_conversations_of_specific_user = (requiredData) => {
 };
 
 export const useGetMessageOfParticularConversation = (requiredData) => {
-  const { set_sent_messages, set_received_messages, set_error } =
-    useContext(MessageContext);
+  const { set_error } = useContext(MessageContext);
+  const dispatch = useDispatch();
 
   return useQuery(
     ["getMessagesOfParticularConversation", requiredData],
@@ -57,25 +58,10 @@ export const useGetMessageOfParticularConversation = (requiredData) => {
       },
       onSuccess: (data) => {
         if (data?.status === 200) {
-          const senderMessage = data?.data?.data?.filter(
-            (messages) =>
-              messages?.primaryKeys?.userId ===
-              parseInt(localStorage.getItem("sm_user_id"))
+          // data?.data?.data?.map((messages) => set_all_messages(messages));
+          data?.data?.data?.map((messages) =>
+            dispatch(set_all_messages(messages))
           );
-
-          senderMessage.map((message) => {
-            return set_sent_messages(message);
-          });
-
-          const received_messages = data?.data?.data?.filter(
-            (messages) =>
-              messages?.primaryKeys?.userId !==
-              parseInt(localStorage.getItem("sm_user_id"))
-          );
-
-          received_messages.map((message) => {
-            return set_received_messages(message);
-          });
         }
       },
       refetchOnMount: false,
@@ -87,7 +73,7 @@ export const useGetMessageOfParticularConversation = (requiredData) => {
 };
 
 export const useGet_all_conversations_of_specific_user = (requiredData) => {
-  const { set_all_conversations } = useContext(MessageContext);
+  const dispatch = useDispatch();
 
   return useQuery(
     ["get_all_conversations_of_specific_user", requiredData],
@@ -124,9 +110,9 @@ export const useGet_all_conversations_of_specific_user = (requiredData) => {
               })
           );
 
-          set_all_conversations(wholeData);
+          dispatch(set_all_conversations(wholeData));
         } else {
-          set_all_conversations([]);
+          dispatch(set_all_conversations(null));
         }
       },
       refetchOnMount: false,

@@ -11,11 +11,19 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+<<<<<<< HEAD
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { AIButton } from "../AIButton";
 import { useGetFollowingsWithProfilePics } from "../../SocialMedia/APIs/SocialMediaProfileInterfaceAPI";
 import { useCookies } from "react-cookie";
 import { Context as profileContext } from "../../context/ProfileContext";
+=======
+import React, { useCallback, useEffect, useState } from "react";
+import { AIButton } from "../AIButton";
+import { useGetFollowingsWithProfilePics } from "../../SocialMedia/APIs/SocialMediaProfileInterfaceAPI";
+import { useCookies } from "react-cookie";
+import { useSelector } from "react-redux";
+>>>>>>> defdabe (NEW)
 
 export const AIShowFollowingList = ({ closeEvent, userId }) => {
   const [open, setOpen] = useState(false);
@@ -26,9 +34,13 @@ export const AIShowFollowingList = ({ closeEvent, userId }) => {
   const { refetch } = useGetFollowingsWithProfilePics(requiredData);
   const [cookies] = useCookies(["avt_token"]);
 
+<<<<<<< HEAD
   const {
     state: { Followings },
   } = useContext(profileContext);
+=======
+  const NonPersistProfile = useSelector((state) => state.NonPersistProfile);
+>>>>>>> defdabe (NEW)
 
   const handleClose = () => {
     setOpen(false);
@@ -74,7 +86,11 @@ export const AIShowFollowingList = ({ closeEvent, userId }) => {
         </DialogTitle>
         <DialogContent>
           <List>
+<<<<<<< HEAD
             {Followings?.at(0)?.map((items) => {
+=======
+            {NonPersistProfile?.Followings?.at(0)?.map((items) => {
+>>>>>>> defdabe (NEW)
               return (
                 <ListItem disableGutters key={items?.userName}>
                   <Stack direction="row" spacing={15} alignItems="center">

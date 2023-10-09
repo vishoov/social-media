@@ -1,7 +1,15 @@
+<<<<<<< HEAD
 import React, { useContext, useState } from "react";
 import { ShowMemoryModel } from "./ShowMemoryModel";
 import { Context as MemoryContext } from "../../context/MemoryContext";
 import { Grid } from "@mui/material";
+=======
+import React, { useState } from "react";
+import { ShowMemoryModel } from "./ShowMemoryModel";
+
+import { Grid } from "@mui/material";
+import { useSelector } from "react-redux";
+>>>>>>> defdabe (NEW)
 
 // const PAGE_SIZE = 12; // Number of images to load per page
 
@@ -9,10 +17,14 @@ export const MemoryImages = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImageUrl, setSelectedImageUrl] = useState("");
 
+<<<<<<< HEAD
   const {
     state: { socialMediaMemories },
     // Assuming you have a dispatch function in your context
   } = useContext(MemoryContext);
+=======
+  const NonPersistMemories = useSelector((state) => state.NonPersistMemories);
+>>>>>>> defdabe (NEW)
 
   const openModel = (item) => {
     setSelectedImageUrl(item);
@@ -35,8 +47,13 @@ export const MemoryImages = () => {
         // paddingTop: 3,
       >
         <Grid container justifyContent="center">
+<<<<<<< HEAD
           {socialMediaMemories !== undefined &&
             socialMediaMemories.map((images) => {
+=======
+          {NonPersistMemories?.socialMediaMemories !== undefined &&
+            NonPersistMemories?.socialMediaMemories.map((images) => {
+>>>>>>> defdabe (NEW)
               return (
                 <img
                   src={images?.urls}

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { useCallback, useContext, useEffect, useState } from "react";
+=======
+import { useCallback, useEffect, useState } from "react";
+>>>>>>> defdabe (NEW)
 import {
   useCheckIsUserFollowingTheOtherUser,
   useGetUserProfileInfo,
@@ -12,15 +16,22 @@ import {
   setIsFollowing,
   setRequestedUserSearchDataForPersist,
 } from "../redux/SearchSlice";
+<<<<<<< HEAD
 import { Context as SearchContext } from "../context/SearchContext";
+=======
+import { setRequestUserSearchData } from "../reduxNonPersist/NonPersistSearchSlice";
+>>>>>>> defdabe (NEW)
 
 const useNavigateByUsingUserName = (username) => {
   const { mutate: mutateUserProfile, data } = useGetUserProfileInfo();
 
   const [called, setCalled] = useState(false);
 
+<<<<<<< HEAD
   const { setRequestUserSearchData } = useContext(SearchContext);
 
+=======
+>>>>>>> defdabe (NEW)
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -47,8 +58,11 @@ const useNavigateByUsingUserName = (username) => {
         });
         dispatch(setIsFollowing(false));
       }
+<<<<<<< HEAD
       //   setSearchData([]);
       //   onClose();
+=======
+>>>>>>> defdabe (NEW)
     }
   };
 
@@ -67,7 +81,11 @@ const useNavigateByUsingUserName = (username) => {
 
   useEffect(() => {
     if (data?.status === 200) {
+<<<<<<< HEAD
       setRequestUserSearchData(data?.data?.data);
+=======
+      dispatch(setRequestUserSearchData(data?.data?.data));
+>>>>>>> defdabe (NEW)
 
       if (called === false) {
         dispatch(

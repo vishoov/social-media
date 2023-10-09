@@ -21,15 +21,21 @@ import { useGetUserBySearchForMessages } from "../../SocialMedia/APIs/SocialMedi
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setSelectedConversation } from "../../redux/MessageSlice";
+<<<<<<< HEAD
 import { Context as MessageContext } from "../../context/MessageContext";
+=======
+>>>>>>> defdabe (NEW)
 
 export const SearchModelForMessage = ({ open, handleClose }) => {
   const {
     state: { searchDataForMessages },
   } = useContext(SearchContext);
 
+<<<<<<< HEAD
   const { set_sent_messages } = useContext(MessageContext);
 
+=======
+>>>>>>> defdabe (NEW)
   const { mutate } = useGetUserBySearchForMessages();
 
   const [cookies] = useCookies(["avt_token"]);
@@ -60,7 +66,10 @@ export const SearchModelForMessage = ({ open, handleClose }) => {
     };
 
     dispatch(setSelectedConversation(generatedData));
+<<<<<<< HEAD
     set_sent_messages({ should_be_empty: true });
+=======
+>>>>>>> defdabe (NEW)
     navigate(
       `/environment/socialMedia/message/${generatedData?.conversationId}`
     );

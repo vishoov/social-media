@@ -29,6 +29,10 @@ import { useNavigate } from "react-router-dom";
 import { Context as SearchContext } from "../../../context/SearchContext";
 import useGetFollowersAndFollowingHook from "../../../hooks/useGetFollowersAndFollowingHook";
 import useGetMemoriesCountHook from "../../../hooks/useGetMemoriesCountHook";
+<<<<<<< HEAD
+=======
+import { setRequestUserSearchData } from "../../../reduxNonPersist/NonPersistSearchSlice";
+>>>>>>> defdabe (NEW)
 
 export const SearchBarComponent = ({ onClose, open }) => {
   const [cookies] = useCookies(["avt_token"]);
@@ -58,8 +62,11 @@ export const SearchBarComponent = ({ onClose, open }) => {
     search.requestedUserSearchdataForPersist?.userId
   );
 
+<<<<<<< HEAD
   const { setRequestUserSearchData } = useContext(SearchContext);
 
+=======
+>>>>>>> defdabe (NEW)
   const socialMediaUser = useSelector((state) => state.socialMediaUser);
 
   const handleChange = (search) => {
@@ -78,7 +85,11 @@ export const SearchBarComponent = ({ onClose, open }) => {
 
   useEffect(() => {
     if (data?.status === 200) {
+<<<<<<< HEAD
       setRequestUserSearchData(data?.data?.data);
+=======
+      dispatch(setRequestUserSearchData(data?.data?.data));
+>>>>>>> defdabe (NEW)
 
       if (called === false) {
         dispatch(

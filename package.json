@@ -18,7 +18,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.4.0",
     "bcrypt": "^5.1.0",
-    "cookie-parser": "^1.4.6",
+    "cmdenv": "^0.5.0",    "cookie-parser": "^1.4.6",
     "glfx": "^0.0.4",
     "idb": "^7.1.1",
     "net": "^1.0.2",
@@ -41,7 +41,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "react-scripts start && cmdenv .env react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

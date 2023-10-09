@@ -3,8 +3,7 @@ import { useQuery } from "react-query";
 
 const URLs = () => {
   return axios.create({
-    baseURL:
-      "http://localhost:9999/ai/intermediateinterface/api/v1/private/activationkey",
+    baseURL: `${process.env.REACT_APP_API_HOST_NAME}/ai/intermediateinterface/api/v1/private/activationkey`,
   });
 };
 

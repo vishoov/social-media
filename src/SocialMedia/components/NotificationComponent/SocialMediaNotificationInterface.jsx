@@ -1,19 +1,21 @@
-import React, { useContext } from "react";
+import React from "react";
 import { AISideBar } from "../../../ReuseableComponents/AISideBar";
 import { Avatar, Box, List, ListItem, Stack, Typography } from "@mui/material";
 import jen18 from "../../../static/images/avatar/jen18.jpeg";
 import useMemoriesSubscribeHook from "../../../hooks/useMemoriesSubscribeHook";
 import useGetMemoriesWithinAWeekHook from "../../../hooks/useGetMemoriesWithinAWeekHook";
-import { Context as NotificationContext } from "../../../context/NotificationContext";
+
+import { useSelector } from "react-redux";
 
 export const SocialMediaNotificationInterface = () => {
   useMemoriesSubscribeHook();
 
   const [isLoading] = useGetMemoriesWithinAWeekHook();
 
-  const {
-    state: { memoriesNotification },
-  } = useContext(NotificationContext);
+
+  const NonPersistNotification = useSelector(
+    (state) => state.NonPersistNotification
+  );
 
   const getTime = (created) => {
     const nowTimestamp = Date.now();
@@ -94,8 +96,9 @@ export const SocialMediaNotificationInterface = () => {
           }}
         >
           <List>
-            {memoriesNotification?.length > 0 &&
-              memoriesNotification?.map((data) => {
+
+            {NonPersistNotification?.memoriesNotification?.length > 0 &&
+              NonPersistNotification?.memoriesNotification?.map((data) => {
                 return (
                   <ListItem key={data?.created}>
                     <Box

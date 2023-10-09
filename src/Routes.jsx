@@ -17,6 +17,10 @@ import { AnotherUsersProfile } from "./SocialMedia/components/profileComponent/A
 import { SocialMediaNotificationInterface } from "./SocialMedia/components/NotificationComponent/SocialMediaNotificationInterface";
 import { MessagingComponent } from "./SocialMedia/components/MessagingComponents/MessagingComponent";
 import { WelcomeMessaging } from "./ReuseableComponents/Messaging/WelcomeMessaging";
+<<<<<<< HEAD
+=======
+import { PendingMessages } from "./SocialMedia/components/MessagingComponents/PendingMessages";
+>>>>>>> defdabe (NEW)
 
 export const Routes = ({ children }) => {
   const routes = createBrowserRouter([
@@ -126,6 +130,17 @@ export const Routes = ({ children }) => {
                 </AIAuthentication>
               ),
             },
+<<<<<<< HEAD
+=======
+            {
+              path: "message/pending",
+              element: (
+                <AIAuthentication>
+                  <PendingMessages />
+                </AIAuthentication>
+              ),
+            },
+>>>>>>> defdabe (NEW)
           ],
         },
       ],

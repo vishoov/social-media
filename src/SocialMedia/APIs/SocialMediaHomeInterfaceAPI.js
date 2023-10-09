@@ -1,18 +1,17 @@
 import axios from "axios";
 import { useQuery } from "react-query";
-import { useContext } from "react";
-import { Context as HomeContext } from "../../context/HomeContext";
-import { Context as NotificationsContext } from "../../context/NotificationContext";
 import {
   setAbnormalError,
   setMemoryNotFoundError,
 } from "../../redux/SocialMediaMemoriesSlice";
 import { useDispatch } from "react-redux";
+import { setHomeMemoriesContentWithApiCall } from "../../reduxNonPersist/NonPersistForHomeSlice";
+import { setMemoriesNotificationsUsingApi } from "../../reduxNonPersist/NonPersistNotificationSlice";
 
 // base urls
 const url = () => {
   return axios.create({
-    baseURL: "http://localhost:9999/ai/socialmedia/api/v1/private/memory",
+    baseURL: `${process.env.REACT_APP_API_HOST_NAME}/ai/socialmedia/api/v1/private/memory`,
   });
 };
 
@@ -27,8 +26,6 @@ const getMemoriesWithinAWeek = (data) => {
 };
 
 export const useGetMemoriesWithinAWeek = (requiredData) => {
-  const { setHomeMemoriesContentWithApiCall } = useContext(HomeContext);
-  const { setMemoriesNotificationsUsingApi } = useContext(NotificationsContext);
   const dispatch = useDispatch();
 
   return useQuery(
@@ -51,8 +48,9 @@ export const useGetMemoriesWithinAWeek = (requiredData) => {
             return memories;
           });
 
-          setHomeMemoriesContentWithApiCall(wholeData);
-          setMemoriesNotificationsUsingApi(wholeData);
+          dispatch(setHomeMemoriesContentWithApiCall(wholeData));
+
+          dispatch(setMemoriesNotificationsUsingApi(wholeData));
           dispatch(setMemoryNotFoundError(null));
         } else {
           dispatch(setMemoryNotFoundError(data?.data?.message));

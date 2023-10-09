@@ -1,9 +1,18 @@
 import React, { useCallback, useContext, useEffect } from "react";
 import { Context as MessageContext } from "../../context/MessageContext";
 
+<<<<<<< HEAD
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
 import { Table, TableBody, TableRow, Typography } from "@mui/material";
+=======
+import { Table, TableBody, TableRow, Typography } from "@mui/material";
+import useReceiverMessageHook from "../../hooks/useReceiverMessageHook";
+import useReceivePushNotificationHook from "../../hooks/useReceivePushNotificationHook";
+import useGetMessagesOfParticularConversationHook from "../../hooks/useGetMessagesOfParticularConversationHook";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+>>>>>>> defdabe (NEW)
 
 const style = {
   recieverMessageStyle: {
@@ -32,6 +41,7 @@ const style = {
 
 export const RealMessageShowingPenal = () => {
   const {
+<<<<<<< HEAD
     state: { sent_messages, received_messages },
     set_received_messages,
   } = useContext(MessageContext);
@@ -55,12 +65,63 @@ export const RealMessageShowingPenal = () => {
         }
       );
     });
+=======
+    state: { all_messages },
+  } = useContext(MessageContext);
+
+  const { conversationId } = useParams();
+
+  const message = useSelector((state) => state.message);
+
+  const MessageNonPersist = useSelector((state) => state.NonPersistMessage);
+
+  // message subscription hook
+  const { callBack } = useReceiverMessageHook(
+    conversationId,
+    message,
+    all_messages
+  );
+
+  const newCallBackForRenderingMessages = useCallback(() => {
+    callBack();
+
+    // eslint-disable-next-line
+  }, []);
+
+  // push notification subscription hook
+  const { callBack: callBackForPushNotification } =
+    useReceivePushNotificationHook();
+
+  const newCallBackForRenderingForPushNotification = useCallback(() => {
+    callBackForPushNotification();
+    // eslint-disable-next-line
+  }, []);
+
+  // hooks for getting messages of particular conversation
+  const { callBack: callBackOfMessages } =
+    useGetMessagesOfParticularConversationHook(conversationId, message);
+
+  // receive messages from the server
+  useEffect(() => {
+    newCallBackForRenderingMessages();
+    newCallBackForRenderingForPushNotification();
+
+    if (all_messages?.length === 0) {
+      console.log("all messages is empty");
+      callBackOfMessages();
+    }
+>>>>>>> defdabe (NEW)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
+<<<<<<< HEAD
     callBack();
   }, [callBack]);
+=======
+    console.log("MessageNonPersist:::::::", MessageNonPersist);
+  }, [MessageNonPersist]);
+>>>>>>> defdabe (NEW)
 
   return (
     <>
@@ -86,9 +147,18 @@ export const RealMessageShowingPenal = () => {
                 Sun 13:54
               </Typography>
             </TableRow>
+<<<<<<< HEAD
             {sent_messages &&
               sent_messages?.map((message) => {
                 return (
+=======
+            {MessageNonPersist &&
+              MessageNonPersist?.all_messages?.map((message) => {
+                return message?.userId ===
+                  parseInt(localStorage.getItem("sm_user_id")) ||
+                  message?.primaryKeys?.userId ===
+                    parseInt(localStorage.getItem("sm_user_id")) ? (
+>>>>>>> defdabe (NEW)
                   <TableRow
                     key={message?.message}
                     sx={{
@@ -100,21 +170,30 @@ export const RealMessageShowingPenal = () => {
                       {message?.message}
                     </Typography>
                   </TableRow>
+<<<<<<< HEAD
                 );
               })}
             {received_messages &&
               received_messages?.map((message) => {
                 return (
+=======
+                ) : (
+>>>>>>> defdabe (NEW)
                   <TableRow key={message}>
                     <Typography
                       sx={style?.recieverMessageStyle}
                       variant="body1"
                     >
+<<<<<<< HEAD
                       {message}
+=======
+                      {message?.message}
+>>>>>>> defdabe (NEW)
                     </Typography>
                   </TableRow>
                 );
               })}
+<<<<<<< HEAD
             {/* <TableRow>
                   <Typography sx={style?.recieverMessageStyle} variant="body1">
                     hi om
@@ -171,6 +250,8 @@ export const RealMessageShowingPenal = () => {
                     i think that's a great idea!🤍🩷
                   </Typography>
                 </TableRow> */}
+=======
+>>>>>>> defdabe (NEW)
           </TableBody>
         </Table>
       </div>

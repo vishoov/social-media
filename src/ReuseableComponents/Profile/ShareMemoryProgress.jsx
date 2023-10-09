@@ -1,7 +1,12 @@
 import { Box, CircularProgress } from "@mui/material";
 import React, { useEffect } from "react";
+<<<<<<< HEAD
 import completeImage from "../../static/images/utils/complete.svg";
 import { useDispatch } from "react-redux";
+=======
+import { useDispatch } from "react-redux";
+import completeImage from "../../static/images/utils/381607_complete_icon.png";
+>>>>>>> defdabe (NEW)
 import { setMemoryNotFoundError } from "../../redux/SocialMediaMemoriesSlice";
 
 export const ShareMemoryProgress = ({ upBar, isLoading, data, isSuccess }) => {
@@ -50,6 +55,11 @@ export const ShareMemoryProgress = ({ upBar, isLoading, data, isSuccess }) => {
               alt="com"
               style={{
                 marginTop: 250,
+<<<<<<< HEAD
+=======
+                height: 200,
+                width: 200,
+>>>>>>> defdabe (NEW)
               }}
             />
           </Box>

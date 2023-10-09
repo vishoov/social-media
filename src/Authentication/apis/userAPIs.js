@@ -15,7 +15,7 @@ import { Context as UserContext } from "../../context/UserContext";
 
 const URLs = () => {
   return axios.create({
-    baseURL: "http://localhost:9999/ai/environment/api/v1/public/user",
+    baseURL: `${process.env.REACT_APP_API_HOST_NAME}/ai/environment/api/v1/public/user`,
   });
 };
 

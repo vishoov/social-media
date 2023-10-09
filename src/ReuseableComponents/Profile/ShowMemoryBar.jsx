@@ -4,10 +4,19 @@ import { Box, Typography } from "@mui/material";
 import AICreateMemoryModel from "./AICreateMemoryModel";
 import { MemoryImages } from "./MemoryImages";
 import useGetAllMemoriesHook from "../../hooks/useGetAllMemoriesHook";
+<<<<<<< HEAD
+=======
+import { useSelector } from "react-redux";
+>>>>>>> defdabe (NEW)
 
 export const ShowMemoryBar = () => {
   // const random = localStorage.getItem("random");
 
+<<<<<<< HEAD
+=======
+  const NonPersistMemories = useSelector((state) => state.NonPersistMemories);
+
+>>>>>>> defdabe (NEW)
   useGetAllMemoriesHook(1);
 
   return (
@@ -18,7 +27,11 @@ export const ShowMemoryBar = () => {
           alignItems: "center",
         }}
       >
+<<<<<<< HEAD
         {localStorage.getItem("memoryExist") > 0 ? (
+=======
+        {NonPersistMemories?.socialMediaMemories !== undefined ? (
+>>>>>>> defdabe (NEW)
           <div>
             <Box display="flex" justifyContent="center">
               <MemoryImages />
