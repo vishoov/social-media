@@ -2,8 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   value: {
-    socialMediaMemories: [],
-    socialMediaAnotherUserMemories: [],
     memoryCreationError: null,
     memoryNotFoundError: null,
     MemoryNotFoundForOtherUserError: null,
@@ -15,12 +13,6 @@ export const socialMediaMemoriesSlice = createSlice({
   name: "memories",
   initialState,
   reducers: {
-    setSocialMediaMemories: (state, action) => {
-      state.value.socialMediaMemories.push(action.payload);
-    },
-    setSocialMediaAnotherUserMemories: (state, action) => {
-      state.value.socialMediaAnotherUserMemories = action.payload;
-    },
     setMemoryCreationError: (state, action) => {
       state.value.memoryCreationError = action.payload;
     },
@@ -37,8 +29,6 @@ export const socialMediaMemoriesSlice = createSlice({
 });
 
 export const {
-  setSocialMediaMemories,
-  setSocialMediaAnotherUserMemories,
   setMemoryCreationError,
   setMemoryNotFoundError,
   setAbnormalError,

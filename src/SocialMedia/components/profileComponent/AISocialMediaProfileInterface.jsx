@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-import React, { useCallback, useContext, useEffect, useState } from "react";
-=======
 import React, { useCallback, useEffect, useState } from "react";
->>>>>>> defdabe (NEW)
+
 import { AISideBar } from "../../../ReuseableComponents/AISideBar";
 import { AIUpBar } from "../../../ReuseableComponents/AIUpBar";
 import {
@@ -12,13 +9,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-<<<<<<< HEAD
-// import jenPic1 from "../../../static/images/avatar/jen1.jpeg";
-// import jenPic2 from "../../../static/images/avatar/jen2.jpeg";
-// import jenPic3 from "../../../static/images/avatar/jen3.jpeg";
-// import jenPic4 from "../../../static/images/avatar/jen4.jpeg";
-=======
->>>>>>> defdabe (NEW)
+
 import jenPic1 from "../../../static/images/avatar/jen2.jpeg";
 import jenPic2 from "../../../static/images/avatar/jen3.jpeg";
 import jenPic3 from "../../../static/images/avatar/jen4.jpeg";
@@ -35,10 +26,6 @@ import useGetProfileDetailsHook from "../../../hooks/useGetProfileDetailsHook";
 import { setRequestedUserSearchDataForPersist } from "../../../redux/SearchSlice";
 import { AIShowFollowingList } from "../../../ReuseableComponents/Profile/AIShowFollowingList";
 import { useCookies } from "react-cookie";
-<<<<<<< HEAD
-import { Context as MemoryContext } from "../../../context/MemoryContext";
-=======
->>>>>>> defdabe (NEW)
 import { useGetAllMemories } from "../../APIs/SocialMediaMemoryInterfaceAPI";
 import { AIShowFollowersList } from "../../../ReuseableComponents/Profile/AIShowFollowersList";
 
@@ -68,20 +55,8 @@ export const AISocialMediaProfileInterface = () => {
   const [requiredData, setRequiredData] = useState(null);
 
   const [cookies] = useCookies();
-<<<<<<< HEAD
-  const {
-    state: { socialMediaMemories },
-    // Assuming you have a dispatch function in your context
-  } = useContext(MemoryContext);
-=======
 
   const NonPersistMemories = useSelector((state) => state.NonPersistMemories);
-
-  // const {
-  //   state: { socialMediaMemories },
-  //   // Assuming you have a dispatch function in your context
-  // } = useContext(MemoryContext);
->>>>>>> defdabe (NEW)
 
   const { refetch } = useGetAllMemories(requiredData);
 
@@ -99,14 +74,11 @@ export const AISocialMediaProfileInterface = () => {
       const memoryData = {
         Authorization: cookies?.avt_token,
         userId: localStorage.getItem("sm_user_id"),
-<<<<<<< HEAD
-        pageNumber: Math.ceil(socialMediaMemories?.length / PAGE_SIZE) + 1,
-=======
+
         pageNumber:
           Math.ceil(
             NonPersistMemories?.socialMediaMemories?.length / PAGE_SIZE
           ) + 1,
->>>>>>> defdabe (NEW)
       };
       setRequiredData(memoryData);
     }

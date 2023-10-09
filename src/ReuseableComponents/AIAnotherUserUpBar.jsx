@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-import React, { useContext, useEffect, useState } from "react";
-=======
 import React, { useEffect, useState } from "react";
->>>>>>> defdabe (NEW)
+
 import { AIButton } from "./AIButton";
 import { MoreHorizRounded } from "@mui/icons-material";
 import { useParams } from "react-router-dom";
@@ -15,11 +12,6 @@ import {
 } from "../SocialMedia/APIs/SocialMediaProfileInterfaceAPI";
 import { useCookies } from "react-cookie";
 import { setFollowButtonChange } from "../redux/UtilitiesSlice";
-<<<<<<< HEAD
-import { Context as MemoryContext } from "../context/MemoryContext";
-import { Context as profileContext } from "../context/ProfileContext";
-=======
->>>>>>> defdabe (NEW)
 
 export const AIAnotherUserUpBar = ({
   settingsSuggested,
@@ -28,10 +20,7 @@ export const AIAnotherUserUpBar = ({
   MoreButton,
   userName,
   onClickOfFollowingList,
-<<<<<<< HEAD
-=======
   onClickOfFollowersList,
->>>>>>> defdabe (NEW)
 }) => {
   //   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
@@ -44,17 +33,6 @@ export const AIAnotherUserUpBar = ({
   const socialMediaUser = useSelector((state) => state.socialMediaUser);
   const auth = useSelector((state) => state.auth);
 
-<<<<<<< HEAD
-  const {
-    state: { memoryCount },
-  } = useContext(MemoryContext);
-
-  const {
-    state: { FollowersCount, FollowingsCount },
-  } = useContext(profileContext);
-
-  useEffect(() => {}, [FollowersCount, FollowingsCount]);
-=======
   const NonPersistMemories = useSelector((state) => state.NonPersistMemories);
 
   const NonPersistProfile = useSelector((state) => state.NonPersistProfile);
@@ -63,7 +41,6 @@ export const AIAnotherUserUpBar = ({
     NonPersistProfile?.FollowersCount,
     NonPersistProfile?.FollowingsCount,
   ]);
->>>>>>> defdabe (NEW)
 
   // useCookies hook
   const [cookies] = useCookies(["avt_token"]);
@@ -142,14 +119,9 @@ export const AIAnotherUserUpBar = ({
                     fontWeight: "bold",
                   }}
                 >
-<<<<<<< HEAD
-                  {FollowersCount !== null || FollowersCount !== undefined
-                    ? FollowersCount
-=======
                   {NonPersistProfile?.FollowersCount !== null ||
                   NonPersistProfile?.FollowersCount !== undefined
                     ? NonPersistProfile?.FollowersCount
->>>>>>> defdabe (NEW)
                     : 0}
                 </Typography>
                 <Typography
@@ -157,10 +129,7 @@ export const AIAnotherUserUpBar = ({
                     fontSize: "14px",
                     cursor: "pointer",
                   }}
-<<<<<<< HEAD
-=======
                   onClick={onClickOfFollowersList}
->>>>>>> defdabe (NEW)
                 >
                   Followers
                 </Typography>
@@ -179,14 +148,9 @@ export const AIAnotherUserUpBar = ({
                     fontWeight: "bold",
                   }}
                 >
-<<<<<<< HEAD
-                  {FollowingsCount !== null || FollowingsCount !== undefined
-                    ? FollowingsCount
-=======
                   {NonPersistProfile?.FollowingsCount !== null ||
                   NonPersistProfile?.FollowingsCount !== undefined
                     ? NonPersistProfile?.FollowingsCount
->>>>>>> defdabe (NEW)
                     : 0}
                 </Typography>
                 <Typography
@@ -213,14 +177,9 @@ export const AIAnotherUserUpBar = ({
                     fontWeight: "bold",
                   }}
                 >
-<<<<<<< HEAD
-                  {memoryCount !== null && memoryCount !== undefined
-                    ? memoryCount
-=======
                   {NonPersistMemories?.memoryCount !== null &&
                   NonPersistMemories?.memoryCount !== undefined
                     ? NonPersistMemories?.memoryCount
->>>>>>> defdabe (NEW)
                     : 0}
                 </Typography>
                 <Typography

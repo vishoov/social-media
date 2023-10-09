@@ -12,23 +12,16 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-<<<<<<< HEAD
-import React, { useContext, useState } from "react";
-import { VideocamRounded } from "@mui/icons-material";
-=======
+
 import React, { useState } from "react";
 import { MarkChatUnreadOutlined, VideocamRounded } from "@mui/icons-material";
->>>>>>> defdabe (NEW)
+
 import { SearchModelForMessage } from "./SearchModelForMessage";
 import messages from "../../static/images/utils/messages (1).png";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setSelectedConversation } from "../../redux/MessageSlice";
 import { setCurrentInterface } from "../../redux/UtilitiesSlice";
-<<<<<<< HEAD
-import { Context as MessageContext } from "../../context/MessageContext";
-=======
->>>>>>> defdabe (NEW)
 
 export const RegularMessageChatComponent = ({ all_conversations }) => {
   const [open, setOpen] = useState(false);
@@ -38,11 +31,6 @@ export const RegularMessageChatComponent = ({ all_conversations }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-<<<<<<< HEAD
-  const { set_sent_messages } = useContext(MessageContext);
-
-=======
->>>>>>> defdabe (NEW)
   const handleClick = (communications, communicationData) => {
     const generatedData = {
       userName: communications?.userName,
@@ -52,11 +40,7 @@ export const RegularMessageChatComponent = ({ all_conversations }) => {
     };
 
     dispatch(setSelectedConversation(generatedData));
-<<<<<<< HEAD
-    set_sent_messages({ should_be_empty: true });
-=======
 
->>>>>>> defdabe (NEW)
     navigate(
       `/environment/socialMedia/message/${generatedData?.conversationId}`
     );
@@ -72,24 +56,6 @@ export const RegularMessageChatComponent = ({ all_conversations }) => {
             marginLeft: 36,
           }}
         >
-<<<<<<< HEAD
-          <Typography
-            variant="subtitle2"
-            sx={{
-              marginLeft: 2,
-              height: 43,
-              display: "flex",
-              alignItems: "center",
-              fontWeight: "bold",
-            }}
-          >
-            Messages
-          </Typography>
-          <Divider
-            sx={{
-              marginLeft: 2,
-              width: 490,
-=======
           <Stack
             direction="row"
             marginLeft={4}
@@ -118,7 +84,6 @@ export const RegularMessageChatComponent = ({ all_conversations }) => {
             sx={{
               marginLeft: 2,
               width: 500,
->>>>>>> defdabe (NEW)
             }}
             color="lightgrey"
           />
@@ -137,11 +102,7 @@ export const RegularMessageChatComponent = ({ all_conversations }) => {
                       <ListItem
                         key={communications?.userName}
                         sx={{
-<<<<<<< HEAD
-                          width: 500,
-=======
                           width: 520,
->>>>>>> defdabe (NEW)
                         }}
                       >
                         <ListItemButton
@@ -175,15 +136,11 @@ export const RegularMessageChatComponent = ({ all_conversations }) => {
                             </Typography>
                           </ListItemText>
                           <ListItemIcon>
-<<<<<<< HEAD
-                            <VideocamRounded />
-=======
                             <VideocamRounded
                               sx={{
                                 color: "black",
                               }}
                             />
->>>>>>> defdabe (NEW)
                           </ListItemIcon>
                         </ListItemButton>
                       </ListItem>

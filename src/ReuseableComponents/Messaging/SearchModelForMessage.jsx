@@ -14,28 +14,14 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useContext } from "react";
-import { Context as SearchContext } from "../../context/SearchContext";
+import React from "react";
 import { useCookies } from "react-cookie";
 import { useGetUserBySearchForMessages } from "../../SocialMedia/APIs/SocialMediaSearchInterfaceApi";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setSelectedConversation } from "../../redux/MessageSlice";
-<<<<<<< HEAD
-import { Context as MessageContext } from "../../context/MessageContext";
-=======
->>>>>>> defdabe (NEW)
 
 export const SearchModelForMessage = ({ open, handleClose }) => {
-  const {
-    state: { searchDataForMessages },
-  } = useContext(SearchContext);
-
-<<<<<<< HEAD
-  const { set_sent_messages } = useContext(MessageContext);
-
-=======
->>>>>>> defdabe (NEW)
   const { mutate } = useGetUserBySearchForMessages();
 
   const [cookies] = useCookies(["avt_token"]);
@@ -47,6 +33,8 @@ export const SearchModelForMessage = ({ open, handleClose }) => {
     };
     mutate(data);
   };
+
+  const NonPersistSearch = useSelector((state) => state.NonPersistSearch);
 
   const generateUniqueNumber = () => {
     const timeStamp = Date.now();
@@ -66,10 +54,7 @@ export const SearchModelForMessage = ({ open, handleClose }) => {
     };
 
     dispatch(setSelectedConversation(generatedData));
-<<<<<<< HEAD
-    set_sent_messages({ should_be_empty: true });
-=======
->>>>>>> defdabe (NEW)
+
     navigate(
       `/environment/socialMedia/message/${generatedData?.conversationId}`
     );
@@ -139,45 +124,47 @@ export const SearchModelForMessage = ({ open, handleClose }) => {
                 maxHeight: 730,
               }}
             >
-              {searchDataForMessages?.length > 0 ? (
-                searchDataForMessages?.map((communications) => {
-                  return (
-                    <ListItem key={communications?.profilePic}>
-                      <ListItemButton
-                        disableTouchRipple
-                        onClick={() => handleClick(communications)}
-                      >
-                        <ListItemAvatar>
-                          <Avatar
-                            src={communications?.profilePic}
-                            srcSet={communications?.profilePic}
-                            sx={{
-                              width: 50,
-                              height: 50,
-                            }}
-                            alt="not found!"
-                          />
-                        </ListItemAvatar>
-                        <ListItemText>
-                          <Typography
-                            variant="subtitle2"
-                            sx={{
-                              fontWeight: "bold",
-                            }}
-                          >
-                            {communications?.userName}
-                          </Typography>
-                          <Typography variant="caption">
-                            {communications?.userName}
-                          </Typography>
-                        </ListItemText>
-                        <ListItemIcon>
-                          <VideocamRounded htmlColor="black" />
-                        </ListItemIcon>
-                      </ListItemButton>
-                    </ListItem>
-                  );
-                })
+              {NonPersistSearch?.searchDataForMessages?.length > 0 ? (
+                NonPersistSearch?.searchDataForMessages?.map(
+                  (communications) => {
+                    return (
+                      <ListItem key={communications?.profilePic}>
+                        <ListItemButton
+                          disableTouchRipple
+                          onClick={() => handleClick(communications)}
+                        >
+                          <ListItemAvatar>
+                            <Avatar
+                              src={communications?.profilePic}
+                              srcSet={communications?.profilePic}
+                              sx={{
+                                width: 50,
+                                height: 50,
+                              }}
+                              alt="not found!"
+                            />
+                          </ListItemAvatar>
+                          <ListItemText>
+                            <Typography
+                              variant="subtitle2"
+                              sx={{
+                                fontWeight: "bold",
+                              }}
+                            >
+                              {communications?.userName}
+                            </Typography>
+                            <Typography variant="caption">
+                              {communications?.userName}
+                            </Typography>
+                          </ListItemText>
+                          <ListItemIcon>
+                            <VideocamRounded htmlColor="black" />
+                          </ListItemIcon>
+                        </ListItemButton>
+                      </ListItem>
+                    );
+                  }
+                )
               ) : (
                 <Typography
                   variant="caption"

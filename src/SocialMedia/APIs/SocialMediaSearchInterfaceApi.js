@@ -3,8 +3,9 @@ import { useMutation } from "react-query";
 import { useDispatch } from "react-redux";
 import { setSearchDataError } from "../../redux/SearchSlice";
 import { setRequestedUserSearchError } from "../../redux/SearchSlice";
-import { useContext } from "react";
+import { setSearchData } from "../../reduxNonPersist/NonPersistSearchSlice";
 import { Context as SearchContext } from "../../context/SearchContext";
+import { useContext } from "react";
 
 const urls = () => {
   return axios.create({
@@ -70,8 +71,6 @@ export const useCheckIsUserFollowingTheOtherUser = () => {
 export const useGetUserBySearch = () => {
   const dispatch = useDispatch();
 
-  const { setSearchData } = useContext(SearchContext);
-
   return useMutation(getUserBySearch, {
     onError: (error) => {
       dispatch(setSearchDataError(error));
@@ -90,7 +89,7 @@ export const useGetUserBySearch = () => {
           return newJson;
         });
 
-        setSearchData(wholeData);
+        dispatch(setSearchData(wholeData));
       }
     },
   });

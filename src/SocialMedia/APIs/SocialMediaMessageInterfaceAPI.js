@@ -1,7 +1,6 @@
 import axios from "axios";
-import { useContext } from "react";
+
 import { useQuery } from "react-query";
-import { Context as MessageContext } from "../../context/MessageContext";
 
 import { useDispatch } from "react-redux";
 import { set_all_messages } from "../../reduxNonPersist/NonPersistMessages";
@@ -46,16 +45,12 @@ const get_all_conversations_of_specific_user = (requiredData) => {
 };
 
 export const useGetMessageOfParticularConversation = (requiredData) => {
-  const { set_error } = useContext(MessageContext);
   const dispatch = useDispatch();
 
   return useQuery(
     ["getMessagesOfParticularConversation", requiredData],
     () => getMessagesOfParticularConversation(requiredData),
     {
-      onError: (error) => {
-        set_error(error?.response?.data?.message);
-      },
       onSuccess: (data) => {
         if (data?.status === 200) {
           // data?.data?.data?.map((messages) => set_all_messages(messages));

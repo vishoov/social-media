@@ -13,7 +13,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   useCheckIsUserFollowingTheOtherUser,
   useGetUserBySearch,
@@ -26,13 +26,13 @@ import {
   setRequestedUserSearchDataForPersist,
 } from "../../../redux/SearchSlice";
 import { useNavigate } from "react-router-dom";
-import { Context as SearchContext } from "../../../context/SearchContext";
 import useGetFollowersAndFollowingHook from "../../../hooks/useGetFollowersAndFollowingHook";
 import useGetMemoriesCountHook from "../../../hooks/useGetMemoriesCountHook";
-<<<<<<< HEAD
-=======
-import { setRequestUserSearchData } from "../../../reduxNonPersist/NonPersistSearchSlice";
->>>>>>> defdabe (NEW)
+
+import {
+  setRequestUserSearchData,
+  setSearchData,
+} from "../../../reduxNonPersist/NonPersistSearchSlice";
 
 export const SearchBarComponent = ({ onClose, open }) => {
   const [cookies] = useCookies(["avt_token"]);
@@ -51,10 +51,7 @@ export const SearchBarComponent = ({ onClose, open }) => {
 
   const search = useSelector((state) => state.search);
 
-  const {
-    state: { searchData },
-    setSearchData,
-  } = useContext(SearchContext);
+  const NonPersistSearch = useSelector((state) => state.NonPersistSearch);
 
   useGetMemoriesCountHook(search.requestedUserSearchdataForPersist?.userId);
 
@@ -62,11 +59,6 @@ export const SearchBarComponent = ({ onClose, open }) => {
     search.requestedUserSearchdataForPersist?.userId
   );
 
-<<<<<<< HEAD
-  const { setRequestUserSearchData } = useContext(SearchContext);
-
-=======
->>>>>>> defdabe (NEW)
   const socialMediaUser = useSelector((state) => state.socialMediaUser);
 
   const handleChange = (search) => {
@@ -85,11 +77,7 @@ export const SearchBarComponent = ({ onClose, open }) => {
 
   useEffect(() => {
     if (data?.status === 200) {
-<<<<<<< HEAD
-      setRequestUserSearchData(data?.data?.data);
-=======
       dispatch(setRequestUserSearchData(data?.data?.data));
->>>>>>> defdabe (NEW)
 
       if (called === false) {
         dispatch(
@@ -152,7 +140,7 @@ export const SearchBarComponent = ({ onClose, open }) => {
         });
         dispatch(setIsFollowing(false));
       }
-      setSearchData([]);
+      dispatch(setSearchData([]));
       onClose();
     }
   };
@@ -209,8 +197,8 @@ export const SearchBarComponent = ({ onClose, open }) => {
         <Stack direction="row">
           <Box>
             <List>
-              {searchData?.length > 0 ? (
-                searchData?.map((searchResults) => {
+              {NonPersistSearch?.searchData?.length > 0 ? (
+                NonPersistSearch?.searchData?.map((searchResults) => {
                   return (
                     <ListItem disablePadding key={searchResults?.userName}>
                       <ListItemButton

@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-import React, { useCallback, useContext, useEffect, useState } from "react";
-=======
 import React, { useCallback, useEffect, useState } from "react";
->>>>>>> defdabe (NEW)
+
 import { AIAnotherUserUpBar } from "../../../ReuseableComponents/AIAnotherUserUpBar";
 import { AISideBar } from "../../../ReuseableComponents/AISideBar";
 import { Avatar, Box, Stack, Typography } from "@mui/material";
@@ -14,42 +11,23 @@ import jenPic2 from "../../../static/images/avatar/jen2.jpeg";
 import jenPic3 from "../../../static/images/avatar/jen3.jpeg";
 import jenPic4 from "../../../static/images/avatar/jen4.jpeg";
 import { ShowMemoryBarOfAnotherUsers } from "../../../ReuseableComponents/Profile/ShowMemoryBarOfAnotherUsers";
-<<<<<<< HEAD
-import { Context as SearchContext } from "../../../context/SearchContext";
-import { Context as MemoryContext } from "../../../context/MemoryContext";
-=======
->>>>>>> defdabe (NEW)
 
 import { useParams } from "react-router-dom";
 import { useGetUserProfileInfo } from "../../APIs/SocialMediaSearchInterfaceApi";
 import { useCookies } from "react-cookie";
-<<<<<<< HEAD
-import { useSelector } from "react-redux";
-import useGetMemoriesCountHook from "../../../hooks/useGetMemoriesCountHook";
-import { useGetAllMemoriesForOtherUser } from "../../APIs/SocialMediaMemoryInterfaceAPI";
-import { AIShowFollowingList } from "../../../ReuseableComponents/Profile/AIShowFollowingList";
-=======
+
 import { useDispatch, useSelector } from "react-redux";
 import useGetMemoriesCountHook from "../../../hooks/useGetMemoriesCountHook";
 import { useGetAllMemoriesForOtherUser } from "../../APIs/SocialMediaMemoryInterfaceAPI";
 import { AIShowFollowingList } from "../../../ReuseableComponents/Profile/AIShowFollowingList";
 import { setRequestUserSearchData } from "../../../reduxNonPersist/NonPersistSearchSlice";
 import { AIShowFollowersList } from "../../../ReuseableComponents/Profile/AIShowFollowersList";
->>>>>>> defdabe (NEW)
 
 const PAGE_SIZE = 12;
 
 export const AnotherUsersProfile = () => {
   const [renderFollowingList, setRenderFollowingList] = useState(false);
-<<<<<<< HEAD
 
-  const { username } = useParams();
-
-  const {
-    state: { requestUserSearchData },
-    setRequestUserSearchData,
-  } = useContext(SearchContext);
-=======
   const [renderFollowersList, setRenderFollowersList] = useState(false);
 
   const { username } = useParams();
@@ -57,7 +35,6 @@ export const AnotherUsersProfile = () => {
   const NonPersistSearch = useSelector((state) => state.NonPersistSearch);
 
   const dispatch = useDispatch();
->>>>>>> defdabe (NEW)
 
   const search = useSelector((state) => state.search);
 
@@ -69,11 +46,7 @@ export const AnotherUsersProfile = () => {
 
   const callBack = useCallback(() => {
     if (data?.status === 200) {
-<<<<<<< HEAD
-      setRequestUserSearchData(data?.data?.data);
-=======
       dispatch(setRequestUserSearchData(data?.data?.data));
->>>>>>> defdabe (NEW)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.status]);
@@ -86,28 +59,14 @@ export const AnotherUsersProfile = () => {
       });
     } else {
       if (data?.status === 200) {
-<<<<<<< HEAD
-        setRequestUserSearchData(data?.data?.data);
-=======
         dispatch(setRequestUserSearchData(data?.data?.data));
->>>>>>> defdabe (NEW)
       }
     }
     // callBack();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [callBack, data?.status, data?.data?.data]);
 
-<<<<<<< HEAD
-  const {
-    state: { socialMediaMemoriesOfAnotherUser },
-  } = useContext(MemoryContext);
-=======
-  // const {
-  //   state: { socialMediaMemoriesOfAnotherUser },
-  // } = useContext(MemoryContext);
-
   const NonPersistMemories = useSelector((state) => state.NonPersistMemories);
->>>>>>> defdabe (NEW)
 
   const [loading, setLoading] = useState(false);
   const [requiredData, setRequiredData] = useState(null);
@@ -128,18 +87,12 @@ export const AnotherUsersProfile = () => {
         Authorization: cookies?.avt_token,
         userId:
           search?.requestedUserSearchdataForPersist?.userId ||
-<<<<<<< HEAD
-          requestUserSearchData?.userPersonalDetails?.userId,
-        pageNumber:
-          Math.ceil(socialMediaMemoriesOfAnotherUser?.length / PAGE_SIZE) + 1,
-=======
           NonPersistSearch?.requestUserSearchData?.userPersonalDetails?.userId,
         pageNumber:
           Math.ceil(
             NonPersistMemories?.socialMediaMemoriesOfAnotherUser?.length /
               PAGE_SIZE
           ) + 1,
->>>>>>> defdabe (NEW)
       };
       setRequiredData(memoryData);
     }
@@ -170,17 +123,11 @@ export const AnotherUsersProfile = () => {
           follow={true}
           message={true}
           userName={
-<<<<<<< HEAD
-            requestUserSearchData?.userPersonalDetails?.userName || username
-          }
-          onClickOfFollowingList={() => setRenderFollowingList(true)}
-=======
             NonPersistSearch?.requestUserSearchData?.userPersonalDetails
               ?.userName || username
           }
           onClickOfFollowingList={() => setRenderFollowingList(true)}
           onClickOfFollowersList={() => setRenderFollowersList(true)}
->>>>>>> defdabe (NEW)
         />
         {renderFollowingList && (
           <AIShowFollowingList
@@ -188,15 +135,14 @@ export const AnotherUsersProfile = () => {
             userId={search?.requestedUserSearchdataForPersist?.userId}
           />
         )}
-<<<<<<< HEAD
-=======
+
         {renderFollowersList && (
           <AIShowFollowersList
             closeEvent={() => setRenderFollowersList(false)}
             userId={search?.requestedUserSearchdataForPersist?.userId}
           />
         )}
->>>>>>> defdabe (NEW)
+
         <Stack
           direction="row"
           sx={{
@@ -306,11 +252,8 @@ export const AnotherUsersProfile = () => {
             <Avatar
               alt="Avatar"
               id="avatar"
-<<<<<<< HEAD
-              src={requestUserSearchData?.userProfilePics
-=======
               src={NonPersistSearch?.requestUserSearchData?.userProfilePics
->>>>>>> defdabe (NEW)
+
                 ?.at(0)
                 ?.profile_details?.at(0)
                 ?.urls?.at(0)}
@@ -330,10 +273,6 @@ export const AnotherUsersProfile = () => {
               }}
             >
               <b>
-<<<<<<< HEAD
-                {requestUserSearchData?.userPersonalDetails?.firstName}{" "}
-                {requestUserSearchData?.userPersonalDetails?.lastName}
-=======
                 {
                   NonPersistSearch?.requestUserSearchData?.userPersonalDetails
                     ?.firstName
@@ -342,7 +281,6 @@ export const AnotherUsersProfile = () => {
                   NonPersistSearch?.requestUserSearchData?.userPersonalDetails
                     ?.lastName
                 }
->>>>>>> defdabe (NEW)
               </b>
             </p>
           </Box>

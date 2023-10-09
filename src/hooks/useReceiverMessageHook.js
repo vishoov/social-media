@@ -13,12 +13,11 @@ const useReceiverMessageHook = (conversationId, message, all_messages) => {
   const stompClientForMessages = Stomp.over(socketForMessages);
 
   const callBack = () => {
-    if (all_messages?.length === 0 && !stompClientForMessages.connected) {
-      console.log("all messages are empty");
+    if (all_messages?.length === 0) {
       stompClientForMessages.connect({}, (frame) => {
         // Subscribe to the topic where Kafka messages are sent
         stompClientForMessages.subscribe(
-          `/conversation/${
+          `/receiver/conversation/${
             message?.selectedConversation?.conversationId || conversationId
           }`,
           (message) => {

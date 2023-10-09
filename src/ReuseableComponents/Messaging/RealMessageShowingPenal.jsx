@@ -1,18 +1,10 @@
-import React, { useCallback, useContext, useEffect } from "react";
-import { Context as MessageContext } from "../../context/MessageContext";
-
-<<<<<<< HEAD
-import SockJS from "sockjs-client";
-import Stomp from "stompjs";
-import { Table, TableBody, TableRow, Typography } from "@mui/material";
-=======
+import React, { useCallback, useEffect } from "react";
 import { Table, TableBody, TableRow, Typography } from "@mui/material";
 import useReceiverMessageHook from "../../hooks/useReceiverMessageHook";
 import useReceivePushNotificationHook from "../../hooks/useReceivePushNotificationHook";
 import useGetMessagesOfParticularConversationHook from "../../hooks/useGetMessagesOfParticularConversationHook";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
->>>>>>> defdabe (NEW)
 
 const style = {
   recieverMessageStyle: {
@@ -40,35 +32,6 @@ const style = {
 };
 
 export const RealMessageShowingPenal = () => {
-  const {
-<<<<<<< HEAD
-    state: { sent_messages, received_messages },
-    set_received_messages,
-  } = useContext(MessageContext);
-
-  const socket = new SockJS("http://localhost:9986/websocket");
-
-  const stompClient = Stomp.over(socket);
-
-  const callBack = useCallback(() => {
-    stompClient.connect({}, (frame) => {
-      // Subscribe to the topic where Kafka messages are sent
-      stompClient.subscribe(
-        `/push/notification/to/accepted/${localStorage.getItem("sm_user_id")}`,
-        (message) => {
-          // Handle incoming messages here
-
-          const data = JSON.parse(message?.body);
-          console.log(data);
-
-          set_received_messages(data);
-        }
-      );
-    });
-=======
-    state: { all_messages },
-  } = useContext(MessageContext);
-
   const { conversationId } = useParams();
 
   const message = useSelector((state) => state.message);
@@ -79,7 +42,7 @@ export const RealMessageShowingPenal = () => {
   const { callBack } = useReceiverMessageHook(
     conversationId,
     message,
-    all_messages
+    MessageNonPersist?.all_messages
   );
 
   const newCallBackForRenderingMessages = useCallback(() => {
@@ -106,22 +69,13 @@ export const RealMessageShowingPenal = () => {
     newCallBackForRenderingMessages();
     newCallBackForRenderingForPushNotification();
 
-    if (all_messages?.length === 0) {
+    if (MessageNonPersist?.all_messages?.length === 0) {
       console.log("all messages is empty");
       callBackOfMessages();
     }
->>>>>>> defdabe (NEW)
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-<<<<<<< HEAD
-    callBack();
-  }, [callBack]);
-=======
-    console.log("MessageNonPersist:::::::", MessageNonPersist);
-  }, [MessageNonPersist]);
->>>>>>> defdabe (NEW)
 
   return (
     <>
@@ -147,18 +101,13 @@ export const RealMessageShowingPenal = () => {
                 Sun 13:54
               </Typography>
             </TableRow>
-<<<<<<< HEAD
-            {sent_messages &&
-              sent_messages?.map((message) => {
-                return (
-=======
+
             {MessageNonPersist &&
               MessageNonPersist?.all_messages?.map((message) => {
                 return message?.userId ===
                   parseInt(localStorage.getItem("sm_user_id")) ||
                   message?.primaryKeys?.userId ===
                     parseInt(localStorage.getItem("sm_user_id")) ? (
->>>>>>> defdabe (NEW)
                   <TableRow
                     key={message?.message}
                     sx={{
@@ -170,88 +119,17 @@ export const RealMessageShowingPenal = () => {
                       {message?.message}
                     </Typography>
                   </TableRow>
-<<<<<<< HEAD
-                );
-              })}
-            {received_messages &&
-              received_messages?.map((message) => {
-                return (
-=======
                 ) : (
->>>>>>> defdabe (NEW)
                   <TableRow key={message}>
                     <Typography
                       sx={style?.recieverMessageStyle}
                       variant="body1"
                     >
-<<<<<<< HEAD
-                      {message}
-=======
                       {message?.message}
->>>>>>> defdabe (NEW)
                     </Typography>
                   </TableRow>
                 );
               })}
-<<<<<<< HEAD
-            {/* <TableRow>
-                  <Typography sx={style?.recieverMessageStyle} variant="body1">
-                    hi om
-                  </Typography>
-                </TableRow>
-                <TableRow
-                  sx={{
-                    display: "flex",
-                    justifyContent: "end",
-                  }}
-                >
-                  <Typography sx={style?.senderMessageStyle} variant="body1">
-                    hi jenna, how are you?
-                  </Typography>
-                </TableRow>
-                <TableRow>
-                  <Typography sx={style?.recieverMessageStyle} variant="body1">
-                    i'm fine, how are you?
-                  </Typography>
-                </TableRow>
-                <TableRow
-                  sx={{
-                    display: "flex",
-                    justifyContent: "end",
-                  }}
-                >
-                  <Typography sx={style?.senderMessageStyle} variant="body1">
-                    i'm also fine!
-                  </Typography>
-                </TableRow>
-                <TableRow>
-                  <Typography sx={style?.recieverMessageStyle} variant="body1">
-                    what's your plan for this cristmas?
-                  </Typography>
-                </TableRow>
-                <TableRow>
-                  <Typography sx={style?.recieverMessageStyle} variant="body1">
-                    🎄🎄🎅
-                  </Typography>
-                </TableRow>
-                <TableRow
-                  sx={{
-                    display: "flex",
-                    justifyContent: "end",
-                  }}
-                >
-                  <Typography sx={style?.senderMessageStyle} variant="body1">
-                    i think we should go to the church or tample something, what
-                    do you think
-                  </Typography>
-                </TableRow>
-                <TableRow>
-                  <Typography sx={style?.recieverMessageStyle} variant="body1">
-                    i think that's a great idea!🤍🩷
-                  </Typography>
-                </TableRow> */}
-=======
->>>>>>> defdabe (NEW)
           </TableBody>
         </Table>
       </div>
