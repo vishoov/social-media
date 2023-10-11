@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   requestUserSearchData: null,
   searchData: [],
+  searchDataForMessages: [],
 };
 
 const NonPersistSearchSlice = createSlice({
@@ -15,10 +16,17 @@ const NonPersistSearchSlice = createSlice({
     setSearchData: (state, action) => {
       state.searchData = action.payload;
     },
+
+    setSearchDataForMessages: (state, action) => {
+      state.searchDataForMessages = action.payload;
+    },
   },
 });
 
-export const { setRequestUserSearchData, setSearchData } =
-  NonPersistSearchSlice.actions;
+export const {
+  setRequestUserSearchData,
+  setSearchData,
+  setSearchDataForMessages,
+} = NonPersistSearchSlice.actions;
 
 export default NonPersistSearchSlice.reducer;

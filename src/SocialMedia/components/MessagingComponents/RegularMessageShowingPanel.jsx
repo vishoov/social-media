@@ -1,73 +1,81 @@
-import React, { useEffect } from "react";
-import { RegularMessageShowingPanel } from "./RegularMessageShowingPanel";
+import {
+  Avatar,
+  Chip,
+  Divider,
+  InputAdornment,
+  InputBase,
+  Paper,
+  Stack,
+} from "@mui/material";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
-import { PendingMessageShowingPenal } from "./PendingMessageShowingPenal";
-import useGetMessagesOfParticularConversationHook from "../../../hooks/useGetMessagesOfParticularConversationHook";
 import { useParams } from "react-router-dom";
+import { AISideBar } from "../../../ReuseableComponents/AISideBar";
+import {
+  InsertPhotoRounded,
+  MicRounded,
+  MoreHorizRounded,
+  PersonalVideoRounded,
+  SentimentSatisfiedRounded,
+  VideocamRounded,
+} from "@mui/icons-material";
+import { RealMessageShowingPenal } from "../../../ReuseableComponents/Messaging/RealMessageShowingPenal";
+import { ModelForMaintainingTheConversations } from "../../../ReuseableComponents/Messaging/ModelForMaintainingTheConversations";
+import SockJS from "sockjs-client";
+import Stomp from "stompjs";
 
-// const socketForSendMessage1 = new SockJS("http://localhost:9988/websocket");
+const socketForSendMessage = new SockJS("http://localhost:9988/websocket");
 
 // Create a Stomp client over the SockJS WebSocket connection
-// const stompClientForSendMessage1 = Stomp.over(socketForSendMessage1);
+const stompClientForSendMessage = Stomp.over(socketForSendMessage);
 
-// const RealMessageShowingPenalHandler = React.memo(() => {
-//   return <RealMessageShowingPenal />;
-// });
+const RealMessageShowingPenalHandler = React.memo(() => {
+  return <RealMessageShowingPenal />;
+});
 
-export const MessagingComponent = () => {
-  // const { register, handleSubmit, reset } = useForm({
-  //   defaultValues: {
-  //     message: "",
-  //   },
-  // });
-
-  // const { conversationId } = useParams();
-
-  // const message = useSelector((state) => state.message);
-
-  // const [open, setOpen] = useState(false);
-
-  // const handleOpen = () => setOpen(true);
-  // const handleClose = () => setOpen(false);
-
-  // const submit = (data) => {
-  //   if (data && data?.message) {
-  //     const buildMessage = {
-  //       primaryKeys: {
-  //         userId: parseInt(localStorage.getItem("sm_user_id")),
-  //         type: "TEXT",
-  //       },
-  //       visibleConversationId: parseInt(
-  //         message?.selectedConversation?.conversationId || conversationId
-  //       ),
-  //       message: data?.message,
-  //       receiverUserId: message?.selectedConversation?.userId,
-  //     };
-  //     stompClientForSendMessage1.send(
-  //       `/conversation/${
-  //         message?.selectedConversation?.conversationId || conversationId
-  //       }`,
-  //       {},
-  //       JSON.stringify(buildMessage)
-  //     );
-  //   }
-  // };
-
-  const messages = useSelector((state) => state.message);
+export const RegularMessageShowingPanel = () => {
+  const { register, handleSubmit, reset } = useForm({
+    defaultValues: {
+      message: "",
+    },
+  });
 
   const { conversationId } = useParams();
 
-  const { callBack: callBackOfMessages } =
-    useGetMessagesOfParticularConversationHook(conversationId, messages);
+  const message = useSelector((state) => state.message);
 
-  useEffect(() => {
-    callBackOfMessages();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const submit = (data) => {
+    if (data && data?.message) {
+      const buildMessage = {
+        primaryKeys: {
+          userId: parseInt(localStorage.getItem("sm_user_id")),
+          type: "TEXT",
+        },
+        visibleConversationId: parseInt(
+          message?.selectedConversation?.conversationId || conversationId
+        ),
+        message: data?.message,
+        receiverUserId: message?.selectedConversation?.userId,
+      };
+      stompClientForSendMessage.send(
+        `/conversation/${
+          message?.selectedConversation?.conversationId || conversationId
+        }`,
+        {},
+        JSON.stringify(buildMessage)
+      );
+    }
+  };
 
   return (
     <>
-      {/* <Stack direction="row" spacing={37.5}>
+      <Stack direction="row" spacing={37.5}>
         <AISideBar />
         <Stack
           direction="column"
@@ -80,7 +88,6 @@ export const MessagingComponent = () => {
               padding: "7px",
             }}
             direction="row"
-
             spacing={122}
             alignItems="center"
           >
@@ -174,18 +181,11 @@ export const MessagingComponent = () => {
         </Stack>
       </Stack>
 
- */}
       {/* model for the choosing the person */}
-      {/* <ModelForMaintainingTheConversations
+      <ModelForMaintainingTheConversations
         open={open}
         handleClose={handleClose}
-      /> */}
-
-      {messages?.selectedConversation?.status === "ACCEPTED" ? (
-        <RegularMessageShowingPanel />
-      ) : (
-        <PendingMessageShowingPenal />
-      )}
+      />
     </>
   );
 };

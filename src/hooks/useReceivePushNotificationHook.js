@@ -16,7 +16,17 @@ const useReceivePushNotificationHook = () => {
         (message) => {
           // Handle incoming messages here
           const data = JSON.parse(message?.body);
-          console.log(data);
+
+          console.log("accepted data :", data);
+        }
+      );
+
+      stompClient.subscribe(
+        `/push/notification/to/pending/${localStorage.getItem("sm_user_id")}`,
+        (message) => {
+          // Handle incoming messages here
+          const data = JSON.parse(message?.body);
+          console.log("pending data :", data);
         }
       );
     });

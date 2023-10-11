@@ -3,9 +3,11 @@ import { useMutation } from "react-query";
 import { useDispatch } from "react-redux";
 import { setSearchDataError } from "../../redux/SearchSlice";
 import { setRequestedUserSearchError } from "../../redux/SearchSlice";
-import { setSearchData } from "../../reduxNonPersist/NonPersistSearchSlice";
-import { Context as SearchContext } from "../../context/SearchContext";
-import { useContext } from "react";
+
+import {
+  setSearchData,
+  setSearchDataForMessages,
+} from "../../reduxNonPersist/NonPersistSearchSlice";
 
 const urls = () => {
   return axios.create({
@@ -98,8 +100,6 @@ export const useGetUserBySearch = () => {
 export const useGetUserBySearchForMessages = () => {
   const dispatch = useDispatch();
 
-  const { setSearchDataForMessages } = useContext(SearchContext);
-
   return useMutation(getUserBySearch, {
     onError: (error) => {
       dispatch(setSearchDataError(error));
@@ -118,7 +118,7 @@ export const useGetUserBySearchForMessages = () => {
           return newJson;
         });
 
-        setSearchDataForMessages(wholeData);
+        dispatch(setSearchDataForMessages(wholeData));
       }
     },
   });

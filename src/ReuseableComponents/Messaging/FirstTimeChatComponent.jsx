@@ -13,7 +13,8 @@ export const FirstTimeChatComponent = () => {
       <div
         style={{
           height: 900,
-          width: 2000,
+          width: 1600,
+          marginLeft: "auto",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",

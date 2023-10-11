@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { AISideBar } from "../../../ReuseableComponents/AISideBar";
 import {
   Avatar,
@@ -13,21 +13,83 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { PersonOffRounded, VideocamRounded } from "@mui/icons-material";
+
+import {
+  ArrowBackRounded,
+  PersonOffRounded,
+  VideocamRounded,
+} from "@mui/icons-material";
+import useReceivePushNotificationHook from "../../../hooks/useReceivePushNotificationHook";
+import { useNavigate } from "react-router-dom";
+import { useGet_all_conversations_request_of_specific_user } from "../../APIs/SocialMediaMessageInterfaceAPI";
+import { useCookies } from "react-cookie";
+import { useDispatch, useSelector } from "react-redux";
+import { setSelectedConversation } from "../../../redux/MessageSlice";
+import { setCurrentInterface } from "../../../redux/UtilitiesSlice";
+import { reset_all_messages } from "../../../reduxNonPersist/NonPersistMessages";
 
 export const PendingMessages = () => {
-  const data = [
-    {
-      userName: "John Doe",
-      profilePic: "https://i.pravatar.cc/150?img=1",
-      message: "Hello John",
-    },
-    {
-      userName: "alogue",
-      profilePic: "https://i.pravatar.cc/150?img=2",
-      message: "Hello another user",
-    },
-  ];
+  const { callBack } = useReceivePushNotificationHook();
+
+  const [cookies] = useCookies(["avt_token"]);
+
+  useEffect(() => {
+    callBack();
+    // eslint-disable-next-line
+  }, []);
+
+  const { refetch } = useGet_all_conversations_request_of_specific_user({
+    Authorization: cookies?.avt_token,
+    userId: localStorage.getItem("sm_user_id"),
+  });
+
+  const NonPersistConversations = useSelector(
+    (state) => state.NonPersistConversations
+  );
+
+  useEffect(() => {
+    if (NonPersistConversations?.all_conversation_requests?.length === 0) {
+      refetch();
+    }
+    // eslint-disable-next-line
+  }, []);
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // const data = [
+  //   {
+  //     userName: "John Doe",
+  //     profilePic: "https://i.pravatar.cc/150?img=1",
+  //     message: "Hello John",
+  //   },
+  //   {
+  //     userName: "alogue",
+  //     profilePic: "https://i.pravatar.cc/150?img=2",
+  //     message: "Hello another user",
+  //   },
+  // ];
+
+  const handleClick = (communications, communicationData) => {
+    const generatedData = {
+      userName: communications?.userName,
+      profilePic: communications?.profilePic.at(0),
+      conversationId: communicationData?.visibleConversationId,
+      userId: communications?.userId,
+      status: communicationData?.status,
+      receiverUserId: communicationData?.receiverUserId,
+    };
+
+    dispatch(setSelectedConversation(generatedData));
+
+    dispatch(reset_all_messages());
+
+    navigate(
+      `/environment/socialMedia/message/${generatedData?.conversationId}`
+    );
+
+    dispatch(setCurrentInterface("REGULAR_MESSAGE_CHAT"));
+  };
 
   return (
     <>
@@ -38,12 +100,13 @@ export const PendingMessages = () => {
             marginLeft: 36,
           }}
         >
-          <Stack
-            direction="row"
-            marginLeft={3}
-            spacing={40}
-            alignItems="center"
-          >
+          <Stack direction="row" marginLeft={3} spacing={3} alignItems="center">
+            <ArrowBackRounded
+              onClick={() => navigate("/environment/socialMedia/message")}
+              sx={{
+                cursor: "pointer",
+              }}
+            />
             <Typography
               variant="subtitle2"
               sx={{
@@ -54,7 +117,7 @@ export const PendingMessages = () => {
                 fontSize: 16,
               }}
             >
-              messages requests
+              message requests
             </Typography>
           </Stack>
           <Divider
@@ -70,50 +133,68 @@ export const PendingMessages = () => {
               maxHeight: 730,
             }}
           >
-            {data?.map((items) => {
-              return (
-                <ListItem
-                  key={items?.userName}
-                  sx={{
-                    width: 520,
-                  }}
-                >
-                  <ListItemButton disableTouchRipple>
-                    <ListItemAvatar>
-                      <Avatar
-                        src={items?.profilePic}
-                        srcSet={items?.profilePic}
-                        sx={{
-                          width: 50,
-                          height: 50,
-                        }}
-                        alt="not found!"
-                      />
-                    </ListItemAvatar>
-                    <ListItemText>
-                      <Typography
-                        variant="subtitle2"
-                        sx={{
-                          fontWeight: "bold",
-                        }}
-                      >
-                        {items?.userName}
-                      </Typography>
-                      <Typography variant="caption">
-                        You: {items?.message}
-                      </Typography>
-                    </ListItemText>
-                    <ListItemIcon>
-                      <VideocamRounded
-                        sx={{
-                          color: "black",
-                        }}
-                      />
-                    </ListItemIcon>
-                  </ListItemButton>
-                </ListItem>
-              );
-            })}
+            {NonPersistConversations?.all_conversation_requests
+              ?.at(0)
+              ?.map((items) => {
+                return items?.map((request_communications) => {
+                  return request_communications?.conversationDetails
+                    ?.at(0)
+                    ?.map((request_communicationData) => {
+                      return (
+                        <ListItem
+                          key={request_communications?.userName}
+                          sx={{
+                            width: 520,
+                          }}
+                        >
+                          <ListItemButton
+                            disableTouchRipple
+                            onClick={() =>
+                              handleClick(
+                                request_communications,
+                                request_communicationData
+                              )
+                            }
+                          >
+                            <ListItemAvatar>
+                              <Avatar
+                                src={request_communications?.profilePic?.at(0)}
+                                srcSet={request_communications?.profilePic?.at(
+                                  0
+                                )}
+                                sx={{
+                                  width: 50,
+                                  height: 50,
+                                }}
+                                alt="not found!"
+                              />
+                            </ListItemAvatar>
+                            <ListItemText>
+                              <Typography
+                                variant="subtitle2"
+                                sx={{
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                {request_communications?.userName}
+                              </Typography>
+                              <Typography variant="caption">
+                                You: {request_communications?.message}
+                              </Typography>
+                            </ListItemText>
+                            <ListItemIcon>
+                              <VideocamRounded
+                                sx={{
+                                  color: "black",
+                                }}
+                              />
+                            </ListItemIcon>
+                          </ListItemButton>
+                        </ListItem>
+                      );
+                    });
+                });
+              })}
           </List>
         </Grid>
         <Divider

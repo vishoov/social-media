@@ -31,7 +31,7 @@ const style = {
   },
 };
 
-export const RealMessageShowingPenal = () => {
+export const RealMessageShowingPenal = ({ askForAccept }) => {
   const { conversationId } = useParams();
 
   const message = useSelector((state) => state.message);

@@ -22,6 +22,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setSelectedConversation } from "../../redux/MessageSlice";
 import { setCurrentInterface } from "../../redux/UtilitiesSlice";
+import { reset_all_messages } from "../../reduxNonPersist/NonPersistMessages";
 
 export const RegularMessageChatComponent = ({ all_conversations }) => {
   const [open, setOpen] = useState(false);
@@ -37,9 +38,12 @@ export const RegularMessageChatComponent = ({ all_conversations }) => {
       profilePic: communications?.profilePic.at(0),
       conversationId: communicationData?.visibleConversationId,
       userId: communications?.userId,
+      status: communicationData?.status,
     };
 
     dispatch(setSelectedConversation(generatedData));
+
+    dispatch(reset_all_messages());
 
     navigate(
       `/environment/socialMedia/message/${generatedData?.conversationId}`
@@ -78,6 +82,9 @@ export const RegularMessageChatComponent = ({ all_conversations }) => {
               onClick={() =>
                 navigate("/environment/socialMedia/message/pending")
               }
+              sx={{
+                cursor: "pointer",
+              }}
             />
           </Stack>
           <Divider

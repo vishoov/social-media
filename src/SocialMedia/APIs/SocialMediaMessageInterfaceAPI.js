@@ -1,10 +1,13 @@
 import axios from "axios";
 
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 
 import { useDispatch } from "react-redux";
 import { set_all_messages } from "../../reduxNonPersist/NonPersistMessages";
-import { set_all_conversations } from "../../reduxNonPersist/NonPersistConversationSlice";
+import {
+  set_all_conversations,
+  set_all_conversation_requests,
+} from "../../reduxNonPersist/NonPersistConversationSlice";
 
 const url = () => {
   return axios.create({
@@ -38,6 +41,39 @@ const get_all_conversations_of_specific_user = (requiredData) => {
         Authorization: "Bearer " + requiredData?.Authorization,
       },
       params: {
+        userId: requiredData?.userId,
+      },
+    });
+  }
+};
+
+const get_all_conversations_request_of_specific_user = (requiredData) => {
+  if (requiredData?.Authorization && requiredData?.userId) {
+    return url1().get("/get/all/requests", {
+      headers: {
+        Authorization: "Bearer " + requiredData?.Authorization,
+      },
+      params: {
+        userId: requiredData?.userId,
+      },
+    });
+  }
+};
+
+const update_user_conversation_request_permissions = (requiredData) => {
+  if (
+    requiredData?.Authorization &&
+    requiredData?.visible_conversation_id &&
+    requiredData?.status &&
+    requiredData?.userId
+  ) {
+    return url1().put("/update/permission/of/messages", null, {
+      headers: {
+        Authorization: "Bearer " + requiredData?.Authorization,
+      },
+      params: {
+        status: requiredData?.status,
+        visible_conversation_id: requiredData?.visible_conversation_id,
         userId: requiredData?.userId,
       },
     });
@@ -116,4 +152,75 @@ export const useGet_all_conversations_of_specific_user = (requiredData) => {
       retryDelay: 1000,
     }
   );
+};
+
+export const useGet_all_conversations_request_of_specific_user = (
+  requiredData
+) => {
+  const dispatch = useDispatch();
+
+  return useQuery(
+    ["get_all_conversations_request_of_specific_user", requiredData],
+    () => get_all_conversations_request_of_specific_user(requiredData),
+    {
+      onError: (error) => {
+        console.log(error?.response?.data?.message);
+      },
+      onSuccess: (data) => {
+        if (data?.status === 200) {
+          const wholeData = data?.data?.data?.profile_pics_data?.results?.map(
+            (profilePics) =>
+              profilePics?.profile_details?.map((pics) => {
+                const all_data = {
+                  profilePic: pics?.urls,
+                  userName: profilePics?.userName,
+                  userId: profilePics?.userId,
+                  conversationDetails: data?.data?.data?.conversation_data?.map(
+                    (conversation) =>
+                      conversation?.user_conversations?.map(
+                        (user_conversation) => {
+                          const all_conversation_data = {
+                            visibleConversationId:
+                              user_conversation?.visibleConversationId,
+                            receiverUserId: conversation?.receiverUserId,
+                            senderUserId: conversation?.senderUserId,
+                            status: conversation?.status,
+                          };
+                          return all_conversation_data;
+                        }
+                      )
+                  ),
+                };
+                return all_data;
+              })
+          );
+
+          console.log("all data :::", wholeData);
+
+          dispatch(set_all_conversation_requests(wholeData));
+        } else {
+          dispatch(set_all_conversation_requests(null));
+        }
+      },
+      refetchOnMount: false,
+      enabled: false,
+      retry: 5,
+      retryDelay: 1000,
+    }
+  );
+};
+
+export const useUpdate_user_conversation_request_permissions = () => {
+  return useMutation(update_user_conversation_request_permissions, {
+    onSuccess: (data) => {
+      if (data?.status === 200) {
+        console.log(data?.data?.data);
+      }
+    },
+    onError: (error) => {
+      console.log(error?.response?.data?.message);
+    },
+    retry: 5,
+    retryDelay: 1000,
+  });
 };
