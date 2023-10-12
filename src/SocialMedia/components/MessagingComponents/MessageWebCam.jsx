@@ -1,0 +1,94 @@
+import { CircleRounded } from "@mui/icons-material";
+import { IconButton, Typography } from "@mui/material";
+import React, { useEffect, useRef, useState } from "react";
+import Webcam from "react-webcam";
+import SockJS from "sockjs-client";
+import Stomp from "stompjs";
+
+const socketForSendMessage = new SockJS("http://localhost:9988/websocket");
+
+// Create a Stomp client over the SockJS WebSocket connection
+const stompClientForSendMessage = Stomp.over(socketForSendMessage);
+
+export const MessageWebCam = ({
+  height,
+  width,
+  onClose,
+  message,
+  conversationId,
+}) => {
+  const [webcamLoaded, setWebcamLoaded] = useState(false);
+  const webcamRef = useRef(null);
+
+  useEffect(() => {
+    // Simulate a delay (you can replace this with actual initialization logic)
+    setTimeout(() => {
+      setWebcamLoaded(true);
+    }, 3000); // Adjust the delay as needed
+  }, []);
+
+  const capture = () => {
+    const imageSrc = webcamRef.current.getScreenshot();
+    // Do something with the captured image source, e.g., display it or save it.
+
+    console.log("image source :::", imageSrc);
+
+    const buildMessage = {
+      primaryKeys: {
+        userId: parseInt(localStorage.getItem("sm_user_id")),
+        type: "IMAGE",
+      },
+      visibleConversationId: parseInt(
+        message?.selectedConversation?.conversationId || conversationId
+      ),
+      message: imageSrc,
+      receiverUserId: message?.selectedConversation?.userId,
+    };
+    stompClientForSendMessage.send(
+      `/conversation/send/image/${
+        message?.selectedConversation?.conversationId || conversationId
+      }`,
+      {},
+      JSON.stringify(buildMessage)
+    );
+
+    onClose();
+  };
+
+  return (
+    <>
+      {webcamLoaded ? (
+        <div>
+          <Webcam
+            videoConstraints={{
+              width: width, // Set the width of the webcam (you can adjust this)
+              height: height, // Set the height of the webcam (you can adjust this)
+              facingMode: "user",
+            }}
+            screenshotFormat="image/jpeg"
+            style={{
+              borderRadius: 5,
+            }}
+            ref={webcamRef}
+          />
+          <IconButton
+            sx={{
+              position: "absolute",
+              bottom: "10%",
+              right: "42.5%",
+              width: 80,
+              height: 80,
+              color: "transparent",
+              border: "3px solid white",
+            }}
+            onClick={capture}
+          >
+            <CircleRounded />
+          </IconButton>
+        </div>
+      ) : (
+        <Typography>Loading...</Typography>
+      )}
+    </>
+  );
+};

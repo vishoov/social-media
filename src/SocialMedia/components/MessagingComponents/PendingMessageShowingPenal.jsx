@@ -58,6 +58,48 @@ const style = {
   },
 };
 
+const PendingRealMessageHendler = React.memo(() => {
+  const MessageNonPersist = useSelector((state) => state.NonPersistMessage);
+
+  return (
+    <div
+      style={{
+        height: 900,
+        overflowY: "scroll", // Make the table body scrollable
+        maxHeight: 900,
+      }}
+    >
+      <Table>
+        <TableBody>
+          <TableRow>
+            <Typography
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                margin: 1,
+              }}
+              variant="caption"
+              color="grey"
+            >
+              Sun 13:54
+            </Typography>
+          </TableRow>
+          {MessageNonPersist &&
+            MessageNonPersist?.all_messages?.map((message) => {
+              return (
+                <TableRow key={message}>
+                  <Typography sx={style?.recieverMessageStyle} variant="body1">
+                    {message?.message}
+                  </Typography>
+                </TableRow>
+              );
+            })}
+        </TableBody>
+      </Table>
+    </div>
+  );
+});
+
 export const PendingMessageShowingPenal = () => {
   const { register, handleSubmit, reset } = useForm({
     defaultValues: {
@@ -75,7 +117,6 @@ export const PendingMessageShowingPenal = () => {
   }, []);
 
   const messages = useSelector((state) => state.message);
-  const MessageNonPersist = useSelector((state) => state.NonPersistMessage);
 
   const submit = (data) => {
     if (data && data?.message) {
@@ -153,45 +194,8 @@ export const PendingMessageShowingPenal = () => {
               width: 1540,
             }}
           />
+          <PendingRealMessageHendler />
 
-          <div
-            style={{
-              height: 900,
-              overflowY: "scroll", // Make the table body scrollable
-              maxHeight: 900,
-            }}
-          >
-            <Table>
-              <TableBody>
-                <TableRow>
-                  <Typography
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      margin: 1,
-                    }}
-                    variant="caption"
-                    color="grey"
-                  >
-                    Sun 13:54
-                  </Typography>
-                </TableRow>
-                {MessageNonPersist &&
-                  MessageNonPersist?.all_messages?.map((message) => {
-                    return (
-                      <TableRow key={message}>
-                        <Typography
-                          sx={style?.recieverMessageStyle}
-                          variant="body1"
-                        >
-                          {message?.message}
-                        </Typography>
-                      </TableRow>
-                    );
-                  })}
-              </TableBody>
-            </Table>
-          </div>
           <Stack
             direction="row"
             spacing={4}

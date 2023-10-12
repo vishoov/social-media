@@ -4,6 +4,7 @@ import {
   Divider,
   InputAdornment,
   InputBase,
+  Modal,
   Paper,
   Stack,
 } from "@mui/material";
@@ -24,6 +25,7 @@ import { RealMessageShowingPenal } from "../../../ReuseableComponents/Messaging/
 import { ModelForMaintainingTheConversations } from "../../../ReuseableComponents/Messaging/ModelForMaintainingTheConversations";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
+import { MessageWebCam } from "./MessageWebCam";
 
 const socketForSendMessage = new SockJS("http://localhost:9988/websocket");
 
@@ -49,6 +51,9 @@ export const RegularMessageShowingPanel = () => {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const [OpenWebCam, setOpenWebCam] = useState(false);
+  const handleWebCamClose = () => setOpenWebCam(false);
 
   const submit = (data) => {
     if (data && data?.message) {
@@ -170,6 +175,10 @@ export const RegularMessageShowingPanel = () => {
             <InsertPhotoRounded
               sx={{
                 fontSize: 30,
+                cursor: "pointer",
+              }}
+              onClick={() => {
+                setOpenWebCam(true);
               }}
             />
             <MicRounded
@@ -180,6 +189,27 @@ export const RegularMessageShowingPanel = () => {
           </Stack>
         </Stack>
       </Stack>
+
+      <Modal open={OpenWebCam} onClose={handleWebCamClose}>
+        <div
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            bgcolor: "transparent",
+            outline: "none",
+          }}
+        >
+          <MessageWebCam
+            height={1000}
+            width={600}
+            onClose={handleWebCamClose}
+            message={message}
+            conversationId={conversationId}
+          />
+        </div>
+      </Modal>
 
       {/* model for the choosing the person */}
       <ModelForMaintainingTheConversations

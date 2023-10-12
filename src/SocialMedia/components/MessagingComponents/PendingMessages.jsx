@@ -57,27 +57,14 @@ export const PendingMessages = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // const data = [
-  //   {
-  //     userName: "John Doe",
-  //     profilePic: "https://i.pravatar.cc/150?img=1",
-  //     message: "Hello John",
-  //   },
-  //   {
-  //     userName: "alogue",
-  //     profilePic: "https://i.pravatar.cc/150?img=2",
-  //     message: "Hello another user",
-  //   },
-  // ];
-
   const handleClick = (communications, communicationData) => {
     const generatedData = {
       userName: communications?.userName,
       profilePic: communications?.profilePic.at(0),
-      conversationId: communicationData?.visibleConversationId,
+      conversationId: communicationData?.at(0)?.visibleConversationId,
       userId: communications?.userId,
-      status: communicationData?.status,
-      receiverUserId: communicationData?.receiverUserId,
+      status: communicationData?.at(0)?.status,
+      receiverUserId: communicationData?.at(0)?.receiverUserId,
     };
 
     dispatch(setSelectedConversation(generatedData));
@@ -136,64 +123,59 @@ export const PendingMessages = () => {
             {NonPersistConversations?.all_conversation_requests
               ?.at(0)
               ?.map((items) => {
-                return items?.map((request_communications) => {
-                  return request_communications?.conversationDetails
-                    ?.at(0)
-                    ?.map((request_communicationData) => {
-                      return (
-                        <ListItem
-                          key={request_communications?.userName}
+                return (
+                  <ListItem
+                    key={items?.userName}
+                    sx={{
+                      width: 520,
+                    }}
+                  >
+                    <ListItemButton
+                      disableTouchRipple
+                      onClick={() =>
+                        handleClick(
+                          items,
+                          items?.conversationDetails?.filter(
+                            (conversationData) =>
+                              conversationData?.receiverUserId === items?.userId
+                          )
+                        )
+                      }
+                    >
+                      <ListItemAvatar>
+                        <Avatar
+                          src={items?.profilePic?.at(0)}
+                          srcSet={items?.profilePic?.at(0)}
                           sx={{
-                            width: 520,
+                            width: 50,
+                            height: 50,
+                          }}
+                          alt="not found!"
+                        />
+                      </ListItemAvatar>
+                      <ListItemText>
+                        <Typography
+                          variant="subtitle2"
+                          sx={{
+                            fontWeight: "bold",
                           }}
                         >
-                          <ListItemButton
-                            disableTouchRipple
-                            onClick={() =>
-                              handleClick(
-                                request_communications,
-                                request_communicationData
-                              )
-                            }
-                          >
-                            <ListItemAvatar>
-                              <Avatar
-                                src={request_communications?.profilePic?.at(0)}
-                                srcSet={request_communications?.profilePic?.at(
-                                  0
-                                )}
-                                sx={{
-                                  width: 50,
-                                  height: 50,
-                                }}
-                                alt="not found!"
-                              />
-                            </ListItemAvatar>
-                            <ListItemText>
-                              <Typography
-                                variant="subtitle2"
-                                sx={{
-                                  fontWeight: "bold",
-                                }}
-                              >
-                                {request_communications?.userName}
-                              </Typography>
-                              <Typography variant="caption">
-                                You: {request_communications?.message}
-                              </Typography>
-                            </ListItemText>
-                            <ListItemIcon>
-                              <VideocamRounded
-                                sx={{
-                                  color: "black",
-                                }}
-                              />
-                            </ListItemIcon>
-                          </ListItemButton>
-                        </ListItem>
-                      );
-                    });
-                });
+                          {items?.userName}
+                        </Typography>
+                        <Typography variant="caption">
+                          You: {items?.message}
+                        </Typography>
+                      </ListItemText>
+                      <ListItemIcon>
+                        <VideocamRounded
+                          sx={{
+                            color: "black",
+                          }}
+                        />
+                      </ListItemIcon>
+                    </ListItemButton>
+                  </ListItem>
+                );
               })}
           </List>
         </Grid>

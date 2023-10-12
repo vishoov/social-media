@@ -89,7 +89,6 @@ export const useGetMessageOfParticularConversation = (requiredData) => {
     {
       onSuccess: (data) => {
         if (data?.status === 200) {
-          // data?.data?.data?.map((messages) => set_all_messages(messages));
           data?.data?.data?.map((messages) =>
             dispatch(set_all_messages(messages))
           );
@@ -116,31 +115,27 @@ export const useGet_all_conversations_of_specific_user = (requiredData) => {
       onSuccess: (data) => {
         if (data?.status === 200) {
           const wholeData = data?.data?.data?.profile_pics_data?.results?.map(
-            (profilePics) =>
-              profilePics?.profile_details?.map((pics) => {
-                const all_data = {
-                  profilePic: pics?.urls,
-                  userName: profilePics?.userName,
-                  userId: profilePics?.userId,
-                  conversationDetails: data?.data?.data?.conversation_data?.map(
-                    (conversation) =>
-                      conversation?.user_conversations?.map(
-                        (user_conversation) => {
-                          const all_conversation_data = {
-                            visibleConversationId:
-                              user_conversation?.visibleConversationId,
-                            receiverUserId: conversation?.receiverUserId,
-                            status: conversation?.status,
-                          };
-                          return all_conversation_data;
-                        }
-                      )
-                  ),
-                };
-                return all_data;
-              })
+            (profilePics) => {
+              const all_data = {
+                profilePic: profilePics?.profile_details?.at(0)?.urls,
+                userName: profilePics?.userName,
+                userId: profilePics?.userId,
+                conversationDetails: data?.data?.data?.conversation_data?.map(
+                  (conversation) => {
+                    const all_conversation_data = {
+                      visibleConversationId:
+                        conversation?.user_conversations?.at(0)
+                          ?.visibleConversationId,
+                      receiverUserId: conversation?.receiverUserId,
+                      status: conversation?.status,
+                    };
+                    return all_conversation_data;
+                  }
+                ),
+              };
+              return all_data;
+            }
           );
-
           dispatch(set_all_conversations(wholeData));
         } else {
           dispatch(set_all_conversations(null));
@@ -169,34 +164,27 @@ export const useGet_all_conversations_request_of_specific_user = (
       onSuccess: (data) => {
         if (data?.status === 200) {
           const wholeData = data?.data?.data?.profile_pics_data?.results?.map(
-            (profilePics) =>
-              profilePics?.profile_details?.map((pics) => {
-                const all_data = {
-                  profilePic: pics?.urls,
-                  userName: profilePics?.userName,
-                  userId: profilePics?.userId,
-                  conversationDetails: data?.data?.data?.conversation_data?.map(
-                    (conversation) =>
-                      conversation?.user_conversations?.map(
-                        (user_conversation) => {
-                          const all_conversation_data = {
-                            visibleConversationId:
-                              user_conversation?.visibleConversationId,
-                            receiverUserId: conversation?.receiverUserId,
-                            senderUserId: conversation?.senderUserId,
-                            status: conversation?.status,
-                          };
-                          return all_conversation_data;
-                        }
-                      )
-                  ),
-                };
-                return all_data;
-              })
+            (profilePics) => {
+              const all_data = {
+                profilePic: profilePics?.profile_details?.at(0)?.urls,
+                userName: profilePics?.userName,
+                userId: profilePics?.userId,
+                conversationDetails: data?.data?.data?.conversation_data?.map(
+                  (conversation) => {
+                    const all_conversation_data = {
+                      visibleConversationId:
+                        conversation?.user_conversations?.at(0)
+                          ?.visibleConversationId,
+                      receiverUserId: conversation?.receiverUserId,
+                      status: conversation?.status,
+                    };
+                    return all_conversation_data;
+                  }
+                ),
+              };
+              return all_data;
+            }
           );
-
-          console.log("all data :::", wholeData);
-
           dispatch(set_all_conversation_requests(wholeData));
         } else {
           dispatch(set_all_conversation_requests(null));

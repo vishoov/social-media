@@ -36,9 +36,9 @@ export const RegularMessageChatComponent = ({ all_conversations }) => {
     const generatedData = {
       userName: communications?.userName,
       profilePic: communications?.profilePic.at(0),
-      conversationId: communicationData?.visibleConversationId,
+      conversationId: communicationData?.at(0)?.visibleConversationId,
       userId: communications?.userId,
-      status: communicationData?.status,
+      status: communicationData?.at(0)?.status,
     };
 
     dispatch(setSelectedConversation(generatedData));
@@ -101,60 +101,67 @@ export const RegularMessageChatComponent = ({ all_conversations }) => {
             }}
           >
             {all_conversations?.at(0)?.map((items) => {
-              return items?.map((communications) => {
-                return communications?.conversationDetails
-                  ?.at(0)
-                  ?.map((communicationData) => {
-                    return (
-                      <ListItem
-                        key={communications?.userName}
+              return (
+                <ListItem
+                  key={items?.userName}
+                  sx={{
+                    width: 520,
+                  }}
+                >
+                  <ListItemButton
+                    disableTouchRipple
+                    onClick={() =>
+                      handleClick(
+                        items,
+                        items?.conversationDetails?.filter(
+                          (conversationData) =>
+                            conversationData?.receiverUserId === items?.userId
+                        )
+                      )
+                    }
+                  >
+                    <ListItemAvatar>
+                      <Avatar
+                        src={items?.profilePic?.at(0)}
+                        srcSet={items?.profilePic?.at(0)}
                         sx={{
-                          width: 520,
+                          width: 50,
+                          height: 50,
+                        }}
+                        alt="not found!"
+                      />
+                    </ListItemAvatar>
+                    <ListItemText>
+                      <Typography
+                        variant="subtitle2"
+                        sx={{
+                          fontWeight: "bold",
                         }}
                       >
-                        <ListItemButton
-                          disableTouchRipple
-                          onClick={() =>
-                            handleClick(communications, communicationData)
-                          }
-                        >
-                          <ListItemAvatar>
-                            <Avatar
-                              src={communications?.profilePic?.at(0)}
-                              srcSet={communications?.profilePic?.at(0)}
-                              sx={{
-                                width: 50,
-                                height: 50,
-                              }}
-                              alt="not found!"
-                            />
-                          </ListItemAvatar>
-                          <ListItemText>
-                            <Typography
-                              variant="subtitle2"
-                              sx={{
-                                fontWeight: "bold",
-                              }}
-                            >
-                              {communications?.userName}
-                            </Typography>
-                            <Typography variant="caption">
-                              You: {communications?.message}
-                            </Typography>
-                          </ListItemText>
-                          <ListItemIcon>
-                            <VideocamRounded
-                              sx={{
-                                color: "black",
-                              }}
-                            />
-                          </ListItemIcon>
-                        </ListItemButton>
-                      </ListItem>
-                    );
-                  });
-              });
+                        {items?.userName}
+                      </Typography>
+                      <Typography variant="caption">
+                        You: {items?.userName}
+                      </Typography>
+                    </ListItemText>
+                    <ListItemIcon>
+                      <VideocamRounded
+                        sx={{
+                          color: "black",
+                        }}
+                      />
+                    </ListItemIcon>
+                  </ListItemButton>
+                </ListItem>
+              );
             })}
+
+            {/* {all_conversations?.at(0)?.map((items) => {
+              console.log("items", items);
+              return (
+                
+              );
+            })} */}
           </List>
         </Grid>
         <Divider

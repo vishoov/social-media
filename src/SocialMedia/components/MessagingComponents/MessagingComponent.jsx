@@ -2,9 +2,8 @@ import React, { useEffect } from "react";
 import { RegularMessageShowingPanel } from "./RegularMessageShowingPanel";
 import { useSelector } from "react-redux";
 import { PendingMessageShowingPenal } from "./PendingMessageShowingPenal";
-import useGetMessagesOfParticularConversationHook from "../../../hooks/useGetMessagesOfParticularConversationHook";
 import { useParams } from "react-router-dom";
-
+import useGetMessagesOfParticularConversationHook from "../../../hooks/useGetMessagesOfParticularConversationHook";
 // const socketForSendMessage1 = new SockJS("http://localhost:9988/websocket");
 
 // Create a Stomp client over the SockJS WebSocket connection
@@ -57,11 +56,15 @@ export const MessagingComponent = () => {
 
   const { conversationId } = useParams();
 
+  const MessageNonPersist = useSelector((state) => state.NonPersistMessage);
+
   const { callBack: callBackOfMessages } =
     useGetMessagesOfParticularConversationHook(conversationId, messages);
 
   useEffect(() => {
-    callBackOfMessages();
+    if (MessageNonPersist?.all_messages?.length === 0) {
+      callBackOfMessages();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

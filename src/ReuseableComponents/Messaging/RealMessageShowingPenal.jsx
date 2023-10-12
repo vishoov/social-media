@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect } from "react";
 import { Table, TableBody, TableRow, Typography } from "@mui/material";
 import useReceiverMessageHook from "../../hooks/useReceiverMessageHook";
-import useReceivePushNotificationHook from "../../hooks/useReceivePushNotificationHook";
 import useGetMessagesOfParticularConversationHook from "../../hooks/useGetMessagesOfParticularConversationHook";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -16,22 +15,23 @@ const style = {
     width: "auto", // This allows the width to expand with content
     display: "inline-block",
     maxWidth: 800,
+    cursor: "pointer",
   },
   senderMessageStyle: {
     margin: 1.5,
     border: "1px solid white",
     borderRadius: "8px",
-    // backgroundColor: "rgb(238, 238, 238)",
     backgroundColor: "rgb(55, 151, 240,1)",
     color: "white",
     padding: 1.3, // Adjust padding as needed
     width: "auto", // This allows the width to expand with content
     display: "inline-block",
     maxWidth: 800, // This allows the width to expand with content
+    cursor: "pointer",
   },
 };
 
-export const RealMessageShowingPenal = ({ askForAccept }) => {
+export const RealMessageShowingPenal = () => {
   const { conversationId } = useParams();
 
   const message = useSelector((state) => state.message);
@@ -47,35 +47,33 @@ export const RealMessageShowingPenal = ({ askForAccept }) => {
 
   const newCallBackForRenderingMessages = useCallback(() => {
     callBack();
-
-    // eslint-disable-next-line
-  }, []);
-
-  // push notification subscription hook
-  const { callBack: callBackForPushNotification } =
-    useReceivePushNotificationHook();
-
-  const newCallBackForRenderingForPushNotification = useCallback(() => {
-    callBackForPushNotification();
     // eslint-disable-next-line
   }, []);
 
   // hooks for getting messages of particular conversation
-  const { callBack: callBackOfMessages } =
-    useGetMessagesOfParticularConversationHook(conversationId, message);
+  // const { callBack: callBackOfMessages } =
+  //   useGetMessagesOfParticularConversationHook(conversationId, message);
+
+  // const newCallBackForMessages = useCallback(() => {
+  //   callBackOfMessages();
+  //   // eslint-disable-next-line
+  // }, []);
 
   // receive messages from the server
   useEffect(() => {
     newCallBackForRenderingMessages();
-    newCallBackForRenderingForPushNotification();
 
-    if (MessageNonPersist?.all_messages?.length === 0) {
-      console.log("all messages is empty");
-      callBackOfMessages();
-    }
+    // if (MessageNonPersist?.all_messages?.length === 0) {
+    //   console.log("all messages is empty");
+    //   newCallBackForMessages();
+    // }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    console.log("message not persist:", MessageNonPersist?.all_messages);
+  }, [MessageNonPersist]);
 
   return (
     <>
@@ -115,18 +113,41 @@ export const RealMessageShowingPenal = ({ askForAccept }) => {
                       justifyContent: "end",
                     }}
                   >
-                    <Typography sx={style?.senderMessageStyle} variant="body1">
-                      {message?.message}
-                    </Typography>
+                    {message?.primaryKeys?.type === "IMAGE" ? (
+                      <img
+                        src={message?.message}
+                        alt="not found!"
+                        style={style.recieverMessageStyle}
+                        width={500}
+                        height={500}
+                      />
+                    ) : (
+                      <Typography
+                        sx={style?.senderMessageStyle}
+                        variant="body1"
+                      >
+                        {message?.message}
+                      </Typography>
+                    )}
                   </TableRow>
                 ) : (
                   <TableRow key={message}>
-                    <Typography
-                      sx={style?.recieverMessageStyle}
-                      variant="body1"
-                    >
-                      {message?.message}
-                    </Typography>
+                    {message?.primaryKeys?.type === "IMAGE" ? (
+                      <img
+                        src={message?.message}
+                        alt="not found!"
+                        style={style.recieverMessageStyle}
+                        width={500}
+                        height={500}
+                      />
+                    ) : (
+                      <Typography
+                        sx={style?.recieverMessageStyle}
+                        variant="body1"
+                      >
+                        {message?.message}
+                      </Typography>
+                    )}
                   </TableRow>
                 );
               })}
