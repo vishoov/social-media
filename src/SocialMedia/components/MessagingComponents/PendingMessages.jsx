@@ -14,11 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import {
-  ArrowBackRounded,
-  PersonOffRounded,
-  VideocamRounded,
-} from "@mui/icons-material";
+import { ArrowBackRounded, PersonOffRounded } from "@mui/icons-material";
 import useReceivePushNotificationHook from "../../../hooks/useReceivePushNotificationHook";
 import { useNavigate } from "react-router-dom";
 import { useGet_all_conversations_request_of_specific_user } from "../../APIs/SocialMediaMessageInterfaceAPI";
@@ -27,7 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setSelectedConversation } from "../../../redux/MessageSlice";
 import { setCurrentInterface } from "../../../redux/UtilitiesSlice";
 import { reset_all_messages } from "../../../reduxNonPersist/NonPersistMessages";
-
+import infinity from "../../../static/images/utils/status.png";
 export const PendingMessages = () => {
   const { callBack } = useReceivePushNotificationHook();
 
@@ -60,11 +56,13 @@ export const PendingMessages = () => {
   const handleClick = (communications, communicationData) => {
     const generatedData = {
       userName: communications?.userName,
-      profilePic: communications?.profilePic.at(0),
-      conversationId: communicationData?.at(0)?.visibleConversationId,
+      profilePic: communications?.profilePic?.at(0),
+      conversationId:
+        communications?.conversationDetails?.at(0)?.visibleConversationId,
       userId: communications?.userId,
-      status: communicationData?.at(0)?.status,
-      receiverUserId: communicationData?.at(0)?.receiverUserId,
+      status: communications?.conversationDetails?.at(0)?.status,
+      receiverUserId:
+        communications?.conversationDetails?.at(0)?.receiverUserId,
     };
 
     dispatch(setSelectedConversation(generatedData));
@@ -167,9 +165,13 @@ export const PendingMessages = () => {
                         </Typography>
                       </ListItemText>
                       <ListItemIcon>
-                        <VideocamRounded
-                          sx={{
-                            color: "black",
+                        <img
+                          src={infinity}
+                          srcSet={infinity}
+                          alt="not found!"
+                          style={{
+                            height: 30,
+                            width: 30,
                           }}
                         />
                       </ListItemIcon>

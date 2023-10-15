@@ -51,6 +51,8 @@ export const ShowMemoryModel = ({ open, onClose, item, username, other }) => {
           <Stack
             direction="row"
             sx={{
+              height: 40,
+              display: "flex",
               alignItems: "center",
             }}
           >

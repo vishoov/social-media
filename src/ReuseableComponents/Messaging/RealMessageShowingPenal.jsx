@@ -1,14 +1,22 @@
-import React, { useCallback, useEffect } from "react";
-import { Table, TableBody, TableRow, Typography } from "@mui/material";
+import React, { useCallback, useEffect, useRef } from "react";
+import {
+  Menu,
+  MenuItem,
+  Stack,
+  Table,
+  TableBody,
+  TableRow,
+  Typography,
+} from "@mui/material";
 import useReceiverMessageHook from "../../hooks/useReceiverMessageHook";
-import useGetMessagesOfParticularConversationHook from "../../hooks/useGetMessagesOfParticularConversationHook";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { ContentCopyRounded, DeleteOutlineRounded } from "@mui/icons-material";
 
 const style = {
   recieverMessageStyle: {
     margin: 1.5,
-    border: "1px solid white",
+    border: "white",
     borderRadius: "8px",
     backgroundColor: "rgb(238, 238, 238)",
     padding: 1.3, // Adjust padding as needed
@@ -19,7 +27,7 @@ const style = {
   },
   senderMessageStyle: {
     margin: 1.5,
-    border: "1px solid white",
+    border: "white",
     borderRadius: "8px",
     backgroundColor: "rgb(55, 151, 240,1)",
     color: "white",
@@ -45,43 +53,100 @@ export const RealMessageShowingPenal = () => {
     MessageNonPersist?.all_messages
   );
 
+  const scrollRef = useRef(null);
+
   const newCallBackForRenderingMessages = useCallback(() => {
     callBack();
     // eslint-disable-next-line
   }, []);
 
-  // hooks for getting messages of particular conversation
-  // const { callBack: callBackOfMessages } =
-  //   useGetMessagesOfParticularConversationHook(conversationId, message);
-
-  // const newCallBackForMessages = useCallback(() => {
-  //   callBackOfMessages();
-  //   // eslint-disable-next-line
-  // }, []);
-
   // receive messages from the server
   useEffect(() => {
     newCallBackForRenderingMessages();
-
-    // if (MessageNonPersist?.all_messages?.length === 0) {
-    //   console.log("all messages is empty");
-    //   newCallBackForMessages();
-    // }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    console.log("message not persist:", MessageNonPersist?.all_messages);
+    console.log("message non persist :::", MessageNonPersist?.all_messages);
+  }, [MessageNonPersist?.all_messages]);
+
+  useEffect(() => {
+    // Scroll to the most recent message when new messages arrive
+    if (scrollRef.current) {
+      scrollRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [MessageNonPersist]);
+
+  useEffect(() => {
+    // Save the index of the most recent message in local storage
+    if (MessageNonPersist?.all_messages) {
+      localStorage.setItem(
+        "mostRecentMessageIndex",
+        MessageNonPersist.all_messages.length - 1
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [MessageNonPersist]);
+
+  useEffect(() => {
+    // Restore the scroll position to the most recent message on component mount
+    const mostRecentMessageIndex = localStorage.getItem(
+      "mostRecentMessageIndex"
+    );
+    if (mostRecentMessageIndex && scrollRef.current) {
+      scrollRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, []);
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event?.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const menuData = [
+    {
+      icon: (
+        <DeleteOutlineRounded
+          sx={{
+            color: "red",
+          }}
+        />
+      ),
+      label: (
+        <Typography variant="overline" color="red">
+          Delet
+        </Typography>
+      ),
+    },
+    {
+      icon: (
+        <ContentCopyRounded
+          sx={{
+            color: "rgb(55, 151, 240,1)",
+          }}
+        />
+      ),
+      label: (
+        <Typography variant="overline" color="rgb(55, 151, 240,1)">
+          copy
+        </Typography>
+      ),
+    },
+  ];
 
   return (
     <>
       <div
         style={{
-          height: 900,
+          height: 915,
           overflowY: "scroll", // Make the table body scrollable
-          maxHeight: 900,
+          maxHeight: 920,
         }}
       >
         <Table>
@@ -101,49 +166,58 @@ export const RealMessageShowingPenal = () => {
             </TableRow>
 
             {MessageNonPersist &&
-              MessageNonPersist?.all_messages?.map((message) => {
-                return message?.userId ===
-                  parseInt(localStorage.getItem("sm_user_id")) ||
+              MessageNonPersist?.all_messages?.map((message, index) => {
+                const isUserMessage =
+                  message?.userId ===
+                    parseInt(localStorage.getItem("sm_user_id")) ||
                   message?.primaryKeys?.userId ===
-                    parseInt(localStorage.getItem("sm_user_id")) ? (
+                    parseInt(localStorage.getItem("sm_user_id"));
+                return (
                   <TableRow
-                    key={message?.message}
+                    key={index} // Using index as the key
                     sx={{
                       display: "flex",
-                      justifyContent: "end",
+                      justifyContent: isUserMessage ? "end" : "start",
                     }}
+                    ref={
+                      index === MessageNonPersist.all_messages.length - 1
+                        ? scrollRef
+                        : null
+                    }
                   >
+                    <Typography
+                      sx={
+                        {
+                          // ... (other message style properties)
+                        }
+                      }
+                      variant="caption"
+                      color="grey"
+                    >
+                      {message.timestamp}
+                    </Typography>
+
                     {message?.primaryKeys?.type === "IMAGE" ? (
                       <img
                         src={message?.message}
                         alt="not found!"
-                        style={style.recieverMessageStyle}
+                        style={
+                          isUserMessage
+                            ? style.senderMessageStyle
+                            : style.recieverMessageStyle
+                        }
                         width={500}
                         height={500}
                       />
                     ) : (
                       <Typography
-                        sx={style?.senderMessageStyle}
+                        sx={
+                          isUserMessage
+                            ? style.senderMessageStyle
+                            : style.recieverMessageStyle
+                        }
                         variant="body1"
-                      >
-                        {message?.message}
-                      </Typography>
-                    )}
-                  </TableRow>
-                ) : (
-                  <TableRow key={message}>
-                    {message?.primaryKeys?.type === "IMAGE" ? (
-                      <img
-                        src={message?.message}
-                        alt="not found!"
-                        style={style.recieverMessageStyle}
-                        width={500}
-                        height={500}
-                      />
-                    ) : (
-                      <Typography
-                        sx={style?.recieverMessageStyle}
-                        variant="body1"
+                        onClick={handleClick}
                       >
                         {message?.message}
                       </Typography>
@@ -153,6 +227,34 @@ export const RealMessageShowingPenal = () => {
               })}
           </TableBody>
         </Table>
+        <Menu
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          slotProps={{
+            paper: {
+              style: {
+                borderRadius: 5,
+              },
+            },
+          }}
+        >
+          {menuData.map((item, index) => {
+            return (
+              <MenuItem
+                key={index}
+                onClick={() => {
+                  handleClose();
+                }}
+              >
+                <Stack direction="row" spacing={2} alignItems="center">
+                  {item.icon}
+                  {item.label}
+                </Stack>
+              </MenuItem>
+            );
+          })}
+        </Menu>
       </div>
     </>
   );

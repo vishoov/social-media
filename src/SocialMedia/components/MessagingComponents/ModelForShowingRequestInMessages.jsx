@@ -8,9 +8,12 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import React, { useEffect } from "react";
+import React from "react";
 import { useUpdate_user_conversation_request_permissions } from "../../APIs/SocialMediaMessageInterfaceAPI";
 import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
+import { setSelectedConversation } from "../../../redux/MessageSlice";
+import { useDispatch } from "react-redux";
 
 export const ModelForShowingRequestInMessages = ({
   open,
@@ -19,23 +22,25 @@ export const ModelForShowingRequestInMessages = ({
 }) => {
   const { mutate } = useUpdate_user_conversation_request_permissions();
 
+  const dispatch = useDispatch();
+
   const [cookies] = useCookies(["avt_token"]);
 
   const accepted = () => {
     const acceptedData = {
-      visible_conversation_id: message?.selectedConversation?.conversationId,
+      conversationId: message?.selectedConversation?.conversationId,
       status: "ACCEPTED",
       Authorization: cookies?.avt_token,
       userId: message?.selectedConversation?.receiverUserId,
+      profilePic: message?.selectedConversation?.profilePic,
     };
-    console.log("accepted data ::::", acceptedData);
     mutate(acceptedData);
     handleClose();
+    dispatch(setSelectedConversation(acceptedData));
+    navigate(`/environment/socialMedia/message/${acceptedData.conversationId}`);
   };
 
-  useEffect(() => {
-    console.log("message :::", message);
-  }, [message]);
+  const navigate = useNavigate();
 
   const rejected = () => {
     const rejectedData = {

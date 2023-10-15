@@ -27,10 +27,9 @@ export const MemoryImages = () => {
       <Grid
         sx={{
           width: 1000,
-          paddingTop: 1,
+          paddingTop: 4,
         }}
         spacing={3}
-        // paddingTop: 3,
       >
         <Grid container justifyContent="center">
           {NonPersistMemories?.socialMediaMemories !== undefined &&

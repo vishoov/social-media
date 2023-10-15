@@ -140,7 +140,6 @@ export const AISocialMediaProfileInterface = () => {
           <Box>
             <Stack
               direction="row"
-              // spacing={3}
               spacing={8}
               sx={{
                 marginLeft: 40,
@@ -156,7 +155,7 @@ export const AISocialMediaProfileInterface = () => {
                       height: 100,
                     }}
                     style={{
-                      marginTop: 15,
+                      marginTop: 12,
                     }}
                   />
                   <Typography variant="subtitle2">Holiday mood!</Typography>
@@ -170,7 +169,7 @@ export const AISocialMediaProfileInterface = () => {
                       height: 100,
                     }}
                     style={{
-                      marginTop: 15,
+                      marginTop: 12,
                     }}
                   />
                   <Typography variant="subtitle2">
@@ -186,7 +185,7 @@ export const AISocialMediaProfileInterface = () => {
                       height: 100,
                     }}
                     style={{
-                      marginTop: 15,
+                      marginTop: 12,
                     }}
                   />
                   <Typography variant="subtitle2">Paris</Typography>
@@ -200,7 +199,7 @@ export const AISocialMediaProfileInterface = () => {
                       height: 100,
                     }}
                     style={{
-                      marginTop: 15,
+                      marginTop: 12,
                     }}
                   />
                   <Typography variant="subtitle2">work mood</Typography>
@@ -214,7 +213,6 @@ export const AISocialMediaProfileInterface = () => {
                       fontWeight: "bold",
                       color: "black",
                       paddingLeft: 85,
-                      // paddingLeft: 85,
                     }}
                   >
                     About Me
@@ -225,7 +223,6 @@ export const AISocialMediaProfileInterface = () => {
                     sx={{
                       color: "black",
                       marginLeft: 10,
-                      // marginLeft: 10,
                       fontSize: "14px",
                       maxWidth: 500,
                     }}
@@ -249,13 +246,11 @@ export const AISocialMediaProfileInterface = () => {
             alignItems: "center",
           }}
         >
-          <Box>
-            <TabsComponent
-              firstTab={<ShowMemoryBar />}
-              secondTab={<ShowLinksBar />}
-              thirdTab={<ShowSavedMemories />}
-            />
-          </Box>
+          <TabsComponent
+            firstTab={<ShowMemoryBar />}
+            secondTab={<ShowLinksBar />}
+            thirdTab={<ShowSavedMemories />}
+          />
         </Stack>
       </div>
     </>

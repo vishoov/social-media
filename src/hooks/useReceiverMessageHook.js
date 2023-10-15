@@ -2,6 +2,7 @@ import SockJS from "sockjs-client";
 import Stomp from "stompjs";
 import { useDispatch } from "react-redux";
 import { set_all_messages } from "../reduxNonPersist/NonPersistMessages";
+import { setMessagesNotification } from "../reduxNonPersist/NonPersistNotificationSlice";
 
 const useReceiverMessageHook = (conversationId, message, all_messages) => {
   const socketForMessages = new SockJS(
@@ -25,7 +26,11 @@ const useReceiverMessageHook = (conversationId, message, all_messages) => {
 
             const data = JSON.parse(message?.body);
 
+            console.log("received", data);
+
             dispatch(set_all_messages(data));
+
+            dispatch(setMessagesNotification(data));
           }
         );
       });

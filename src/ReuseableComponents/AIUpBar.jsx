@@ -45,6 +45,7 @@ export const AIUpBar = ({
         <p
           style={{
             fontSize: 18,
+            width: 100,
           }}
         >
           <b>{userName}</b>
@@ -134,14 +135,16 @@ export const AIUpBar = ({
           </Typography>
         </Stack>
       </Stack>
-      <Stack direction="row" alignItems="center">
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="end"
+        width={600}
+      >
         {editProfile && (
           <Box>
             <AIButton
               content="Edit Profile"
-              style={{
-                marginLeft: 150,
-              }}
               onClick={() => navigate("/environment/socialmedia/profile/edit")}
             />
           </Box>
@@ -151,7 +154,7 @@ export const AIUpBar = ({
             <AIButton
               content="Share Memory"
               style={{
-                marginLeft: 30,
+                marginLeft: 20,
               }}
               onClick={() => {
                 setIsOpen(true);
@@ -163,7 +166,8 @@ export const AIUpBar = ({
           <Box>
             <MoreHorizRounded
               style={{
-                marginLeft: 30,
+                marginLeft: 20,
+                cursor: "pointer",
               }}
               onClick={() => {
                 alert("not implemented yet");

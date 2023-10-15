@@ -44,7 +44,6 @@ export const AvatarFileInput = ({ firstName, lastName }) => {
             profilePicUrl: data?.data?.data?.urls,
           };
 
-          console.log("json data :---->", jsonData);
           const json = JSON.stringify(jsonData);
 
           const response = new Response(json, {

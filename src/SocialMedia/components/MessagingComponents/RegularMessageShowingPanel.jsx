@@ -14,18 +14,19 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { AISideBar } from "../../../ReuseableComponents/AISideBar";
 import {
-  InsertPhotoRounded,
   MicRounded,
   MoreHorizRounded,
   PersonalVideoRounded,
   SentimentSatisfiedRounded,
-  VideocamRounded,
 } from "@mui/icons-material";
 import { RealMessageShowingPenal } from "../../../ReuseableComponents/Messaging/RealMessageShowingPenal";
 import { ModelForMaintainingTheConversations } from "../../../ReuseableComponents/Messaging/ModelForMaintainingTheConversations";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
 import { MessageWebCam } from "./MessageWebCam";
+import videoCall from "../../../static/images/utils/video-call.png";
+import gellery from "../../../static/images/utils/gallery.png";
+import frame from "../../../static/images/utils/frame.png";
 
 const socketForSendMessage = new SockJS("http://localhost:9988/websocket");
 
@@ -49,6 +50,9 @@ export const RegularMessageShowingPanel = () => {
 
   const [open, setOpen] = useState(false);
 
+  const auth = useSelector((state) => state.auth);
+  const socialMediaUser = useSelector((state) => state.socialMediaUser);
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -67,6 +71,10 @@ export const RegularMessageShowingPanel = () => {
         ),
         message: data?.message,
         receiverUserId: message?.selectedConversation?.userId,
+        username:
+          auth?.value?.signinData?.userName ||
+          socialMediaUser?.value?.SocialMediaUserData?.userName,
+        profilePic: message?.selectedConversation?.profilePic,
       };
       stompClientForSendMessage.send(
         `/conversation/${
@@ -75,6 +83,47 @@ export const RegularMessageShowingPanel = () => {
         {},
         JSON.stringify(buildMessage)
       );
+    }
+  };
+
+  const handleGelleryClick = () => {
+    document.getElementById("image-input").click();
+  };
+
+  const handleImageChange1 = async (event) => {
+    const file = event.target.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        const base64Image = e.target.result;
+
+        const buildMessage = {
+          primaryKeys: {
+            userId: parseInt(localStorage.getItem("sm_user_id")),
+            type: "IMAGE",
+          },
+          visibleConversationId: parseInt(
+            message?.selectedConversation?.conversationId || conversationId
+          ),
+          message: base64Image, // Set the message to the base64 image data
+          receiverUserId: message?.selectedConversation?.userId,
+          username:
+            auth?.value?.signinData?.userName ||
+            socialMediaUser?.value?.SocialMediaUserData?.userName,
+          profilePic: message?.selectedConversation?.profilePic,
+        };
+
+        stompClientForSendMessage.send(
+          `/conversation/send/image/${
+            message?.selectedConversation?.conversationId || conversationId
+          }`,
+          {},
+          JSON.stringify(buildMessage)
+        );
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -119,11 +168,23 @@ export const RegularMessageShowingPanel = () => {
             <Stack direction="row" spacing={2} alignItems="center">
               <PersonalVideoRounded
                 sx={{
-                  fontSize: "20px",
+                  fontSize: "23px",
                 }}
               />
-              <VideocamRounded />
-              <MoreHorizRounded />
+              <img
+                src={videoCall}
+                srcSet={videoCall}
+                alt="not found"
+                style={{
+                  width: "23px",
+                  height: "23px",
+                }}
+              />
+              <MoreHorizRounded
+                sx={{
+                  fontSize: "23px",
+                }}
+              />
             </Stack>
           </Stack>
           <Divider
@@ -136,15 +197,37 @@ export const RegularMessageShowingPanel = () => {
           <RealMessageShowingPenalHandler />
           <Stack
             direction="row"
-            spacing={4}
+            spacing={3}
             alignItems="center"
             justifyContent="center"
           >
             <SentimentSatisfiedRounded
               sx={{
                 fontSize: 30,
+                cursor: "pointer",
               }}
+              // onClick={(event) => {
+              // setEmojiPickerPosition({
+              //   top: event.clientY - 300, // Adjust the top position as needed
+              //   left: event.clientX - 50, // Adjust the left position as needed
+              // });
+              // setIsPickerOpen((prevState) => !prevState);
+              // }}
             />
+            {/* {isPickerOpen &&
+              emojiPickerPosition &&
+              ReactDOM.createPortal(
+                <MessageEmojiBar
+                  onEmojiSelect={(data) => {
+                    console.log("data ::::", data);
+                    // setValue(
+                    //   "message",
+                    //   (prevMessage) => prevMessage + data?.emoji
+                    // );
+                  }}
+                />,
+                document.body
+              )} */}
 
             <Paper
               sx={{
@@ -160,6 +243,7 @@ export const RegularMessageShowingPanel = () => {
                   width: 1300,
                   height: 40,
                 }}
+                // onChange={(e) => setMessageText(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     handleSubmit(submit)();
@@ -172,14 +256,30 @@ export const RegularMessageShowingPanel = () => {
                 }
               />
             </Paper>
-            <InsertPhotoRounded
-              sx={{
-                fontSize: 30,
+            <img
+              src={frame}
+              srcSet={frame}
+              alt="not found"
+              style={{
+                width: "23px",
+                height: "23px",
                 cursor: "pointer",
               }}
               onClick={() => {
                 setOpenWebCam(true);
               }}
+            />
+
+            <img
+              src={gellery}
+              srcSet={gellery}
+              alt="not found"
+              style={{
+                width: "25px",
+                height: "25px",
+                cursor: "pointer",
+              }}
+              onClick={handleGelleryClick}
             />
             <MicRounded
               sx={{
@@ -215,6 +315,13 @@ export const RegularMessageShowingPanel = () => {
       <ModelForMaintainingTheConversations
         open={open}
         handleClose={handleClose}
+      />
+      <input
+        type="file"
+        id="image-input"
+        accept="image/jpeg"
+        style={{ display: "none" }}
+        onChange={handleImageChange1}
       />
     </>
   );

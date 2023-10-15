@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 
 import React, { useState } from "react";
-import { MarkChatUnreadOutlined, VideocamRounded } from "@mui/icons-material";
+import { MarkChatUnreadOutlined } from "@mui/icons-material";
 
 import { SearchModelForMessage } from "./SearchModelForMessage";
 import messages from "../../static/images/utils/messages (1).png";
@@ -23,6 +23,7 @@ import { useNavigate } from "react-router-dom";
 import { setSelectedConversation } from "../../redux/MessageSlice";
 import { setCurrentInterface } from "../../redux/UtilitiesSlice";
 import { reset_all_messages } from "../../reduxNonPersist/NonPersistMessages";
+import infinity from "../../static/images/utils/status.png";
 
 export const RegularMessageChatComponent = ({ all_conversations }) => {
   const [open, setOpen] = useState(false);
@@ -35,7 +36,7 @@ export const RegularMessageChatComponent = ({ all_conversations }) => {
   const handleClick = (communications, communicationData) => {
     const generatedData = {
       userName: communications?.userName,
-      profilePic: communications?.profilePic.at(0),
+      profilePic: communications?.profilePic?.at(0),
       conversationId: communicationData?.at(0)?.visibleConversationId,
       userId: communications?.userId,
       status: communicationData?.at(0)?.status,
@@ -145,9 +146,13 @@ export const RegularMessageChatComponent = ({ all_conversations }) => {
                       </Typography>
                     </ListItemText>
                     <ListItemIcon>
-                      <VideocamRounded
-                        sx={{
-                          color: "black",
+                      <img
+                        src={infinity}
+                        srcSet={infinity}
+                        alt="not found!"
+                        style={{
+                          height: 30,
+                          width: 30,
                         }}
                       />
                     </ListItemIcon>
@@ -155,13 +160,6 @@ export const RegularMessageChatComponent = ({ all_conversations }) => {
                 </ListItem>
               );
             })}
-
-            {/* {all_conversations?.at(0)?.map((items) => {
-              console.log("items", items);
-              return (
-                
-              );
-            })} */}
           </List>
         </Grid>
         <Divider

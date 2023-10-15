@@ -74,14 +74,14 @@ export const AIShowFollowersList = ({ closeEvent, userId }) => {
         </DialogTitle>
         <DialogContent>
           <List>
-            {NonPersistProfile?.Followers?.at(0)?.map((items) => {
+            {NonPersistProfile?.Followers?.map((items) => {
               return (
-                <ListItem disableGutters key={items?.userName}>
+                <ListItem disableGutters key={items?.at(0)?.userName}>
                   <Stack direction="row" spacing={15} alignItems="center">
                     <Box flexDirection="row" display="flex" alignItems="center">
                       <Avatar
-                        src={items?.profileUrl}
-                        srcSet={items?.profileUrl}
+                        src={items?.at(0)?.profileUrl}
+                        srcSet={items?.at(0)?.profileUrl}
                         alt="not found"
                         sx={{
                           width: 50,
@@ -92,11 +92,12 @@ export const AIShowFollowersList = ({ closeEvent, userId }) => {
                         variant="body2"
                         fontWeight="bold"
                         paddingLeft={1}
+                        width={120}
                       >
-                        {items?.userName}
+                        {items?.at(0)?.userName}
                       </Typography>
                     </Box>
-                    <AIButton content="Follower" />
+                    <AIButton content="Follow" />
                   </Stack>
                 </ListItem>
               );

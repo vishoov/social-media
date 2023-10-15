@@ -73,14 +73,14 @@ export const AIShowFollowingList = ({ closeEvent, userId }) => {
         </DialogTitle>
         <DialogContent>
           <List>
-            {NonPersistProfile?.Followings?.at(0)?.map((items) => {
+            {NonPersistProfile?.Followings?.map((items) => {
               return (
                 <ListItem disableGutters key={items?.userName}>
                   <Stack direction="row" spacing={15} alignItems="center">
                     <Box flexDirection="row" display="flex" alignItems="center">
                       <Avatar
-                        src={items?.profileUrl}
-                        srcSet={items?.profileUrl}
+                        src={items?.at(0)?.profileUrl}
+                        srcSet={items?.at(0)?.profileUrl}
                         alt="not found"
                         sx={{
                           width: 50,
@@ -91,8 +91,10 @@ export const AIShowFollowingList = ({ closeEvent, userId }) => {
                         variant="body2"
                         fontWeight="bold"
                         paddingLeft={1}
+                        width={120}
+                        textAlign="left"
                       >
-                        {items?.userName}
+                        {items?.at(0)?.userName}
                       </Typography>
                     </Box>
                     <AIButton content="Following" />

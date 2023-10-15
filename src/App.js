@@ -28,7 +28,13 @@ function App() {
     <>
       <AuthProvider>
         <SearchProvider>
-          {showLoader ? <AILoader /> : <Routes />}
+          {showLoader ? (
+            <AILoader />
+          ) : (
+            <>
+              <Routes />
+            </>
+          )}
         </SearchProvider>
       </AuthProvider>
     </>

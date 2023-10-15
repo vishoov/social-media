@@ -63,7 +63,7 @@ const get_all_conversations_request_of_specific_user = (requiredData) => {
 const update_user_conversation_request_permissions = (requiredData) => {
   if (
     requiredData?.Authorization &&
-    requiredData?.visible_conversation_id &&
+    requiredData?.conversationId &&
     requiredData?.status &&
     requiredData?.userId
   ) {
@@ -73,7 +73,7 @@ const update_user_conversation_request_permissions = (requiredData) => {
       },
       params: {
         status: requiredData?.status,
-        visible_conversation_id: requiredData?.visible_conversation_id,
+        visible_conversation_id: requiredData?.conversationId,
         userId: requiredData?.userId,
       },
     });

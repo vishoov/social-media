@@ -69,6 +69,8 @@ export const useAddUserData = () => {
 
   return useMutation(addUserData, {
     onSuccess: (data) => {
+      console.log("data ::::", data);
+
       if (data?.status === 200) {
         dispatch(DO_SIGNUP(data?.data?.data));
 

@@ -1,4 +1,4 @@
-import { CircleRounded } from "@mui/icons-material";
+import { CircleRounded, ClearRounded } from "@mui/icons-material";
 import { IconButton, Typography } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import Webcam from "react-webcam";
@@ -17,21 +17,19 @@ export const MessageWebCam = ({
   message,
   conversationId,
 }) => {
-  const [webcamLoaded, setWebcamLoaded] = useState(false);
+  const [webcamLoaded, setWebcamLoaded] = useState(true);
   const webcamRef = useRef(null);
 
   useEffect(() => {
     // Simulate a delay (you can replace this with actual initialization logic)
     setTimeout(() => {
-      setWebcamLoaded(true);
+      setWebcamLoaded(false);
     }, 3000); // Adjust the delay as needed
   }, []);
 
   const capture = () => {
     const imageSrc = webcamRef.current.getScreenshot();
     // Do something with the captured image source, e.g., display it or save it.
-
-    console.log("image source :::", imageSrc);
 
     const buildMessage = {
       primaryKeys: {
@@ -44,6 +42,9 @@ export const MessageWebCam = ({
       message: imageSrc,
       receiverUserId: message?.selectedConversation?.userId,
     };
+
+    console.log("build message :::", buildMessage);
+
     stompClientForSendMessage.send(
       `/conversation/send/image/${
         message?.selectedConversation?.conversationId || conversationId
@@ -57,24 +58,33 @@ export const MessageWebCam = ({
 
   return (
     <>
-      {webcamLoaded ? (
-        <div>
-          <Webcam
-            videoConstraints={{
-              width: width, // Set the width of the webcam (you can adjust this)
-              height: height, // Set the height of the webcam (you can adjust this)
-              facingMode: "user",
+      <div>
+        {webcamLoaded && (
+          <Typography
+            sx={{
+              marginLeft: 20,
             }}
-            screenshotFormat="image/jpeg"
-            style={{
-              borderRadius: 5,
-            }}
-            ref={webcamRef}
-          />
+          >
+            Loading...
+          </Typography>
+        )}
+        <Webcam
+          videoConstraints={{
+            width: width, // Set the width of the webcam (you can adjust this)
+            height: height, // Set the height of the webcam (you can adjust this)
+            facingMode: "user",
+          }}
+          screenshotFormat="image/jpeg"
+          style={{
+            borderRadius: 5,
+          }}
+          ref={webcamRef}
+        />
+        {webcamLoaded === false && (
           <IconButton
             sx={{
               position: "absolute",
-              bottom: "10%",
+              bottom: "6%",
               right: "42.5%",
               width: 80,
               height: 80,
@@ -85,10 +95,29 @@ export const MessageWebCam = ({
           >
             <CircleRounded />
           </IconButton>
-        </div>
-      ) : (
-        <Typography>Loading...</Typography>
-      )}
+        )}
+        {webcamLoaded === false && (
+          <IconButton
+            sx={{
+              position: "absolute",
+              bottom: "92%",
+              right: "0.5%",
+            }}
+            onClick={onClose}
+          >
+            <ClearRounded
+              sx={{
+                color: "white",
+                width: 25,
+                height: 25,
+                backgroundColor: "GrayText",
+                borderRadius: 10,
+                padding: 1,
+              }}
+            />
+          </IconButton>
+        )}
+      </div>
     </>
   );
 };

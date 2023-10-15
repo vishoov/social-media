@@ -20,6 +20,7 @@ import { useGetUserBySearchForMessages } from "../../SocialMedia/APIs/SocialMedi
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setSelectedConversation } from "../../redux/MessageSlice";
+import { reset_all_messages } from "../../reduxNonPersist/NonPersistMessages";
 
 export const SearchModelForMessage = ({ open, handleClose }) => {
   const { mutate } = useGetUserBySearchForMessages();
@@ -54,6 +55,8 @@ export const SearchModelForMessage = ({ open, handleClose }) => {
     };
 
     dispatch(setSelectedConversation(generatedData));
+
+    dispatch(reset_all_messages());
 
     navigate(
       `/environment/socialMedia/message/${generatedData?.conversationId}`

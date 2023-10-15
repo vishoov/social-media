@@ -88,9 +88,19 @@ const PendingRealMessageHendler = React.memo(() => {
             MessageNonPersist?.all_messages?.map((message) => {
               return (
                 <TableRow key={message}>
-                  <Typography sx={style?.recieverMessageStyle} variant="body1">
-                    {message?.message}
-                  </Typography>
+                  {message?.primaryKeys?.type === "IMAGE" ? (
+                    <img
+                      src={message?.message}
+                      alt="not found!"
+                      style={style.recieverMessageStyle}
+                      width={500}
+                      height={500}
+                    />
+                  ) : (
+                    <Typography sx={style.recieverMessageStyle} variant="body1">
+                      {message?.message}
+                    </Typography>
+                  )}
                 </TableRow>
               );
             })}

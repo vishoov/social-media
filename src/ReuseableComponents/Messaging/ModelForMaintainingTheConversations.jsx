@@ -1,6 +1,4 @@
-import React from "react";
-import jen from "../../static/images/avatar/jen2.jpeg";
-import space from "../../static/images/avatar/space5.jpeg";
+import React, { useEffect } from "react";
 import {
   Avatar,
   Divider,
@@ -14,21 +12,59 @@ import {
   Modal,
   Typography,
 } from "@mui/material";
-import { VideocamRounded } from "@mui/icons-material";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { reset_all_messages } from "../../reduxNonPersist/NonPersistMessages";
+import { setSelectedConversation } from "../../redux/MessageSlice";
+import { setCurrentInterface } from "../../redux/UtilitiesSlice";
+import infinity from "../../static/images/utils/status.png";
+import { useCookies } from "react-cookie";
+import { useGet_all_conversations_of_specific_user } from "../../SocialMedia/APIs/SocialMediaMessageInterfaceAPI";
 
 export const ModelForMaintainingTheConversations = ({ open, handleClose }) => {
-  const dataOfCommunication = [
-    {
-      username: "JennaOrtega",
-      url: jen,
-      message: "hi om",
-    },
-    {
-      username: "omshan0408",
-      url: space,
-      message: "hi jenna",
-    },
-  ];
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { conversationId } = useParams();
+
+  const handleClick = (communications, communicationData) => {
+    const generatedData = {
+      userName: communications?.userName,
+      profilePic: communications?.profilePic.at(0),
+      conversationId: communicationData?.at(0)?.visibleConversationId,
+      userId: communications?.userId,
+      status: communicationData?.at(0)?.status,
+    };
+
+    if (generatedData?.conversationId !== parseInt(conversationId)) {
+      console.log("Generated conversation");
+      dispatch(setSelectedConversation(generatedData));
+      dispatch(reset_all_messages());
+      navigate(
+        `/environment/socialMedia/message/${generatedData?.conversationId}`
+      );
+    }
+    dispatch(setCurrentInterface("REGULAR_MESSAGE_CHAT"));
+    handleClose();
+  };
+
+  const [cookies] = useCookies(["avt_token"]);
+
+  const { refetch } = useGet_all_conversations_of_specific_user({
+    Authorization: cookies?.avt_token,
+    userId: localStorage.getItem("sm_user_id"),
+  });
+
+  const NonPersistConversations = useSelector(
+    (state) => state.NonPersistConversations
+  );
+
+  useEffect(() => {
+    if (NonPersistConversations?.all_conversations?.length === 0) {
+      refetch();
+    }
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <>
@@ -40,18 +76,15 @@ export const ModelForMaintainingTheConversations = ({ open, handleClose }) => {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: 1250,
+            width: 700,
             height: 800,
             bgcolor: "background.paper",
-            // bgcolor: "transparent",
-            boxShadow: 10,
-            // p: 1,
             borderRadius: 2,
           }}
         >
           <Grid
             sx={{
-              width: 450,
+              width: 500,
             }}
           >
             <Typography
@@ -60,7 +93,6 @@ export const ModelForMaintainingTheConversations = ({ open, handleClose }) => {
                 fontWeight: "bold",
                 display: "flex",
                 justifyContent: "center",
-                // color: "white",
                 padding: 1,
               }}
             >
@@ -73,57 +105,77 @@ export const ModelForMaintainingTheConversations = ({ open, handleClose }) => {
                 maxHeight: 730,
               }}
             >
-              {dataOfCommunication.map((communications) => {
-                return (
-                  <ListItem key={communications?.username}>
-                    <ListItemButton
-                      disableTouchRipple
-                      onClick={() => {
-                        handleClose();
+              {NonPersistConversations?.all_conversations
+                ?.at(0)
+                ?.map((items) => {
+                  return (
+                    <ListItem
+                      key={items?.userName}
+                      sx={{
+                        width: 500,
                       }}
                     >
-                      <ListItemAvatar>
-                        <Avatar
-                          src={communications?.url}
-                          srcSet={communications?.url}
-                          sx={{
-                            width: 50,
-                            height: 50,
-                          }}
-                          alt="not found!"
-                        />
-                      </ListItemAvatar>
-                      <ListItemText>
-                        <Typography
-                          variant="subtitle2"
-                          sx={{
-                            fontWeight: "bold",
-                            // color: "white",
-                          }}
-                        >
-                          {communications?.username}
-                        </Typography>
-                        <Typography
-                          variant="caption"
-                          sx={
-                            {
-                              // color: "white",
-                            }
-                          }
-                        >
-                          You: {communications?.message}
-                        </Typography>
-                      </ListItemText>
-                      <ListItemIcon>
-                        <VideocamRounded />
-                      </ListItemIcon>
-                    </ListItemButton>
-                  </ListItem>
-                );
-              })}
+                      <ListItemButton
+                        disableTouchRipple
+                        onClick={() =>
+                          handleClick(
+                            items,
+                            items?.conversationDetails?.filter(
+                              (conversationData) =>
+                                conversationData?.receiverUserId ===
+                                items?.userId
+                            )
+                          )
+                        }
+                      >
+                        <ListItemAvatar>
+                          <Avatar
+                            src={items?.profilePic?.at(0)}
+                            srcSet={items?.profilePic?.at(0)}
+                            sx={{
+                              width: 50,
+                              height: 50,
+                            }}
+                            alt="not found!"
+                          />
+                        </ListItemAvatar>
+                        <ListItemText>
+                          <Typography
+                            variant="subtitle2"
+                            sx={{
+                              fontWeight: "bold",
+                            }}
+                          >
+                            {items?.userName}
+                          </Typography>
+                          <Typography variant="caption">
+                            You: {items?.userName}
+                          </Typography>
+                        </ListItemText>
+                        <ListItemIcon onClick={() => alert("hello world!")}>
+                          <img
+                            src={infinity}
+                            srcSet={infinity}
+                            alt="not found!"
+                            style={{
+                              height: 30,
+                              width: 30,
+                            }}
+                          />
+                        </ListItemIcon>
+                      </ListItemButton>
+                    </ListItem>
+                  );
+                })}
             </List>
           </Grid>
-          <Divider orientation="vertical" flexItem />
+          <Divider
+            orientation="vertical"
+            sx={{
+              height: 800,
+            }}
+            flexItem
+          />
           <Grid
             sx={{
               width: 775,
