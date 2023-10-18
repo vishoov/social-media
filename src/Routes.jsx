@@ -19,6 +19,7 @@ import { MessagingComponent } from "./SocialMedia/components/MessagingComponents
 import { WelcomeMessaging } from "./ReuseableComponents/Messaging/WelcomeMessaging";
 
 import { PendingMessages } from "./SocialMedia/components/MessagingComponents/PendingMessages";
+import { GroupMessagingComponent } from "./SocialMedia/components/MessagingComponents/GroupMessagingComponent";
 
 export const Routes = ({ children }) => {
   const routes = createBrowserRouter([
@@ -128,7 +129,14 @@ export const Routes = ({ children }) => {
                 </AIAuthentication>
               ),
             },
-
+            {
+              path: "message/group/:groupConversationId",
+              element: (
+                <AIAuthentication>
+                  <GroupMessagingComponent />
+                </AIAuthentication>
+              ),
+            },
             {
               path: "message/pending",
               element: (

@@ -144,7 +144,7 @@ export const ModelForShowingRequestInMessages = ({
                 style={{ width: 250, height: 50, border: "none" }}
                 onClick={() => accepted()}
               >
-                <Typography variant="subtitle1">Accepted</Typography>
+                <Typography variant="subtitle1">Accept</Typography>
               </Button>
               <Button
                 size="large"
@@ -152,7 +152,7 @@ export const ModelForShowingRequestInMessages = ({
                 onAbort={() => rejected()}
               >
                 <Typography color="red" variant="subtitle1">
-                  Rejected
+                  Reject
                 </Typography>
               </Button>
             </ButtonGroup>

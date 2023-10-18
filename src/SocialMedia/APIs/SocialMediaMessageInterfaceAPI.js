@@ -8,6 +8,8 @@ import {
   set_all_conversations,
   set_all_conversation_requests,
 } from "../../reduxNonPersist/NonPersistConversationSlice";
+import { useNavigate } from "react-router-dom";
+import { setSelectedGroup } from "../../redux/MessageSlice";
 
 const url = () => {
   return axios.create({
@@ -18,6 +20,12 @@ const url = () => {
 const url1 = () => {
   return axios.create({
     baseURL: `${process.env.REACT_APP_API_HOST_NAME}/ai/socialmedia/api/v1/private/conversations`,
+  });
+};
+
+const url2 = () => {
+  return axios.create({
+    baseURL: `${process.env.REACT_APP_API_HOST_NAME}/ai/socialmedia/api/v1/private/group/conversation`,
   });
 };
 
@@ -79,6 +87,18 @@ const update_user_conversation_request_permissions = (requiredData) => {
     });
   }
 };
+
+const save_group_details = (requiredData) => {
+  if (requiredData?.Authorization && requiredData?.group_details) {
+    return url2().post("/save", requiredData?.group_details, {
+      headers: {
+        Authorization: "Bearer " + requiredData?.Authorization,
+      },
+    });
+  }
+};
+
+// hooks
 
 export const useGetMessageOfParticularConversation = (requiredData) => {
   const dispatch = useDispatch();
@@ -210,5 +230,25 @@ export const useUpdate_user_conversation_request_permissions = () => {
     },
     retry: 5,
     retryDelay: 1000,
+  });
+};
+
+export const useSaveGroupDetails = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  return useMutation(save_group_details, {
+    onSuccess: (data) => {
+      if (data?.status === 200) {
+        dispatch(setSelectedGroup(data?.data?.data));
+
+        navigate(
+          `/environment/socialMedia/message/group/${data?.data?.data?.visibleConversationId}`
+        );
+      }
+    },
+    onError: (error) => {
+      console.log(error?.response?.data?.message);
+    },
   });
 };

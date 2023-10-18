@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import { ContentCopyRounded, DeleteOutlineRounded } from "@mui/icons-material";
 import {
   Menu,
   MenuItem,
@@ -8,13 +8,15 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import useReceiverMessageHook from "../../hooks/useReceiverMessageHook";
+import React, { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { ContentCopyRounded, DeleteOutlineRounded } from "@mui/icons-material";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
-import useGetDeletedMessageConfirmationHook from "../../hooks/useGetDeletedMessageConfirmationHookj";
+
+const socketForSendMessage = new SockJS("http://localhost:9988/websocket");
+
+// Create a Stomp client over the SockJS WebSocket connection
+const stompClientForSendMessage = Stomp.over(socketForSendMessage);
 
 const style = {
   recieverMessageStyle: {
@@ -42,38 +44,33 @@ const style = {
   },
 };
 
-const socketForSendMessage = new SockJS("http://localhost:9988/websocket");
+export const GroupRealMessageShowingPenal = () => {
+  // const { conversationId } = useParams();
 
-// Create a Stomp client over the SockJS WebSocket connection
-const stompClientForSendMessage = Stomp.over(socketForSendMessage);
-
-export const RealMessageShowingPenal = () => {
-  const { conversationId } = useParams();
-
-  const message = useSelector((state) => state.message);
+  // const message = useSelector((state) => state.message);
 
   const MessageNonPersist = useSelector((state) => state.NonPersistMessage);
 
   // message subscription hook
-  const { callBack } = useReceiverMessageHook(
-    conversationId,
-    message,
-    MessageNonPersist?.all_messages
-  );
+  // const { callBack } = useReceiverMessageHook(
+  //   conversationId,
+  //   message,
+  //   MessageNonPersist?.all_messages
+  // );
 
   const scrollRef = useRef(null);
 
-  const newCallBackForRenderingMessages = useCallback(() => {
-    callBack();
-    // eslint-disable-next-line
-  }, []);
+  // const newCallBackForRenderingMessages = useCallback(() => {
+  //   callBack();
+  //   // eslint-disable-next-line
+  // }, []);
 
   // receive messages from the server
-  useEffect(() => {
-    newCallBackForRenderingMessages();
+  // useEffect(() => {
+  //   newCallBackForRenderingMessages();
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   useEffect(() => {
     // Scroll to the most recent message when new messages arrive
@@ -132,9 +129,9 @@ export const RealMessageShowingPenal = () => {
     );
   };
 
-  useGetDeletedMessageConfirmationHook(
-    message?.selectedConversation?.conversationId || conversationId
-  );
+  // useGetDeletedMessageConfirmationHook(
+  //   message?.selectedConversation?.conversationId || conversationId
+  // );
 
   return (
     <>

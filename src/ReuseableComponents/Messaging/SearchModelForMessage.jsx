@@ -1,9 +1,8 @@
-import { SearchRounded, VideocamRounded } from "@mui/icons-material";
+import { VideocamRounded } from "@mui/icons-material";
 import {
   Avatar,
   Divider,
   Grid,
-  InputAdornment,
   List,
   ListItem,
   ListItemAvatar,
@@ -89,13 +88,14 @@ export const SearchModelForMessage = ({ open, handleClose }) => {
               variant="subtitle2"
               sx={{
                 fontWeight: "bold",
-                display: "flex",
                 justifyContent: "center",
+                display: "flex",
                 padding: 2,
               }}
             >
               new message
             </Typography>
+
             <Divider color="white" />
             <div
               style={{
@@ -106,18 +106,12 @@ export const SearchModelForMessage = ({ open, handleClose }) => {
             >
               <TextField
                 variant="standard"
-                label="Search..."
+                placeholder="search..."
                 size="small"
                 onChange={(data) => handleChange(data.target.value)}
                 sx={{
                   width: 470,
-                }}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <SearchRounded />
-                    </InputAdornment>
-                  ),
+                  padding: 2,
                 }}
               />
             </div>

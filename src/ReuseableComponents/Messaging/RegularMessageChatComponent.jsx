@@ -24,11 +24,17 @@ import { setSelectedConversation } from "../../redux/MessageSlice";
 import { setCurrentInterface } from "../../redux/UtilitiesSlice";
 import { reset_all_messages } from "../../reduxNonPersist/NonPersistMessages";
 import infinity from "../../static/images/utils/status.png";
+import group from "../../static/images/utils/group.png";
+import { SearchModelForMessageInGroup } from "./SearchModelForMessageInGroup";
 
 export const RegularMessageChatComponent = ({ all_conversations }) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const [openForGroup, setOpenForGroup] = useState(false);
+  const handleOpenForGroup = () => setOpenForGroup(true);
+  const handleCloseForGroup = () => setOpenForGroup(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -64,7 +70,7 @@ export const RegularMessageChatComponent = ({ all_conversations }) => {
           <Stack
             direction="row"
             marginLeft={4}
-            spacing={45}
+            spacing={40}
             alignItems="center"
           >
             <Typography
@@ -77,16 +83,29 @@ export const RegularMessageChatComponent = ({ all_conversations }) => {
                 fontSize: 16,
               }}
             >
-              Messages
+              messages
             </Typography>
-            <MarkChatUnreadOutlined
-              onClick={() =>
-                navigate("/environment/socialMedia/message/pending")
-              }
-              sx={{
-                cursor: "pointer",
-              }}
-            />
+            <Stack direction="row" spacing={3}>
+              <img
+                src={group}
+                srcSet={group}
+                alt="not found!"
+                style={{
+                  width: "25px",
+                  height: "25px",
+                  cursor: "pointer",
+                }}
+                onClick={handleOpenForGroup}
+              />
+              <MarkChatUnreadOutlined
+                onClick={() =>
+                  navigate("/environment/socialMedia/message/pending")
+                }
+                sx={{
+                  cursor: "pointer",
+                }}
+              />
+            </Stack>
           </Stack>
           <Divider
             sx={{
@@ -198,6 +217,10 @@ export const RegularMessageChatComponent = ({ all_conversations }) => {
             </Stack>
           </div>
           <SearchModelForMessage open={open} handleClose={handleClose} />
+          <SearchModelForMessageInGroup
+            openGroupModel={openForGroup}
+            handleCloseForGroupModel={handleCloseForGroup}
+          />
         </Grid>
       </Grid>
     </>

@@ -52,8 +52,6 @@ const SocialMediaMessageNotification = () => {
     callBack();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [callBack]);
-
-  return <div></div>;
 };
 
 export default SocialMediaMessageNotification;
