@@ -27,13 +27,18 @@ const useReceiveGroupCreationNotificationHook = () => {
           const data = JSON.parse(message?.body);
 
           const group_created_notification_build = {
-            profilePic: data?.data?.results
+            profilePic: data?.profile_data?.results
               ?.at(0)
               ?.profile_details?.at(0)
               ?.urls?.at(0),
-            userName: data?.data?.results?.at(0)?.userName,
+            userName: data?.profile_data?.results?.at(0)?.userName,
+            visibleGroupConversationId:
+              data?.group_data?.visibleGroupConversationId,
+            groupName: data?.group_data?.groupName,
             type_of_notification: data?.type_of_notification,
           };
+
+          console.log("Conversation data :", group_created_notification_build);
 
           dispatch(
             setGroupCreationNotification(group_created_notification_build)

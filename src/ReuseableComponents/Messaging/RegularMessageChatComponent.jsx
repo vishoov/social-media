@@ -13,7 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MarkChatUnreadOutlined } from "@mui/icons-material";
 
 import { SearchModelForMessage } from "./SearchModelForMessage";
@@ -26,6 +26,8 @@ import { reset_all_messages } from "../../reduxNonPersist/NonPersistMessages";
 import infinity from "../../static/images/utils/status.png";
 import group from "../../static/images/utils/group.png";
 import { SearchModelForMessageInGroup } from "./SearchModelForMessageInGroup";
+import { useGetAllGroupConversation } from "../../SocialMedia/APIs/SocialMediaMessageInterfaceAPI";
+import { useCookies } from "react-cookie";
 
 export const RegularMessageChatComponent = ({ all_conversations }) => {
   const [open, setOpen] = useState(false);
@@ -58,6 +60,27 @@ export const RegularMessageChatComponent = ({ all_conversations }) => {
 
     dispatch(setCurrentInterface("REGULAR_MESSAGE_CHAT"));
   };
+
+  const [cookies] = useCookies(["avt_token"]);
+
+  const [requiredData, setRequiredData] = useState({
+    userId: localStorage.getItem("sm_user_id"),
+    Authorization: cookies?.avt_token,
+  });
+
+  const { refetch } = useGetAllGroupConversation(requiredData);
+
+  useEffect(() => {
+    if (requiredData) {
+      refetch();
+    } else {
+      setRequiredData({
+        userId: localStorage.getItem("sm_user_id"),
+        Authorization: cookies?.avt_token,
+      });
+    }
+    // eslint-disable-next-line
+  }, [requiredData]);
 
   return (
     <>

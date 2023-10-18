@@ -98,6 +98,30 @@ const save_group_details = (requiredData) => {
   }
 };
 
+const update_group_details = (requiredData) => {
+  if (requiredData.Authorization && requiredData?.data) {
+    return url2().put("/update", requiredData?.data, {
+      headers: {
+        Authorization: "Bearer " + requiredData?.Authorization,
+      },
+    });
+  }
+};
+
+const get_all_group_conversation = (requiredData) => {
+  console.log("get_all_group_conversation", requiredData);
+  if (requiredData?.Authorization && requiredData?.userId) {
+    return url2().get("/get/all", {
+      headers: {
+        Authorization: "Bearer " + requiredData?.Authorization,
+      },
+      params: {
+        userId: requiredData?.userId,
+      },
+    });
+  }
+};
+
 // hooks
 
 export const useGetMessageOfParticularConversation = (requiredData) => {
@@ -243,7 +267,7 @@ export const useSaveGroupDetails = () => {
         dispatch(setSelectedGroup(data?.data?.data));
 
         navigate(
-          `/environment/socialMedia/message/group/${data?.data?.data?.visibleConversationId}`
+          `/environment/socialMedia/message/group/${data?.data?.data?.visibleGroupConversationId}`
         );
       }
     },
@@ -251,4 +275,61 @@ export const useSaveGroupDetails = () => {
       console.log(error?.response?.data?.message);
     },
   });
+};
+
+export const useUpdateGroupDetails = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  return useMutation(update_group_details, {
+    onSuccess: (data) => {
+      if (data?.status === 200) {
+        console.log("successfully joined the group!!!", data?.data?.data);
+        dispatch(setSelectedGroup(data?.data?.data));
+
+        navigate(
+          `/environment/socialMedia/message/group/${data?.data?.data?.visibleGroupConversationId}`
+        );
+      }
+    },
+    onError: (error) => {
+      console.log(error?.response?.data?.message);
+    },
+  });
+};
+
+export const useGetAllGroupConversation = (requiredData) => {
+  const dispatch = useDispatch();
+
+  return useQuery(
+    ["get_all_group_conversation", requiredData],
+    () => get_all_group_conversation(requiredData),
+    {
+      onSuccess: (data) => {
+        if (data?.status === 200) {
+          var group_conversation_data = data?.data?.data?.results?.map(
+            (group_conversation_data) => {
+              return {
+                groupName:
+                  group_conversation_data?.user_group_conversation_details
+                    ?.groupName,
+                visibleGroupConversationId:
+                  group_conversation_data?.user_group_conversation_details
+                    ?.visibleGroupConversationId,
+              };
+            }
+          );
+
+          dispatch(set_all_conversations(group_conversation_data));
+        }
+      },
+      onError: (error) => {
+        console.log(error?.response?.data?.message);
+      },
+      enabled: false,
+      refetchOnMount: false,
+      retry: 5,
+      retryDelay: 1000,
+    }
+  );
 };

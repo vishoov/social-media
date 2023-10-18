@@ -15,6 +15,8 @@ import jen18 from "../../../static/images/avatar/jen18.jpeg";
 import useMemoriesSubscribeHook from "../../../hooks/useMemoriesSubscribeHook";
 import { useSelector } from "react-redux";
 import useReceiveGroupCreationNotificationHook from "../../../hooks/useReceiveGroupCreationNotificationHook";
+import { useCookies } from "react-cookie";
+import { useUpdateGroupDetails } from "../../APIs/SocialMediaMessageInterfaceAPI";
 
 export const SocialMediaNotificationInterface = () => {
   useMemoriesSubscribeHook();
@@ -24,6 +26,8 @@ export const SocialMediaNotificationInterface = () => {
   const NonPersistNotification = useSelector(
     (state) => state.NonPersistNotification
   );
+
+  const [cookies] = useCookies(["avt_token"]);
 
   const getTime = (created) => {
     const nowTimestamp = Date.now();
@@ -38,9 +42,21 @@ export const SocialMediaNotificationInterface = () => {
     return time;
   };
 
+  const { mutate: mutateForJoinGroup } = useUpdateGroupDetails();
+
   const join = () => {
     const requiredData = {
-      group_id: NonPersistNotification?.group_id,
+      data: {
+        groupParticipants: [
+          {
+            userId: parseInt(localStorage.getItem("sm_user_id")),
+            status_of_join_of_group: "JOINED",
+          },
+        ],
+        visibleGroupConversationId:
+          NonPersistNotification?.groupCreationNotification
+            ?.visibleGroupConversationId,
+      },
       Authorization: cookies?.avt_token,
     };
 

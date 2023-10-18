@@ -77,6 +77,8 @@ export const SearchModelForMessageInGroup = ({
         auth?.value?.signinData?.userName ||
         socialMediaUser?.value?.SocialMediaUserData?.userName,
       userId: parseInt(localStorage.getItem("sm_user_id")),
+      status_of_join_of_group: "JOINED",
+      role: "ADMIN",
     };
 
     const generatedData = {
@@ -85,9 +87,11 @@ export const SearchModelForMessageInGroup = ({
         ...chipData.map((chip) => ({
           userName: chip?.groupParticipants?.userName,
           userId: chip?.groupParticipants?.userId,
+          status_of_join_of_group: "NOT_JOINED",
+          role: "USER",
         })),
       ],
-      visibleConversationId: generateUniqueNumber(),
+      visibleGroupConversationId: generateUniqueNumber(),
       groupName: groupName,
     };
 
