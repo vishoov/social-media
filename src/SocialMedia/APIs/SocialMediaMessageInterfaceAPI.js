@@ -3,10 +3,14 @@ import axios from "axios";
 import { useMutation, useQuery } from "react-query";
 
 import { useDispatch } from "react-redux";
-import { set_all_messages } from "../../reduxNonPersist/NonPersistMessages";
+import {
+  set_all_group_messages,
+  set_all_messages,
+} from "../../reduxNonPersist/NonPersistMessages";
 import {
   set_all_conversations,
   set_all_conversation_requests,
+  set_all_group_conversations,
 } from "../../reduxNonPersist/NonPersistConversationSlice";
 import { useNavigate } from "react-router-dom";
 import { setSelectedGroup } from "../../redux/MessageSlice";
@@ -109,7 +113,6 @@ const update_group_details = (requiredData) => {
 };
 
 const get_all_group_conversation = (requiredData) => {
-  console.log("get_all_group_conversation", requiredData);
   if (requiredData?.Authorization && requiredData?.userId) {
     return url2().get("/get/all", {
       headers: {
@@ -117,6 +120,19 @@ const get_all_group_conversation = (requiredData) => {
       },
       params: {
         userId: requiredData?.userId,
+      },
+    });
+  }
+};
+
+const get_all_group_messages = (requiredData) => {
+  if (requiredData?.Authorization && requiredData?.visibleGroupConversationId) {
+    return url().get("/get/messages/of/group/conversation", {
+      headers: {
+        Authorization: "Bearer " + requiredData?.Authorization,
+      },
+      params: {
+        visible_group_conversation_id: requiredData?.visibleGroupConversationId,
       },
     });
   }
@@ -180,6 +196,7 @@ export const useGet_all_conversations_of_specific_user = (requiredData) => {
               return all_data;
             }
           );
+
           dispatch(set_all_conversations(wholeData));
         } else {
           dispatch(set_all_conversations(null));
@@ -320,7 +337,7 @@ export const useGetAllGroupConversation = (requiredData) => {
             }
           );
 
-          dispatch(set_all_conversations(group_conversation_data));
+          dispatch(set_all_group_conversations(group_conversation_data));
         }
       },
       onError: (error) => {
@@ -328,6 +345,30 @@ export const useGetAllGroupConversation = (requiredData) => {
       },
       enabled: false,
       refetchOnMount: false,
+      retry: 5,
+      retryDelay: 1000,
+    }
+  );
+};
+
+export const useGetAllGroupMessages = (requiredData) => {
+  const dispatch = useDispatch();
+
+  return useQuery(
+    ["getMessagesOfParticularGroupConversation", requiredData],
+    () => get_all_group_messages(requiredData),
+    {
+      onSuccess: (data) => {
+        if (data?.status === 200) {
+          console.log("Successfully");
+
+          data?.data?.data?.map((messages) =>
+            dispatch(set_all_group_messages(messages))
+          );
+        }
+      },
+      refetchOnMount: false,
+      enabled: false,
       retry: 5,
       retryDelay: 1000,
     }

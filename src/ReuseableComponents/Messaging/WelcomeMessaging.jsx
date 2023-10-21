@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import { useCookies } from "react-cookie";
-import { useGet_all_conversations_of_specific_user } from "../../SocialMedia/APIs/SocialMediaMessageInterfaceAPI";
+import {
+  useGetAllGroupConversation,
+  useGet_all_conversations_of_specific_user,
+} from "../../SocialMedia/APIs/SocialMediaMessageInterfaceAPI";
 import { RegularMessageChatComponent } from "./RegularMessageChatComponent";
-import { FirstTimeChatComponent } from "./FirstTimeChatComponent";
 import { AISideBar } from "../AISideBar";
 import { useSelector } from "react-redux";
 
@@ -10,6 +12,11 @@ export const WelcomeMessaging = () => {
   const [cookies] = useCookies(["avt_token"]);
 
   const { refetch } = useGet_all_conversations_of_specific_user({
+    Authorization: cookies?.avt_token,
+    userId: localStorage.getItem("sm_user_id"),
+  });
+
+  const { refetch: refetchForGroups } = useGetAllGroupConversation({
     Authorization: cookies?.avt_token,
     userId: localStorage.getItem("sm_user_id"),
   });
@@ -25,19 +32,23 @@ export const WelcomeMessaging = () => {
     // eslint-disable-next-line
   }, []);
 
+  useEffect(() => {
+    if (NonPersistConversations?.all_group_conversations?.length === 0) {
+      refetchForGroups();
+    }
+    // eslint-disable-next-line
+  }, []);
+
   return (
     <>
       <>
         <AISideBar />
-
-        {NonPersistConversations?.all_conversations?.at(0) !== null &&
-        NonPersistConversations?.all_conversations?.length > 0 ? (
-          <RegularMessageChatComponent
-            all_conversations={NonPersistConversations?.all_conversations}
-          />
-        ) : (
-          <FirstTimeChatComponent />
-        )}
+        <RegularMessageChatComponent
+          all_conversations={NonPersistConversations?.all_conversations}
+          all_group_conversations={
+            NonPersistConversations?.all_group_conversations
+          }
+        />
       </>
     </>
   );

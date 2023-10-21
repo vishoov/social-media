@@ -1,10 +1,12 @@
 import { useCallback, useEffect } from "react";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
-import { set_deleted_message } from "../reduxNonPersist/NonPersistMessages";
+import { set_delete_group_messages } from "../reduxNonPersist/NonPersistMessages";
 import { useDispatch } from "react-redux";
 
-const useGetDeletedMessageConfirmationHook = (visible_conversation_id) => {
+const useGetDeletedGroupMessageConfirmationHook = (
+  visibleGroupConversationId
+) => {
   const socket = new SockJS(
     `${process.env.REACT_APP_WEBSOCKET_FOR_RECEIVING_SEAMLESS_MESSAGES}`
   );
@@ -17,12 +19,14 @@ const useGetDeletedMessageConfirmationHook = (visible_conversation_id) => {
     stompClient.connect({}, (frame) => {
       // Subscribe to the topic where Kafka messages are sent
       stompClient.subscribe(
-        `/delete/message/${visible_conversation_id}`,
+        `/delete/group/message/${visibleGroupConversationId}`,
         (message) => {
           // Handle incoming messages here
           const data = JSON.parse(message?.body);
 
-          dispatch(set_deleted_message(data));
+          console.log("message deleted :::------>", data);
+
+          dispatch(set_delete_group_messages(data));
         }
       );
     });
@@ -35,4 +39,4 @@ const useGetDeletedMessageConfirmationHook = (visible_conversation_id) => {
   }, []);
 };
 
-export default useGetDeletedMessageConfirmationHook;
+export default useGetDeletedGroupMessageConfirmationHook;

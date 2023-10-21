@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GroupRealMessageShowingPenal } from "./GroupRealMessageShowingPenal";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
@@ -22,11 +22,12 @@ import {
   PersonalVideoRounded,
   SentimentSatisfiedRounded,
 } from "@mui/icons-material";
-import { MessageWebCam } from "./MessageWebCam";
 import { ModelForMaintainingTheConversations } from "../../../ReuseableComponents/Messaging/ModelForMaintainingTheConversations";
 import videoCall from "../../../static/images/utils/video-call.png";
 import frame from "../../../static/images/utils/frame.png";
 import gellery from "../../../static/images/utils/gallery.png";
+import useGetProfilePicFromCacheHook from "../../../hooks/useGetProfilePicFromCacheHook";
+import { MessageWebCamForGroup } from "./MessageWebCamForGroup";
 
 const RealMessageShowingPenalHandler = () => {
   return <GroupRealMessageShowingPenal />;
@@ -44,7 +45,7 @@ export const GroupRegularMessageShowingPenal = () => {
     },
   });
 
-  const { conversationId } = useParams();
+  const { groupConversationId } = useParams();
 
   const message = useSelector((state) => state.message);
 
@@ -59,6 +60,13 @@ export const GroupRegularMessageShowingPenal = () => {
   const [OpenWebCam, setOpenWebCam] = useState(false);
   const handleWebCamClose = () => setOpenWebCam(false);
 
+  const [callBack, profilePic] = useGetProfilePicFromCacheHook();
+
+  useEffect(() => {
+    callBack();
+    // eslint-disable-next-line
+  }, []);
+
   const submit = (data) => {
     if (data && data?.message) {
       const buildMessage = {
@@ -66,19 +74,21 @@ export const GroupRegularMessageShowingPenal = () => {
           userId: parseInt(localStorage.getItem("sm_user_id")),
           type: "TEXT",
         },
-        visibleConversationId: parseInt(
-          message?.selectedConversation?.conversationId || conversationId
+        visibleGroupConversationId: parseInt(
+          message?.selectedGroup?.visibleGroupConversationId ||
+            groupConversationId
         ),
         message: data?.message,
-        receiverUserId: message?.selectedConversation?.userId,
-        username:
+        userName:
           auth?.value?.signinData?.userName ||
           socialMediaUser?.value?.SocialMediaUserData?.userName,
-        profilePic: message?.selectedConversation?.profilePic,
+        profilePic: profilePic?.current,
       };
+      console.log("buildMessage", buildMessage);
       stompClientForSendMessage.send(
-        `/conversation/${
-          message?.selectedConversation?.conversationId || conversationId
+        `/conversation/group/${
+          message?.selectedGroup?.visibleGroupConversationId ||
+          groupConversationId
         }`,
         {},
         JSON.stringify(buildMessage)
@@ -104,20 +114,22 @@ export const GroupRegularMessageShowingPenal = () => {
             userId: parseInt(localStorage.getItem("sm_user_id")),
             type: "IMAGE",
           },
-          visibleConversationId: parseInt(
-            message?.selectedConversation?.conversationId || conversationId
+          visibleGroupConversationId: parseInt(
+            message?.selectedGroup?.visibleGroupConversationId ||
+              groupConversationId
           ),
           message: base64Image, // Set the message to the base64 image data
-          receiverUserId: message?.selectedConversation?.userId,
-          username:
+          userName:
             auth?.value?.signinData?.userName ||
             socialMediaUser?.value?.SocialMediaUserData?.userName,
-          profilePic: message?.selectedConversation?.profilePic,
+          profilePic: profilePic?.current,
+          groupName: message?.selectedGroup?.groupName,
         };
 
         stompClientForSendMessage.send(
-          `/conversation/send/image/${
-            message?.selectedConversation?.conversationId || conversationId
+          `/conversation/group/send/image/${
+            message?.selectedGroup?.visibleGroupConversationId ||
+            groupConversationId
           }`,
           {},
           JSON.stringify(buildMessage)
@@ -149,8 +161,8 @@ export const GroupRegularMessageShowingPenal = () => {
               onClick={handleOpen}
               avatar={
                 <Avatar
-                  src={message?.selectedConversation?.profilePic}
-                  srcSet={message?.selectedConversation?.profilePic}
+                  src={message?.selectedGroup?.profilePic}
+                  srcSet={message?.selectedGroup?.profilePic}
                   alt="not found!"
                 />
               }
@@ -206,29 +218,7 @@ export const GroupRegularMessageShowingPenal = () => {
                 fontSize: 30,
                 cursor: "pointer",
               }}
-              // onClick={(event) => {
-              // setEmojiPickerPosition({
-              //   top: event.clientY - 300, // Adjust the top position as needed
-              //   left: event.clientX - 50, // Adjust the left position as needed
-              // });
-              // setIsPickerOpen((prevState) => !prevState);
-              // }}
             />
-            {/* {isPickerOpen &&
-            emojiPickerPosition &&
-            ReactDOM.createPortal(
-              <MessageEmojiBar
-                onEmojiSelect={(data) => {
-                  console.log("data ::::", data);
-                  // setValue(
-                  //   "message",
-                  //   (prevMessage) => prevMessage + data?.emoji
-                  // );
-                }}
-              />,
-              document.body
-            )} */}
-
             <Paper
               sx={{
                 border: "1px solid white",
@@ -243,7 +233,6 @@ export const GroupRegularMessageShowingPenal = () => {
                   width: 1300,
                   height: 40,
                 }}
-                // onChange={(e) => setMessageText(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     handleSubmit(submit)();
@@ -301,12 +290,15 @@ export const GroupRegularMessageShowingPenal = () => {
             outline: "none",
           }}
         >
-          <MessageWebCam
+          <MessageWebCamForGroup
             height={1000}
             width={600}
             onClose={handleWebCamClose}
             message={message}
-            conversationId={conversationId}
+            groupConversationId={groupConversationId}
+            auth={auth}
+            socialMediaUser={socialMediaUser}
+            profilePic={profilePic?.current}
           />
         </div>
       </Modal>

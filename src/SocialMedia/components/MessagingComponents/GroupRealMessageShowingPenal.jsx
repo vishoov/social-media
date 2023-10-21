@@ -1,5 +1,6 @@
 import { ContentCopyRounded, DeleteOutlineRounded } from "@mui/icons-material";
 import {
+  Avatar,
   Menu,
   MenuItem,
   Stack,
@@ -8,10 +9,13 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
+import useReceiveGroupMessageHook from "../../../hooks/useReceiveGroupMessageHook";
+import { useParams } from "react-router-dom";
+import useGetDeletedGroupMessageConfirmationHook from "../../../hooks/useGetDeleteGroupMessageConfirmationHook";
 
 const socketForSendMessage = new SockJS("http://localhost:9988/websocket");
 
@@ -22,7 +26,7 @@ const style = {
   recieverMessageStyle: {
     margin: 1.5,
     border: "white",
-    borderRadius: "8px",
+    borderRadius: "20px",
     backgroundColor: "rgb(238, 238, 238)",
     padding: 1.3, // Adjust padding as needed
     width: "auto", // This allows the width to expand with content
@@ -33,7 +37,7 @@ const style = {
   senderMessageStyle: {
     margin: 1.5,
     border: "white",
-    borderRadius: "8px",
+    borderRadius: "20px",
     backgroundColor: "rgb(55, 151, 240,1)",
     color: "white",
     padding: 1.3, // Adjust padding as needed
@@ -45,32 +49,31 @@ const style = {
 };
 
 export const GroupRealMessageShowingPenal = () => {
-  // const { conversationId } = useParams();
+  const { groupConversationId } = useParams();
 
-  // const message = useSelector((state) => state.message);
+  const message = useSelector((state) => state.message);
 
   const MessageNonPersist = useSelector((state) => state.NonPersistMessage);
 
-  // message subscription hook
-  // const { callBack } = useReceiverMessageHook(
-  //   conversationId,
-  //   message,
-  //   MessageNonPersist?.all_messages
-  // );
+  const { callBack } = useReceiveGroupMessageHook(
+    message,
+    groupConversationId,
+    MessageNonPersist?.all_group_messages
+  );
 
   const scrollRef = useRef(null);
 
-  // const newCallBackForRenderingMessages = useCallback(() => {
-  //   callBack();
-  //   // eslint-disable-next-line
-  // }, []);
+  const newCallBackForRenderingMessages = useCallback(() => {
+    callBack();
+    // eslint-disable-next-line
+  }, []);
 
   // receive messages from the server
-  // useEffect(() => {
-  //   newCallBackForRenderingMessages();
+  useEffect(() => {
+    newCallBackForRenderingMessages();
 
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     // Scroll to the most recent message when new messages arrive
@@ -82,10 +85,10 @@ export const GroupRealMessageShowingPenal = () => {
 
   useEffect(() => {
     // Save the index of the most recent message in local storage
-    if (MessageNonPersist?.all_messages) {
+    if (MessageNonPersist?.all_group_messages) {
       localStorage.setItem(
         "mostRecentMessageIndex",
-        MessageNonPersist.all_messages.length - 1
+        MessageNonPersist.all_group_messages.length - 1
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -114,10 +117,10 @@ export const GroupRealMessageShowingPenal = () => {
   };
 
   const handleDeleteEvent = (messageId) => {
-    console.log("message id", messageId);
+    console.log("messageId :", messageId);
 
     stompClientForSendMessage.send(
-      `/conversation/delete/message/${messageId}`,
+      `/conversation/group/delete/message/${messageId}`,
       {},
       JSON.stringify({
         primaryKeys: {
@@ -129,9 +132,9 @@ export const GroupRealMessageShowingPenal = () => {
     );
   };
 
-  // useGetDeletedMessageConfirmationHook(
-  //   message?.selectedConversation?.conversationId || conversationId
-  // );
+  useGetDeletedGroupMessageConfirmationHook(
+    message?.selectedGroup?.visibleGroupConversationId || groupConversationId
+  );
 
   return (
     <>
@@ -159,7 +162,7 @@ export const GroupRealMessageShowingPenal = () => {
             </TableRow>
 
             {MessageNonPersist &&
-              MessageNonPersist?.all_messages?.map((message, index) => {
+              MessageNonPersist?.all_group_messages?.map((message, index) => {
                 const isUserMessage =
                   message?.userId ===
                     parseInt(localStorage.getItem("sm_user_id")) ||
@@ -174,57 +177,59 @@ export const GroupRealMessageShowingPenal = () => {
                         justifyContent: isUserMessage ? "end" : "start",
                       }}
                       ref={
-                        index === MessageNonPersist.all_messages.length - 1
+                        index ===
+                        MessageNonPersist.all_group_messages.length - 1
                           ? scrollRef
                           : null
                       }
                     >
-                      <Typography
-                        sx={
-                          {
-                            // ... (other message style properties)
-                          }
-                        }
-                        variant="caption"
-                        color="grey"
-                      >
-                        {message.timestamp}
-                      </Typography>
-
-                      {message?.primaryKeys?.type === "IMAGE" ? (
-                        <img
-                          src={message?.message}
-                          alt="not found!"
-                          style={
-                            isUserMessage
-                              ? style.senderMessageStyle
-                              : style.recieverMessageStyle
-                          }
-                          width={500}
-                          height={500}
-                          onClick={
-                            isUserMessage
-                              ? (event) => handleClickForMessage(event)
-                              : null
-                          }
-                        />
-                      ) : (
-                        <Typography
-                          sx={
-                            isUserMessage
-                              ? style.senderMessageStyle
-                              : style.recieverMessageStyle
-                          }
-                          variant="body1"
-                          onClick={
-                            isUserMessage
-                              ? (event) => handleClickForMessage(event)
-                              : null
-                          }
-                        >
-                          {message?.message}
-                        </Typography>
-                      )}
+                      <Stack direction="row" alignItems="start">
+                        {isUserMessage ? null : (
+                          <Avatar
+                            src={message?.profilePic}
+                            srcSet={message?.profilePic}
+                            sx={{
+                              width: 25,
+                              height: 25,
+                            }}
+                            alt={message?.userName}
+                          />
+                        )}
+                        {message?.primaryKeys?.type === "IMAGE" ? (
+                          <img
+                            src={message?.message}
+                            alt="not found!"
+                            style={
+                              isUserMessage
+                                ? style.senderMessageStyle
+                                : style.recieverMessageStyle
+                            }
+                            width={500}
+                            height={500}
+                            onClick={
+                              isUserMessage
+                                ? (event) => handleClickForMessage(event)
+                                : null
+                            }
+                          />
+                        ) : (
+                          <Typography
+                            sx={
+                              isUserMessage
+                                ? style.senderMessageStyle
+                                : style.recieverMessageStyle
+                            }
+                            variant="body1"
+                            onClick={
+                              isUserMessage
+                                ? (event) => handleClickForMessage(event)
+                                : null
+                            }
+                          >
+                            {message?.message}
+                          </Typography>
+                        )}
+                      </Stack>
                     </TableRow>
                     <Menu
                       anchorEl={anchorEl}

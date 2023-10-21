@@ -20,7 +20,7 @@ const style = {
   recieverMessageStyle: {
     margin: 1.5,
     border: "white",
-    borderRadius: "8px",
+    borderRadius: "20px",
     backgroundColor: "rgb(238, 238, 238)",
     padding: 1.3, // Adjust padding as needed
     width: "auto", // This allows the width to expand with content
@@ -31,7 +31,7 @@ const style = {
   senderMessageStyle: {
     margin: 1.5,
     border: "white",
-    borderRadius: "8px",
+    borderRadius: "20px",
     backgroundColor: "rgb(55, 151, 240,1)",
     color: "white",
     padding: 1.3, // Adjust padding as needed
