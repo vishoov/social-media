@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   memoriesNotification: [],
   messageNotification: null,
-  groupCreationNotification: null,
+  notifications: [],
 };
 
 const NonPersistNotificationSlice = createSlice({
@@ -19,8 +19,8 @@ const NonPersistNotificationSlice = createSlice({
     setMessagesNotification: (state, action) => {
       state.messageNotification = action.payload;
     },
-    setGroupCreationNotification: (state, action) => {
-      state.groupCreationNotification = action.payload;
+    setNotifications: (state, action) => {
+      state.notifications.unshift(action.payload);
     },
   },
 });
@@ -29,6 +29,6 @@ export const {
   setMemoriesNotification,
   setMemoriesNotificationsUsingApi,
   setMessagesNotification,
-  setGroupCreationNotification,
+  setNotifications,
 } = NonPersistNotificationSlice.actions;
 export default NonPersistNotificationSlice.reducer;

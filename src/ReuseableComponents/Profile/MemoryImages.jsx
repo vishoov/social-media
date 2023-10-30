@@ -31,7 +31,13 @@ export const MemoryImages = () => {
         }}
         spacing={3}
       >
-        <Grid container justifyContent="center">
+        <Grid
+          container
+          justifyContent="center"
+          sx={{
+            cursor: "pointer",
+          }}
+        >
           {NonPersistMemories?.socialMediaMemories !== undefined &&
             NonPersistMemories?.socialMediaMemories.map((images) => {
               return (

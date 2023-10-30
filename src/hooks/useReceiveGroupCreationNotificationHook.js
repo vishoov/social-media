@@ -1,6 +1,6 @@
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
-import { setGroupCreationNotification } from "../reduxNonPersist/NonPersistNotificationSlice";
+import { setNotifications } from "../reduxNonPersist/NonPersistNotificationSlice";
 import { useDispatch } from "react-redux";
 
 const useReceiveGroupCreationNotificationHook = () => {
@@ -27,22 +27,20 @@ const useReceiveGroupCreationNotificationHook = () => {
           const data = JSON.parse(message?.body);
 
           const group_created_notification_build = {
-            profilePic: data?.profile_data?.results
+            senderProfilePic: data?.profile_data?.results
               ?.at(0)
               ?.profile_details?.at(0)
               ?.urls?.at(0),
-            userName: data?.profile_data?.results?.at(0)?.userName,
+            senderUserName: data?.profile_data?.results?.at(0)?.userName,
             visibleGroupConversationId:
               data?.group_data?.visibleGroupConversationId,
             groupName: data?.group_data?.groupName,
-            type_of_notification: data?.type_of_notification,
+            notificationType: data?.type_of_notification,
           };
 
           console.log("Conversation data :", group_created_notification_build);
 
-          dispatch(
-            setGroupCreationNotification(group_created_notification_build)
-          );
+          dispatch(setNotifications(group_created_notification_build));
         }
       );
     });

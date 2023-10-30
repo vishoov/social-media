@@ -24,8 +24,6 @@ const useGetDeletedGroupMessageConfirmationHook = (
           // Handle incoming messages here
           const data = JSON.parse(message?.body);
 
-          console.log("message deleted :::------>", data);
-
           dispatch(set_delete_group_messages(data));
         }
       );

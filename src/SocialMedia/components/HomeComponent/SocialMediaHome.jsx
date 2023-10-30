@@ -2,258 +2,198 @@ import React, { useState } from "react";
 import { AISideBar } from "../../../ReuseableComponents/AISideBar";
 import {
   Alert,
-  Avatar,
   Box,
-  List,
-  ListItem,
+  Button,
+  Divider,
+  Grid,
+  Modal,
   Snackbar,
   Stack,
-  TextField,
+  Tab,
+  Tabs,
+  ThemeProvider,
   Tooltip,
   Typography,
+  createTheme,
 } from "@mui/material";
 import {
-  FavoriteBorderRounded,
-  MoreHorizRounded,
-  SendRounded,
-  TvRounded,
+  AppsRounded,
+  AutoAwesomeMotionRounded,
+  AutoAwesomeRounded,
+  FavoriteRounded,
 } from "@mui/icons-material";
 import useMemoriesSubscribeHook from "../../../hooks/useMemoriesSubscribeHook";
-import useGetMemoriesWithinAWeekHook from "../../../hooks/useGetMemoriesWithinAWeekHook";
-import useNavigateByUsingUserName from "../../../hooks/useNavigateByUsingUserName";
-import { useSelector } from "react-redux";
+import { HomeMemoriesTab } from "./HomeMemoriesTab";
+import { HomeLiveUpdatesTab } from "./HomeLiveUpdatesTab";
+import LiveUpdateWebCam from "./LiveUpdateWebCam";
+import share from "../../../static/images/utils/share.png";
+import frame from "../../../static/images/utils/frame.png";
+import { UpdateModificationModel } from "./UpdateModificationModel";
 
 export const SocialMediaHome = () => {
   // live memories updates
   const { snackbarMessage, snackbarOpen } = useMemoriesSubscribeHook();
 
-  const NonPersistForHome = useSelector((state) => state.NonPersistForHome);
-
   const handleSnackbarClose = () => {};
 
-  const [isLoading] = useGetMemoriesWithinAWeekHook();
+  const [selectedTab, setSelectedTab] = useState(0);
 
-  const [username, setUsername] = useState("");
+  const handleTabChange = (event, newValue) => {
+    setSelectedTab(newValue);
+  };
 
-  useNavigateByUsingUserName(username);
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: "#000000", // Set the primary color to black
+      },
+    },
+  });
+
+  const [open, setOpen] = React.useState(false);
+
+  const [openModelForUpdateCustom, setOpenModelForUpdateCustom] =
+    useState(false);
+
+  const [updateImageSrc, setUpdateImageSrc] = useState(null);
+
+  const handleClickOpen = () => setOpen(true);
+
+  const handleClose = () => setOpen(false);
+
+  const [openWebCam, setOpenWebCam] = React.useState(false);
 
   return (
     <>
       <Box>
         <AISideBar />
       </Box>
-      {isLoading && (
-        <Typography
+      <Stack
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "7vh",
+          marginLeft: 100,
+        }}
+        direction="row"
+        spacing={190}
+      >
+        <Stack
+          direction="row"
+          spacing={4}
           sx={{
+            height: "12vh",
             display: "flex",
-            justifyContent: "center",
             alignItems: "center",
-            height: "85vh",
-            fontSize: "1.5rem",
+            position: "fixed",
           }}
         >
-          Loading...
-        </Typography>
-      )}
-      <Stack
-        sx={{
-          marginLeft: 70,
-          paddingTop: 15,
-        }}
-        direction="column"
-      >
-        {/* <Typography>{memory?.value?.memoryNotFoundError}</Typography> */}
-        <List>
-          {NonPersistForHome?.HomeMemoriesContent?.length > 0 &&
-            NonPersistForHome?.HomeMemoriesContent?.map((memories) => {
-              return (
-                <ListItem key={memories?.urls}>
-                  <Stack
-                    sx={{
-                      marginBottom: 10,
-                      border: 1,
-                      borderColor: "lightblue",
-                      borderRadius: 2,
-                      padding: 2,
-                      paddingBottom: 8,
-                      width: 602,
-                      height: 650,
-                      maxHeight: "none",
-                      overflowY: "auto",
-                    }}
-                  >
-                    <Stack
-                      direction="row"
-                      sx={{
-                        width: 602,
-                        borderBottom: 1,
-                        borderBottomColor: "lightblue",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <Stack spacing={1} direction="row" alignItems="center">
-                        <Box
-                          sx={{
-                            paddingBottom: 0.5,
-                          }}
-                        >
-                          <Avatar
-                            src={memories?.profileUrl}
-                            srcSet={memories?.profileUrl}
-                            alt="nothing"
-                            sx={{
-                              width: 25,
-                              height: 25,
-                            }}
-                          />
-                        </Box>
-                        <Box>
-                          <Typography
-                            sx={{
-                              fontWeight: 550,
-                              fontSize: 14,
-                              color: "black",
-                              cursor: "pointer",
-                            }}
-                            onClick={() => setUsername(memories?.userName)}
-                          >
-                            {memories?.userName}
-                          </Typography>
-                        </Box>
-                      </Stack>
-                      <Box onClick={() => alert("not implemented yet")}>
-                        <MoreHorizRounded />
-                      </Box>
-                    </Stack>
-                    <Stack direction="row" spacing={3}>
-                      <Box
-                        sx={{
-                          justifyContent: "start",
-                        }}
-                      >
-                        <img
-                          src={memories?.urls}
-                          alt="nothing"
-                          srcSet={memories?.urls}
-                          style={{
-                            width: 600,
-                            height: 600,
-                            borderRadius: 2,
-                            paddingTop: 10,
-                          }}
-                        />
-                      </Box>
-                    </Stack>
-                    <Stack
-                      direction="row"
-                      justifyContent="space-between"
-                      sx={{
-                        paddingTop: 1,
-                      }}
-                    >
-                      <Stack direction="row" spacing={3}>
-                        <Box>
-                          <Tooltip
-                            disableFocusListener
-                            title={
-                              <React.Fragment>
-                                <Stack
-                                  spacing={2}
-                                  direction="row"
-                                  alignItems="center"
-                                >
-                                  <FavoriteBorderRounded />
-                                  <Typography>424,242 likes</Typography>
-                                </Stack>
-                              </React.Fragment>
-                            }
-                          >
-                            <FavoriteBorderRounded
-                              sx={{
-                                cursor: "pointer",
-                                height: 25,
-                                width: 25,
-                              }}
-                            />
-                          </Tooltip>
-                        </Box>
-                        <Box>
-                          <Tooltip
-                            disableFocusListener
-                            title={
-                              <React.Fragment>
-                                <Stack
-                                  spacing={2}
-                                  direction="row"
-                                  alignItems="center"
-                                >
-                                  <TvRounded />
-                                  <Typography>Glance</Typography>
-                                </Stack>
-                              </React.Fragment>
-                            }
-                          >
-                            <TvRounded
-                              sx={{
-                                height: 25,
-                                width: 25,
-                                cursor: "pointer",
-                              }}
-                            />
-                          </Tooltip>
-                        </Box>
-                      </Stack>
-                    </Stack>
-                    <Box>
-                      <Typography
-                        variant="subtitle1"
-                        sx={{
-                          fontWeight: 550,
-                          paddingTop: 1,
-                        }}
-                      >
-                        {memories?.userName}
-                      </Typography>
-                      <Typography
-                        sx={{
-                          paddingTop: 1,
-                          maxHeight: 200, // Set a maximum height for the text
-                          overflowY: "auto", // Enable vertical scrolling when text exceeds maxHeight
-                          fontWeight: 400, // Adjust as needed
-                        }}
-                      >
-                        {memories?.feelings}
-                      </Typography>
-                    </Box>
-                    <Stack
-                      direction="row"
-                      spacing={3}
-                      sx={{
-                        paddingTop: 2,
-                      }}
-                      alignItems="center"
-                    >
-                      <TextField
-                        variant="standard"
-                        placeholder="share your thoughts..."
-                        sx={{
-                          width: 550,
-                        }}
-                      />
-                      <SendRounded
-                        sx={{
-                          height: 25,
-                          width: 25,
-                          cursor: "pointer",
-                        }}
-                      />
-                    </Stack>
-                  </Stack>
-                </ListItem>
-              );
-            })}
-        </List>
+          <ThemeProvider theme={theme}>
+            <Tabs
+              value={selectedTab}
+              onChange={handleTabChange}
+              textColor="inherit"
+              indicatorColor="primary"
+            >
+              <Tab
+                label="Memories"
+                icon={<AutoAwesomeRounded />}
+                iconPosition="top"
+                sx={{
+                  color: "black",
+                  "&:hover": {
+                    backgroundColor: "#EEEEEE",
+                    borderRadius: "7px",
+                    textTransform: "capitalize",
+                  },
+                  textTransform: "capitalize",
+                }}
+              />
+              <Tab
+                label="Live updates"
+                icon={<AutoAwesomeMotionRounded />}
+                iconPosition="top"
+                sx={{
+                  color: "black",
+                  "&:hover": {
+                    backgroundColor: "#EEEEEE",
+                    borderRadius: "7px",
+                  },
+                  textTransform: "capitalize",
+                }}
+              />
+              <Tab
+                label="Saved"
+                icon={<FavoriteRounded />}
+                iconPosition="top"
+                sx={{
+                  color: "black",
+                  "&:hover": {
+                    backgroundColor: "#EEEEEE",
+                    borderRadius: "7px",
+                  },
+                  textTransform: "capitalize",
+                }}
+              />
+            </Tabs>
+          </ThemeProvider>
+        </Stack>
+        <Stack
+          direction="row"
+          spacing={3}
+          sx={{
+            position: "fixed",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <Tooltip title="More">
+            <Box
+              sx={{
+                background: "#EEEEEE",
+                p: 1.5,
+                borderRadius: "50%",
+                cursor: "pointer",
+              }}
+            >
+              <AppsRounded />
+            </Box>
+          </Tooltip>
+          <Tooltip title="share">
+            <Box
+              sx={{
+                background: "#EEEEEE",
+                p: 1.5,
+                borderRadius: "50%",
+                cursor: "pointer",
+              }}
+              onClick={() => handleClickOpen()}
+            >
+              <img
+                style={{
+                  height: 25,
+                  width: 25,
+                  cursor: "pointer",
+                }}
+                src={share}
+                srcSet={share}
+                alt="not found"
+              />
+            </Box>
+          </Tooltip>
+        </Stack>
       </Stack>
+      <Divider
+        sx={{
+          width: 1555,
+          marginLeft: 38,
+          position: "fixed",
+        }}
+      />
+      {selectedTab === 0 && <HomeMemoriesTab />}
+      {selectedTab === 1 && <HomeLiveUpdatesTab />}
+
       <Box
         sx={{
           height: 200,
@@ -268,6 +208,104 @@ export const SocialMediaHome = () => {
             {snackbarMessage}
           </Alert>
         </Snackbar>
+      </Box>
+      <Box>
+        <Modal open={open} onClose={handleClose}>
+          <Grid
+            container
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "55%",
+              transform: "translate(-50%, -50%)",
+              width: 400,
+              height: 300,
+              bgcolor: "background.paper",
+              boxShadow: 10,
+              borderRadius: 6,
+            }}
+          >
+            <Stack
+              sx={{
+                width: 500,
+              }}
+              direction="column"
+            >
+              <Button
+                sx={{
+                  height: 60,
+                  textTransform: "capitalize",
+                  color: "black",
+                  fontWeight: "bold",
+                }}
+              >
+                <img
+                  style={{
+                    height: 30,
+                    width: 30,
+                  }}
+                  src={share}
+                  srcSet={share}
+                  alt="not found"
+                />
+                <Typography
+                  sx={{
+                    padding: 1,
+                  }}
+                >
+                  Share memory
+                </Typography>
+              </Button>
+
+              <Button
+                sx={{
+                  height: 60,
+                  color: "black",
+                  textTransform: "capitalize",
+                  fontWeight: "bold",
+                }}
+                onClick={() => {
+                  setOpen(false);
+                  setOpenWebCam(true);
+                }}
+              >
+                <img
+                  style={{
+                    height: 25,
+                    width: 25,
+                  }}
+                  src={frame}
+                  srcSet={frame}
+                  alt="not found"
+                />
+                <Typography
+                  sx={{
+                    padding: 1,
+                  }}
+                >
+                  Share updates
+                </Typography>
+              </Button>
+            </Stack>
+          </Grid>
+        </Modal>
+        {openWebCam && (
+          <LiveUpdateWebCam
+            open={openWebCam}
+            handleClose={() => setOpenWebCam(false)}
+            passImage={(imageSrc) => {
+              setOpenModelForUpdateCustom(true);
+              setUpdateImageSrc(imageSrc);
+            }}
+          />
+        )}
+        {openModelForUpdateCustom && (
+          <UpdateModificationModel
+            handleCustomClose={() => setOpenModelForUpdateCustom(false)}
+            openModelForUpdateCustom={openModelForUpdateCustom}
+            updateImageSrc={updateImageSrc}
+          />
+        )}
       </Box>
     </>
   );

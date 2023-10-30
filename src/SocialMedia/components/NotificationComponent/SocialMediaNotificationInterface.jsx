@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { AISideBar } from "../../../ReuseableComponents/AISideBar";
 import {
   Avatar,
@@ -17,17 +17,38 @@ import { useSelector } from "react-redux";
 import useReceiveGroupCreationNotificationHook from "../../../hooks/useReceiveGroupCreationNotificationHook";
 import { useCookies } from "react-cookie";
 import { useUpdateGroupDetails } from "../../APIs/SocialMediaMessageInterfaceAPI";
+import { useGetAllNotifications } from "../../APIs/SocialMediaNotificationInterfaceAPI";
+import localStorage from "redux-persist/es/storage";
 
 export const SocialMediaNotificationInterface = () => {
   useMemoriesSubscribeHook();
-
-  // const [isLoading] = useGetMemoriesWithinAWeekHook();
 
   const NonPersistNotification = useSelector(
     (state) => state.NonPersistNotification
   );
 
   const [cookies] = useCookies(["avt_token"]);
+
+  const [requiredData, setRequiredData] = useState(null);
+
+  const { refetch } = useGetAllNotifications(requiredData);
+
+  const [joined, setJoined] = useState(false);
+
+  useEffect(() => {
+    if (requiredData) {
+      refetch();
+    } else {
+      async function fetchNotification() {
+        setRequiredData({
+          Authorization: cookies?.avt_token,
+          userId: await localStorage.getItem("sm_user_id"),
+        });
+      }
+      fetchNotification();
+    }
+    // eslint-disable-next-line
+  }, [requiredData]);
 
   const getTime = (created) => {
     const nowTimestamp = Date.now();
@@ -44,23 +65,21 @@ export const SocialMediaNotificationInterface = () => {
 
   const { mutate: mutateForJoinGroup } = useUpdateGroupDetails();
 
-  const join = () => {
-    const requiredData = {
+  const join = (visibleGroupConversationId) => {
+    const requiredData1 = {
       data: {
         groupParticipants: [
           {
-            userId: parseInt(localStorage.getItem("sm_user_id")),
+            userId: requiredData?.userId,
             status_of_join_of_group: "JOINED",
           },
         ],
-        visibleGroupConversationId:
-          NonPersistNotification?.groupCreationNotification
-            ?.visibleGroupConversationId,
+        visibleGroupConversationId: visibleGroupConversationId,
       },
       Authorization: cookies?.avt_token,
     };
 
-    mutateForJoinGroup(requiredData);
+    mutateForJoinGroup(requiredData1);
   };
 
   const { callBack } = useReceiveGroupCreationNotificationHook();
@@ -128,76 +147,161 @@ export const SocialMediaNotificationInterface = () => {
               overflowY: "scroll",
             }}
           >
-            {NonPersistNotification?.groupCreationNotification ? (
-              <Stack
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  boxShadow: 4,
-                  borderRadius: 2,
-                  height: 50,
-                  margin: 4,
-                  p: 0.2,
-                }}
-                direction="row"
-                spacing={42}
-              >
-                <Stack spacing={2} direction="row" alignItems="center">
-                  <Avatar
-                    src={
-                      NonPersistNotification?.groupCreationNotification
-                        ?.profilePic
-                    }
-                    srcSet={
-                      NonPersistNotification?.groupCreationNotification
-                        ?.profilePic
-                    }
-                    alt="not found"
-                  />
-                  <Typography variant="caption">
-                    <span
-                      style={{
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {
-                        NonPersistNotification?.groupCreationNotification
-                          ?.userName
-                      }
-                    </span>
-                    <span
-                      style={{
-                        paddingLeft: 5,
-                      }}
-                    >
-                      created a group and you're one of the member of the group.
-                    </span>
-                  </Typography>
-                </Stack>
-
-                <Button
-                  size="medium"
-                  style={{
-                    width: 100,
-                    border: "none",
-                    backgroundColor: "rgb(55, 151, 240,1)",
-                    height: 35,
-                    textTransform: "capitalize",
-                    borderRadius: 6,
+            {NonPersistNotification?.notifications?.map((notifications) => {
+              console.log("notifications", notifications);
+              return notifications?.notificationType ===
+                "MESSAGE_GROUP_CREATION_NOTIFICATION" ? (
+                <Stack
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    boxShadow: 4,
+                    borderRadius: 2,
+                    height: 50,
+                    margin: 4,
+                    p: 0.2,
                   }}
-                  onClick={() => join()}
-                  variant="contained"
+                  direction="row"
+                  spacing={35}
                 >
-                  <span
-                    style={{
-                      paddingLeft: 5,
-                    }}
-                  >
-                    <Typography variant="subtitle1">Join</Typography>
-                  </span>
-                </Button>
-              </Stack>
-            ) : null}
+                  <Stack spacing={2} direction="row" alignItems="center">
+                    <Avatar
+                      src={notifications?.senderProfilePic}
+                      srcSet={notifications?.senderProfilePic}
+                      alt="not found"
+                    />
+                    <Typography variant="caption">
+                      <span
+                        style={{
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {notifications?.senderUserName}
+                      </span>
+                      <span
+                        style={{
+                          paddingLeft: 4,
+                        }}
+                      >
+                        created a group{" "}
+                        {
+                          <span
+                            style={{
+                              fontWeight: "bold",
+                            }}
+                          >
+                            {notifications?.groupName}
+                          </span>
+                        }{" "}
+                        and you're one of the member of the group.
+                      </span>
+                    </Typography>
+                  </Stack>
+                  {notifications?.receiverUserDetails
+                    ?.filter(
+                      (user) => user?.userId === parseInt(requiredData?.userId)
+                    )
+                    .at(0)?.status_of_join_of_group === "JOINED" ? (
+                    <Button
+                      size="medium"
+                      style={{
+                        width: 100,
+                        border: "none",
+                        backgroundColor: "rgb(238, 238, 238)",
+                        color: "black",
+                        height: 35,
+                        textTransform: "capitalize",
+                        borderRadius: 8,
+                      }}
+                    >
+                      <span>
+                        <Typography variant="subtitle1">Joined</Typography>
+                      </span>
+                    </Button>
+                  ) : (
+                    <Button
+                      size="medium"
+                      style={
+                        joined
+                          ? {
+                              width: 100,
+                              border: "none",
+                              backgroundColor: "rgb(238, 238, 238)",
+                              color: "black",
+                              height: 35,
+                              textTransform: "capitalize",
+                              borderRadius: 8,
+                            }
+                          : {
+                              width: 100,
+                              border: "none",
+                              backgroundColor: "rgb(55, 151, 240,1)",
+                              height: 35,
+                              textTransform: "capitalize",
+                              borderRadius: 8,
+                            }
+                      }
+                      onClick={
+                        joined
+                          ? null
+                          : () => {
+                              join(notifications?.visibleGroupConversationId);
+                              setJoined(true);
+                            }
+                      }
+                      variant="contained"
+                    >
+                      <span>
+                        {joined ? (
+                          <Typography variant="subtitle1">Joined</Typography>
+                        ) : (
+                          <Typography variant="subtitle1">Join</Typography>
+                        )}
+                      </span>
+                    </Button>
+                  )}
+                </Stack>
+              ) : notifications?.notificationType ===
+                "MEMORY_CREATION_NOTIFICATION" ? (
+                <Stack
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    boxShadow: 4,
+                    borderRadius: 2,
+                    height: 50,
+                    margin: 4,
+                    p: 0.2,
+                  }}
+                  direction="row"
+                  spacing={35}
+                >
+                  <Stack spacing={2} direction="row" alignItems="center">
+                    <Avatar
+                      src={notifications?.senderProfilePic}
+                      srcSet={notifications?.senderProfilePic}
+                      alt="not found"
+                    />
+                    <Typography variant="caption">
+                      <span
+                        style={{
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {notifications?.senderUserName}
+                      </span>
+                      <span
+                        style={{
+                          paddingLeft: 4,
+                        }}
+                      >
+                        just shared a memory
+                      </span>
+                    </Typography>
+                  </Stack>
+                </Stack>
+              ) : null;
+            })}
           </Grid>
           <Divider
             orientation="vertical"

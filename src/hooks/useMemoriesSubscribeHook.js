@@ -15,6 +15,8 @@ const useMemoriesSubscribeHook = () => {
   const socialMediaUser = useSelector((state) => state.socialMediaUser);
 
   const callBackForSocketConnection = useCallback(() => {
+    console.log("new connection...");
+
     const socket = new SockJS(
       `${process.env.REACT_APP_WEBSOCKET_FOR_MEMORIES}`
     );

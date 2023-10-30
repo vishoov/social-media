@@ -14,6 +14,7 @@ import {
 } from "../../reduxNonPersist/NonPersistConversationSlice";
 import { useNavigate } from "react-router-dom";
 import { setSelectedGroup } from "../../redux/MessageSlice";
+import { setNotifications } from "../../reduxNonPersist/NonPersistNotificationSlice";
 
 const url = () => {
   return axios.create({
@@ -304,6 +305,7 @@ export const useUpdateGroupDetails = () => {
         console.log("successfully joined the group!!!", data?.data?.data);
         dispatch(setSelectedGroup(data?.data?.data));
 
+        dispatch(setNotifications([]));
         navigate(
           `/environment/socialMedia/message/group/${data?.data?.data?.visibleGroupConversationId}`
         );
