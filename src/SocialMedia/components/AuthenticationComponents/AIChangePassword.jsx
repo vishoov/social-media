@@ -1,11 +1,11 @@
 import React from "react";
-import { AIInput } from "../../ReuseableComponents/AIInput";
+import { AIInput } from "../../../ReuseableComponents/AIInput";
 import { useForm } from "react-hook-form";
 import { Card } from "@mui/material";
-import { AIButton } from "../../ReuseableComponents/AIButton";
-import { getAuthDataById } from "../../IndexDB";
+import { AIButton } from "../../../ReuseableComponents/AIButton";
+import { getAuthDataById } from "../../../IndexDB";
 import { useCookies } from "react-cookie";
-import { useChangePassword } from "../apis/userAPIs";
+import { useChangePassword } from "../../APIs/userAPIs";
 
 export const AIChangePassword = () => {
   // react hook form component

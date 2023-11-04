@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
-import { AIButton } from "../../ReuseableComponents/AIButton";
-import { AIVoiceAssist } from "../../ReuseableComponents/AIVoiceAssist";
+import { AIButton } from "../../../ReuseableComponents/AIButton";
+import { AIVoiceAssist } from "../../../ReuseableComponents/AIVoiceAssist";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Context as UserContext } from "../../context/UserContext";
+import { Context as UserContext } from "../../../context/UserContext";
 
 export const AIHome = () => {
   const {

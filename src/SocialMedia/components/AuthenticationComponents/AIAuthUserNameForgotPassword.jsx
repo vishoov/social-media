@@ -1,9 +1,9 @@
 import React from "react";
-import { AIInput } from "../../ReuseableComponents/AIInput";
-import { AIButton } from "../../ReuseableComponents/AIButton";
+import { AIInput } from "../../../ReuseableComponents/AIInput";
+import { AIButton } from "../../../ReuseableComponents/AIButton";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
-import { useGenerateLink } from "../apis/userAPIs";
+import { useGenerateLink } from "../../APIs/userAPIs";
 
 export const AIAuthUserNameForgotPassword = () => {
   // use Form hook

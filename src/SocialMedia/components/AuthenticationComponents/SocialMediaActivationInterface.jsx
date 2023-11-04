@@ -1,14 +1,14 @@
 import { Avatar, Card, CircularProgress, Typography } from "@mui/material";
 import React, { useContext, useState } from "react";
-import salvare from "../../static/images/avatar/salvare.jpeg";
-import { AIInput } from "../../ReuseableComponents/AIInput";
+import salvare from "../../../static/images/avatar/salvare.jpeg";
+import { AIInput } from "../../../ReuseableComponents/AIInput";
 import { useForm } from "react-hook-form";
-import { AIButton } from "../../ReuseableComponents/AIButton";
-import { useAddSocialMediaUser } from "../APIs/SocialMediaUserInterfaceAPIs";
+import { AIButton } from "../../../ReuseableComponents/AIButton";
+import { useAddSocialMediaUser } from "../../APIs/SocialMediaUserInterfaceAPIs";
 import { useCookies } from "react-cookie";
-import { useGetActivationKey } from "../../Authentication/apis/IntermediateAPIs";
-import { Context as UserContext } from "../../context/UserContext";
-import useGetProfileDetailsHook from "../../hooks/useGetProfileDetailsHook";
+import { useGetActivationKey } from "../../APIs/IntermediateAPIs";
+import { Context as UserContext } from "../../../context/UserContext";
+import useGetProfileDetailsHook from "../../../hooks/useGetProfileDetailsHook";
 
 export const SocialMediaActivationInterface = () => {
   // useForm hook

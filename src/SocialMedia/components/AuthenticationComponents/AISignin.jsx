@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
-import { AIInput } from "../../ReuseableComponents/AIInput";
+import { AIInput } from "../../../ReuseableComponents/AIInput";
 import { useForm } from "react-hook-form";
 import { Card } from "@mui/material";
-import { AIButton } from "../../ReuseableComponents/AIButton";
-import { useVerifyUserData } from "../apis/userAPIs";
+import { AIButton } from "../../../ReuseableComponents/AIButton";
+import { useVerifyUserData } from "../../APIs/userAPIs";
 import { Link } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
-import { Context as UserContext } from "../../context/UserContext";
+import { Context as UserContext } from "../../../context/UserContext";
 
 export const AISignin = () => {
   // useForm Hook
