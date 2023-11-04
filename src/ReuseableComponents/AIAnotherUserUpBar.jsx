@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { AIButton } from "./AIButton";
 import { MoreHorizRounded } from "@mui/icons-material";
 import { useParams } from "react-router-dom";
-import AICreateMemoryModel from "./Profile/AICreateMemoryModel";
+import AICreateMemoryModel from "../SocialMedia/components/profileComponent/AICreateMemoryModel";
 import { useDispatch, useSelector } from "react-redux";
 import { Box, IconButton, Stack, Typography } from "@mui/material";
 import {

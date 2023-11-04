@@ -14,12 +14,12 @@ import {
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { reset_all_messages } from "../../reduxNonPersist/NonPersistMessages";
-import { setSelectedConversation } from "../../redux/MessageSlice";
-import { setCurrentInterface } from "../../redux/UtilitiesSlice";
-import infinity from "../../static/images/utils/status.png";
+import { reset_all_messages } from "../../../reduxNonPersist/NonPersistMessages";
+import { setSelectedConversation } from "../../../redux/MessageSlice";
+import { setCurrentInterface } from "../../../redux/UtilitiesSlice";
+import infinity from "../../../static/images/utils/status.png";
 import { useCookies } from "react-cookie";
-import { useGet_all_conversations_of_specific_user } from "../../SocialMedia/APIs/SocialMediaMessageInterfaceAPI";
+import { useGet_all_conversations_of_specific_user } from "../../../SocialMedia/APIs/SocialMediaMessageInterfaceAPI";
 
 export const ModelForMaintainingTheConversations = ({ open, handleClose }) => {
   const dispatch = useDispatch();

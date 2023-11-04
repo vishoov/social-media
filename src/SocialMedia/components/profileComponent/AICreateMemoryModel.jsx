@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Box, Button, Modal, Tooltip } from "@mui/material";
-import { AIButton } from "../AIButton";
+import { AIButton } from "../../../ReuseableComponents/AIButton";
 import { AICreateMemoryUpBar } from "./AICreateMemoryUpBar";
 import { CropEasy } from "./CropEasy";
 

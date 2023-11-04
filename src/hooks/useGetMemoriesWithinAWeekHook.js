@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useGetMemoriesWithinAWeek } from "../SocialMedia/APIs/SocialMediaHomeInterfaceAPI";
 import { useCookies } from "react-cookie";
 
@@ -23,11 +23,7 @@ const useGetMemoriesWithinAWeekHook = () => {
     }
   }, [cookies?.avt_token, refetch, requiredData]);
 
-  useEffect(() => {
-    callBack();
-  }, [callBack]);
-
-  return [isLoading];
+  return [isLoading, callBack];
 };
 
 export default useGetMemoriesWithinAWeekHook;

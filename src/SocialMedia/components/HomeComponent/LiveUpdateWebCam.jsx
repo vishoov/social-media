@@ -1,7 +1,9 @@
 import { CircleRounded, ClearRounded } from "@mui/icons-material";
-import { Box, Modal, Typography } from "@mui/material";
+import { Box, Modal } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import Webcam from "react-webcam";
+import { useGetSpotifyAccessToken } from "../../APIs/SpotifyInterfaceApi";
+import { useCookies } from "react-cookie";
 
 const videoConstraints = {
   width: 720, // Set the width of the webcam (you can adjust this)
@@ -20,36 +22,18 @@ const LiveUpdateWebCam = ({ open, handleClose, passImage }) => {
     }, 3000); // Adjust the delay as needed
   }, []);
 
+  const { mutate } = useGetSpotifyAccessToken();
+
+  const [cookies] = useCookies(["sat_token"]);
+
   const capture = () => {
     console.log("Capture");
     const imageSrcForUpdates = webcamRef.current.getScreenshot();
     // Do something with the captured image source, e.g., display it or save it.
 
-    // const buildMessage = {
-    //   primaryKeys: {
-    //     userId: parseInt(localStorage.getItem("sm_user_id")),
-    //     type: "IMAGE",
-    //   },
-    //   visibleGroupConversationId: parseInt(
-    //     message?.selectedGroup?.visibleGroupConversationId ||
-    //       groupConversationId
-    //   ),
-    //   message: imageSrc, // Set the message to the base64 image data
-    //   userName:
-    //     auth?.value?.signinData?.userName ||
-    //     socialMediaUser?.value?.SocialMediaUserData?.userName,
-    //   profilePic: profilePic,
-    //   groupName: message?.selectedGroup?.groupName,
-    // };
-
-    // stompClientForSendMessage.send(
-    //   `/conversation/group/send/image/${
-    //     message?.selectedGroup?.visibleGroupConversationId ||
-    //     groupConversationId
-    //   }`,
-    //   {},
-    //   JSON.stringify(buildMessage)
-    // );
+    if (cookies?.sat_token === null || cookies?.sat_token === undefined) {
+      mutate();
+    }
 
     handleClose();
 
@@ -58,15 +42,15 @@ const LiveUpdateWebCam = ({ open, handleClose, passImage }) => {
 
   return (
     <>
-      {webcamLoaded && (
+      {/* {webcamLoaded && (
         <Typography
           sx={{
-            marginLeft: 20,
+            marginLeft: 120,
           }}
         >
           Loading...
         </Typography>
-      )}
+      )} */}
       <Modal open={open} onClose={handleClose}>
         <Box
           sx={{
@@ -103,27 +87,6 @@ const LiveUpdateWebCam = ({ open, handleClose, passImage }) => {
               <CircleRounded />
             </Box>
           )}
-          {/* {webcamLoaded === false && (
-            <Box
-              sx={{
-                position: "absolute",
-                top: "12%",
-                right: "29%",
-                cursor: "pointer",
-              }}
-            >
-              <LibraryMusicRounded
-                sx={{
-                  color: "white",
-                  height: 30,
-                  width: 30,
-                  backgroundColor: "GrayText",
-                  borderRadius: 10,
-                  padding: 1,
-                }}
-              />
-            </Box>
-          )} */}
           {webcamLoaded === false && (
             <Box
               sx={{

@@ -18,21 +18,21 @@ import React, { useEffect, useState } from "react";
 import { MarkChatUnreadOutlined } from "@mui/icons-material";
 
 import { SearchModelForMessage } from "./SearchModelForMessage";
-import messages from "../../static/images/utils/messages (1).png";
+import messages from "../../../static/images/utils/messages (1).png";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
   setSelectedConversation,
   setSelectedGroup,
-} from "../../redux/MessageSlice";
-import { setCurrentInterface } from "../../redux/UtilitiesSlice";
-import { reset_all_messages } from "../../reduxNonPersist/NonPersistMessages";
-import infinity from "../../static/images/utils/status.png";
-import group from "../../static/images/utils/group.png";
+} from "../../../redux/MessageSlice";
+import { setCurrentInterface } from "../../../redux/UtilitiesSlice";
+import { reset_all_messages } from "../../../reduxNonPersist/NonPersistMessages";
+import infinity from "../../../static/images/utils/status.png";
+import group from "../../../static/images/utils/group.png";
 import { SearchModelForMessageInGroup } from "./SearchModelForMessageInGroup";
-import { useGetAllGroupConversation } from "../../SocialMedia/APIs/SocialMediaMessageInterfaceAPI";
+import { useGetAllGroupConversation } from "../../../SocialMedia/APIs/SocialMediaMessageInterfaceAPI";
 import { useCookies } from "react-cookie";
-import jen24 from "../../static/images/avatar/Jen24.jpeg";
+import jen24 from "../../../static/images/avatar/Jen24.jpeg";
 
 export const RegularMessageChatComponent = ({
   all_conversations,

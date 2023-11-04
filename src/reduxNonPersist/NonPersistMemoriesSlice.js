@@ -4,6 +4,7 @@ const initialState = {
   socialMediaMemories: [],
   socialMediaMemoriesOfAnotherUser: [],
   memoryCount: 0,
+  tracks: null,
 };
 
 const NonPersistMemoriesSlice = createSlice({

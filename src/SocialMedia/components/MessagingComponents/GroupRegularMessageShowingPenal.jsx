@@ -22,7 +22,7 @@ import {
   PersonalVideoRounded,
   SentimentSatisfiedRounded,
 } from "@mui/icons-material";
-import { ModelForMaintainingTheConversations } from "../../../ReuseableComponents/Messaging/ModelForMaintainingTheConversations";
+import { ModelForMaintainingTheConversations } from "../MessagingComponents/ModelForMaintainingTheConversations";
 import videoCall from "../../../static/images/utils/video-call.png";
 import frame from "../../../static/images/utils/frame.png";
 import gellery from "../../../static/images/utils/gallery.png";

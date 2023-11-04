@@ -19,8 +19,8 @@ import {
   PersonalVideoRounded,
   SentimentSatisfiedRounded,
 } from "@mui/icons-material";
-import { RealMessageShowingPenal } from "../../../ReuseableComponents/Messaging/RealMessageShowingPenal";
-import { ModelForMaintainingTheConversations } from "../../../ReuseableComponents/Messaging/ModelForMaintainingTheConversations";
+import { RealMessageShowingPenal } from "../MessagingComponents/RealMessageShowingPenal";
+import { ModelForMaintainingTheConversations } from "../MessagingComponents/ModelForMaintainingTheConversations";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
 import { MessageWebCam } from "./MessageWebCam";

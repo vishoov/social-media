@@ -3,14 +3,14 @@ import React, { useCallback, useEffect, useState } from "react";
 import { AIAnotherUserUpBar } from "../../../ReuseableComponents/AIAnotherUserUpBar";
 import { AISideBar } from "../../../ReuseableComponents/AISideBar";
 import { Avatar, Box, Stack, Typography } from "@mui/material";
-import { ShowLinksBar } from "../../../ReuseableComponents/Profile/ShowLinksBar";
-import { ShowSavedMemories } from "../../../ReuseableComponents/Profile/ShowSavedMemories";
+import { ShowLinksBar } from "../profileComponent/ShowLinksBar";
+import { ShowSavedMemories } from "../profileComponent/ShowSavedMemories";
 import TabsComponent from "../../../ReuseableComponents/Tabs";
 import jenPic1 from "../../../static/images/avatar/jen1.jpeg";
 import jenPic2 from "../../../static/images/avatar/jen2.jpeg";
 import jenPic3 from "../../../static/images/avatar/jen3.jpeg";
 import jenPic4 from "../../../static/images/avatar/jen4.jpeg";
-import { ShowMemoryBarOfAnotherUsers } from "../../../ReuseableComponents/Profile/ShowMemoryBarOfAnotherUsers";
+import { ShowMemoryBarOfAnotherUsers } from "../profileComponent/ShowMemoryBarOfAnotherUsers";
 
 import { useParams } from "react-router-dom";
 import { useGetUserProfileInfo } from "../../APIs/SocialMediaSearchInterfaceApi";
@@ -19,9 +19,9 @@ import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import useGetMemoriesCountHook from "../../../hooks/useGetMemoriesCountHook";
 import { useGetAllMemoriesForOtherUser } from "../../APIs/SocialMediaMemoryInterfaceAPI";
-import { AIShowFollowingList } from "../../../ReuseableComponents/Profile/AIShowFollowingList";
+import { AIShowFollowingList } from "../profileComponent/AIShowFollowingList";
 import { setRequestUserSearchData } from "../../../reduxNonPersist/NonPersistSearchSlice";
-import { AIShowFollowersList } from "../../../ReuseableComponents/Profile/AIShowFollowersList";
+import { AIShowFollowersList } from "../profileComponent/AIShowFollowersList";
 
 const PAGE_SIZE = 12;
 

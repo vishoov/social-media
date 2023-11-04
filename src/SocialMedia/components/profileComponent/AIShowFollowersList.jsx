@@ -13,21 +13,22 @@ import {
 } from "@mui/material";
 
 import React, { useCallback, useEffect, useState } from "react";
-import { AIButton } from "../AIButton";
-import { useGetFollowingsWithProfilePics } from "../../SocialMedia/APIs/SocialMediaProfileInterfaceAPI";
 import { useCookies } from "react-cookie";
+import { AIButton } from "../../../ReuseableComponents/AIButton";
+import { useGetFollowersWithProfilePics } from "../../../SocialMedia/APIs/SocialMediaProfileInterfaceAPI";
 import { useSelector } from "react-redux";
 
-export const AIShowFollowingList = ({ closeEvent, userId }) => {
+export const AIShowFollowersList = ({ closeEvent, userId }) => {
   const [open, setOpen] = useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
   const [requiredData, setRequiredData] = useState(null);
 
-  const { refetch } = useGetFollowingsWithProfilePics(requiredData);
   const [cookies] = useCookies(["avt_token"]);
 
   const NonPersistProfile = useSelector((state) => state.NonPersistProfile);
+
+  const { refetch } = useGetFollowersWithProfilePics(requiredData);
 
   const handleClose = () => {
     setOpen(false);
@@ -69,13 +70,13 @@ export const AIShowFollowingList = ({ closeEvent, userId }) => {
           fontWeight="bold"
           fontSize="15px"
         >
-          Followings
+          Followers
         </DialogTitle>
         <DialogContent>
           <List>
-            {NonPersistProfile?.Followings?.map((items) => {
+            {NonPersistProfile?.Followers?.map((items) => {
               return (
-                <ListItem disableGutters key={items?.userName}>
+                <ListItem disableGutters key={items?.at(0)?.userName}>
                   <Stack direction="row" spacing={15} alignItems="center">
                     <Box flexDirection="row" display="flex" alignItems="center">
                       <Avatar
@@ -92,12 +93,11 @@ export const AIShowFollowingList = ({ closeEvent, userId }) => {
                         fontWeight="bold"
                         paddingLeft={1}
                         width={120}
-                        textAlign="left"
                       >
                         {items?.at(0)?.userName}
                       </Typography>
                     </Box>
-                    <AIButton content="Following" />
+                    <AIButton content="Follow" />
                   </Stack>
                 </ListItem>
               );

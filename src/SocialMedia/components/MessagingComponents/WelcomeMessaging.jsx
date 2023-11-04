@@ -3,9 +3,9 @@ import { useCookies } from "react-cookie";
 import {
   useGetAllGroupConversation,
   useGet_all_conversations_of_specific_user,
-} from "../../SocialMedia/APIs/SocialMediaMessageInterfaceAPI";
+} from "../../../SocialMedia/APIs/SocialMediaMessageInterfaceAPI";
 import { RegularMessageChatComponent } from "./RegularMessageChatComponent";
-import { AISideBar } from "../AISideBar";
+import { AISideBar } from "../../../ReuseableComponents/AISideBar";
 import { useSelector } from "react-redux";
 
 export const WelcomeMessaging = () => {

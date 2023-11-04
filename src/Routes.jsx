@@ -16,7 +16,7 @@ import { AISocialMediaEditProfile } from "./SocialMedia/components/profileCompon
 import { AnotherUsersProfile } from "./SocialMedia/components/profileComponent/AnotherUsersProfile";
 import { SocialMediaNotificationInterface } from "./SocialMedia/components/NotificationComponent/SocialMediaNotificationInterface";
 import { MessagingComponent } from "./SocialMedia/components/MessagingComponents/MessagingComponent";
-import { WelcomeMessaging } from "./ReuseableComponents/Messaging/WelcomeMessaging";
+import { WelcomeMessaging } from "./SocialMedia/components/MessagingComponents/WelcomeMessaging";
 
 import { PendingMessages } from "./SocialMedia/components/MessagingComponents/PendingMessages";
 import { GroupMessagingComponent } from "./SocialMedia/components/MessagingComponents/GroupMessagingComponent";

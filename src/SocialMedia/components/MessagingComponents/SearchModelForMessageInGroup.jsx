@@ -20,9 +20,9 @@ import {
 } from "@mui/material";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useGetUserBySearchForMessages } from "../../SocialMedia/APIs/SocialMediaSearchInterfaceApi";
+import { useGetUserBySearchForMessages } from "../../../SocialMedia/APIs/SocialMediaSearchInterfaceApi";
 import { useCookies } from "react-cookie";
-import { useSaveGroupDetails } from "../../SocialMedia/APIs/SocialMediaMessageInterfaceAPI";
+import { useSaveGroupDetails } from "../../../SocialMedia/APIs/SocialMediaMessageInterfaceAPI";
 
 export const SearchModelForMessageInGroup = ({
   openGroupModel,

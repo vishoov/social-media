@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { Box, Typography } from "@mui/material";
 import { OtherUsersMemoryImages } from "./OtherUsersMemoryImages";
-import { useGetAllMemoriesForOtherUser } from "../../SocialMedia/APIs/SocialMediaMemoryInterfaceAPI";
-
+import { useGetAllMemoriesForOtherUser } from "../../../SocialMedia/APIs/SocialMediaMemoryInterfaceAPI";
 import { useSelector } from "react-redux";
 
 export const ShowMemoryBarOfAnotherUsers = ({ userName }) => {

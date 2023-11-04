@@ -2,9 +2,9 @@ import { Box, CircularProgress } from "@mui/material";
 import React, { useEffect } from "react";
 
 import { useDispatch } from "react-redux";
-import completeImage from "../../static/images/utils/381607_complete_icon.png";
+import completeImage from "../../../static/images/utils/381607_complete_icon.png";
 
-import { setMemoryNotFoundError } from "../../redux/SocialMediaMemoriesSlice";
+import { setMemoryNotFoundError } from "../../../redux/SocialMediaMemoriesSlice";
 
 export const ShareMemoryProgress = ({ upBar, isLoading, data, isSuccess }) => {
   const dispatch = useDispatch();

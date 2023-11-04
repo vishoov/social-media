@@ -3,7 +3,7 @@ import { AddAPhotoRounded } from "@mui/icons-material";
 import { Box, Typography } from "@mui/material";
 import AICreateMemoryModel from "./AICreateMemoryModel";
 import { MemoryImages } from "./MemoryImages";
-import useGetAllMemoriesHook from "../../hooks/useGetAllMemoriesHook";
+import useGetAllMemoriesHook from "../../../hooks/useGetAllMemoriesHook";
 
 import { useSelector } from "react-redux";
 

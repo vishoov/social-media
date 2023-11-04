@@ -2,7 +2,7 @@ import { Avatar, Box, Button } from "@mui/material";
 import React, { cloneElement, useCallback, useEffect, useState } from "react";
 import { ShareMemoryProgress } from "./ShareMemoryProgress";
 import axios from "axios";
-import { useShareMemory } from "../../SocialMedia/APIs/SocialMediaMemoryInterfaceAPI";
+import { useShareMemory } from "../../../SocialMedia/APIs/SocialMediaMemoryInterfaceAPI";
 import { useForm } from "react-hook-form";
 import { useCookies } from "react-cookie";
 

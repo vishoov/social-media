@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import React, { cloneElement, useCallback, useEffect, useState } from "react";
 import Cropper from "react-easy-crop";
-import getCroppedImg from "./Utils/cropImage";
+import getCroppedImg from "../profileComponent/Utils/cropImage";
 import { AIAddFilter } from "./AIAddFilter";
 
 export const CropEasy = ({ uploadedFile, upBar }) => {

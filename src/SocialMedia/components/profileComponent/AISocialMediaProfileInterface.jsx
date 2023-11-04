@@ -16,18 +16,18 @@ import jenPic3 from "../../../static/images/avatar/jen4.jpeg";
 import jenPic4 from "../../../static/images/avatar/jen5.jpeg";
 import { AvatarFileInput } from "../../../ReuseableComponents/AvatarFileInput";
 import TabsComponent from "../../../ReuseableComponents/Tabs";
-import { ShowMemoryBar } from "../../../ReuseableComponents/Profile/ShowMemoryBar";
-import { ShowSavedMemories } from "../../../ReuseableComponents/Profile/ShowSavedMemories";
-import { ShowLinksBar } from "../../../ReuseableComponents/Profile/ShowLinksBar";
+import { ShowMemoryBar } from "../profileComponent/ShowMemoryBar";
+import { ShowSavedMemories } from "../profileComponent/ShowSavedMemories";
+import { ShowLinksBar } from "../profileComponent/ShowLinksBar";
 import { useDispatch, useSelector } from "react-redux";
 import useGetFollowersAndFollowingHook from "../../../hooks/useGetFollowersAndFollowingHook";
 import useGetMemoriesCountHook from "../../../hooks/useGetMemoriesCountHook";
 import useGetProfileDetailsHook from "../../../hooks/useGetProfileDetailsHook";
 import { setRequestedUserSearchDataForPersist } from "../../../redux/SearchSlice";
-import { AIShowFollowingList } from "../../../ReuseableComponents/Profile/AIShowFollowingList";
+import { AIShowFollowingList } from "../profileComponent/AIShowFollowingList";
 import { useCookies } from "react-cookie";
 import { useGetAllMemories } from "../../APIs/SocialMediaMemoryInterfaceAPI";
-import { AIShowFollowersList } from "../../../ReuseableComponents/Profile/AIShowFollowersList";
+import { AIShowFollowersList } from "../profileComponent/AIShowFollowersList";
 
 const PAGE_SIZE = 12;
 

@@ -5,7 +5,10 @@ import {
   setMemoryNotFoundError,
 } from "../../redux/SocialMediaMemoriesSlice";
 import { useDispatch } from "react-redux";
-import { setHomeMemoriesContentWithApiCall } from "../../reduxNonPersist/NonPersistForHomeSlice";
+import {
+  setHomeMemoriesContentWithApiCall,
+  setTracks,
+} from "../../reduxNonPersist/NonPersistForHomeSlice";
 import { setMemoriesNotificationsUsingApi } from "../../reduxNonPersist/NonPersistNotificationSlice";
 
 // base urls
@@ -15,11 +18,32 @@ const url = () => {
   });
 };
 
+const urlForTracks = () => {
+  return axios.create({
+    baseURL: `${process.env.REACT_APP_API_HOST_NAME}/ai/socialmedia/api/v1/private/tracks`,
+  });
+};
+
 const getMemoriesWithinAWeek = (data) => {
   if (data?.Authorization) {
     return url().get("/get/memories/between", {
       headers: {
         Authorization: "Bearer " + data?.Authorization,
+      },
+    });
+  }
+};
+
+const get_all_tracks = (data) => {
+  console.log("data for tracks  :::", data);
+
+  if (data?.Authorization && data?.pageNumber) {
+    return urlForTracks().get("/all/songs", {
+      headers: {
+        Authorization: "Bearer " + data?.Authorization,
+      },
+      params: {
+        pageNumber: data?.pageNumber,
       },
     });
   }
@@ -63,6 +87,26 @@ export const useGetMemoriesWithinAWeek = (requiredData) => {
       enabled: !!requiredData,
       retry: 3,
       retryDelay: 2000,
+    }
+  );
+};
+
+export const useGetAllTracks = (requiredData) => {
+  const dispatch = useDispatch();
+
+  return useQuery(
+    ["getAllTracks", requiredData],
+    () => get_all_tracks(requiredData),
+    {
+      onSuccess: (data) => {
+        if (data?.status === 200) {
+          console.log("all tracks...", data?.data?.data);
+          data?.data?.data?.results?.map((track) => dispatch(setTracks(track)));
+        }
+      },
+      onError: (error) => {
+        console.log("error messages :::", error?.response?.data?.message);
+      },
     }
   );
 };

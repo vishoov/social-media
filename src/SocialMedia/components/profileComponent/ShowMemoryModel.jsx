@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import jen from "../../static/images/avatar/jen.jpeg";
+import jen from "../../../static/images/avatar/jen.jpeg";
 import { MoreHorizRounded } from "@mui/icons-material";
 
 export const ShowMemoryModel = ({ open, onClose, item, username, other }) => {

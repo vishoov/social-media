@@ -15,11 +15,11 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useCookies } from "react-cookie";
-import { useGetUserBySearchForMessages } from "../../SocialMedia/APIs/SocialMediaSearchInterfaceApi";
+import { useGetUserBySearchForMessages } from "../../../SocialMedia/APIs/SocialMediaSearchInterfaceApi";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setSelectedConversation } from "../../redux/MessageSlice";
-import { reset_all_messages } from "../../reduxNonPersist/NonPersistMessages";
+import { setSelectedConversation } from "../../../redux/MessageSlice";
+import { reset_all_messages } from "../../../reduxNonPersist/NonPersistMessages";
 
 export const SearchModelForMessage = ({ open, handleClose }) => {
   const { mutate } = useGetUserBySearchForMessages();

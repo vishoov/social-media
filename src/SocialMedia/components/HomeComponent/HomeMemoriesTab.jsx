@@ -13,7 +13,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import useNavigateByUsingUserName from "../../../hooks/useNavigateByUsingUserName";
 import useGetMemoriesWithinAWeekHook from "../../../hooks/useGetMemoriesWithinAWeekHook";
@@ -23,7 +23,12 @@ export const HomeMemoriesTab = () => {
 
   const [username, setUsername] = useState("");
 
-  const [isLoading] = useGetMemoriesWithinAWeekHook();
+  const [isLoading, callBack] = useGetMemoriesWithinAWeekHook();
+
+  useEffect(() => {
+    callBack();
+    // eslint-disable-next-line
+  }, []);
 
   useNavigateByUsingUserName(username);
 

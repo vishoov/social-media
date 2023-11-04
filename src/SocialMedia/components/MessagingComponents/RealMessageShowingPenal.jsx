@@ -8,13 +8,13 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import useReceiverMessageHook from "../../hooks/useReceiverMessageHook";
+import useReceiverMessageHook from "../../../hooks/useReceiverMessageHook";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { ContentCopyRounded, DeleteOutlineRounded } from "@mui/icons-material";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
-import useGetDeletedMessageConfirmationHook from "../../hooks/useGetDeletedMessageConfirmationHookj";
+import useGetDeletedMessageConfirmationHook from "../../../hooks/useGetDeletedMessageConfirmationHookj";
 
 const style = {
   recieverMessageStyle: {
