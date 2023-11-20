@@ -138,8 +138,9 @@ export const AIUpBar = ({
       <Stack
         direction="row"
         alignItems="center"
-        justifyContent="end"
-        width={600}
+        justifyContent="flex-end"
+        display="flex"
+        width={520}
       >
         {editProfile && (
           <Box>
@@ -154,7 +155,7 @@ export const AIUpBar = ({
             <AIButton
               content="Share Memory"
               style={{
-                marginLeft: 20,
+                marginLeft: 18,
               }}
               onClick={() => {
                 setIsOpen(true);
@@ -162,11 +163,11 @@ export const AIUpBar = ({
             />
           </Box>
         )}
-        {settingsSuggested && (
+        {/* {settingsSuggested && (
           <Box>
             <MoreHorizRounded
               style={{
-                marginLeft: 20,
+                marginLeft: 16,
                 cursor: "pointer",
               }}
               onClick={() => {
@@ -174,7 +175,7 @@ export const AIUpBar = ({
               }}
             />
           </Box>
-        )}
+        )} */}
         <Box>
           <AICreateMemoryModel
             isEmpty={true}

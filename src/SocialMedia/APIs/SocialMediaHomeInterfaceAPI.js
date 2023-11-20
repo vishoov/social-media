@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import {
   setAbnormalError,
   setMemoryNotFoundError,
@@ -21,6 +21,12 @@ const url = () => {
 const urlForTracks = () => {
   return axios.create({
     baseURL: `${process.env.REACT_APP_API_HOST_NAME}/ai/socialmedia/api/v1/private/tracks`,
+  });
+};
+
+const likeUrl = () => {
+  return axios.create({
+    baseURL: `${process.env.REACT_APP_API_HOST_NAME}/ai/socialmedia/api/v1/private/likes`,
   });
 };
 
@@ -49,6 +55,17 @@ const get_all_tracks = (data) => {
   }
 };
 
+const add_like_of_memory = (data) => {
+  if (data?.likedata && data?.Authorization) {
+    console.log("likedata :::", data?.likedata);
+    return likeUrl().post("/add/to", data?.likedata, {
+      headers: {
+        Authorization: "Bearer " + data?.Authorization,
+      },
+    });
+  }
+};
+
 export const useGetMemoriesWithinAWeek = (requiredData) => {
   const dispatch = useDispatch();
 
@@ -59,7 +76,8 @@ export const useGetMemoriesWithinAWeek = (requiredData) => {
       onSuccess: (data) => {
         if (data?.status === 200) {
           var wholeData = data?.data?.data?.results?.map((item) => {
-            var memories = {
+            return {
+              memoryDetailsId: item?.memory_details?._id,
               feelings: item?.memory_details?.feelings,
               urls: item?.memory_details?.urls?.at(0),
               profileUrl: item?.profilePicsData?.results
@@ -68,9 +86,13 @@ export const useGetMemoriesWithinAWeek = (requiredData) => {
                 ?.urls?.at(0),
               userName: item?.userName,
               created: item?.memory_details?.created,
+              userId: item?.userId,
+              totalLikes: item?.memory_details?.totalLikes,
+              likerUserIds: item?.likerUserId,
             };
-            return memories;
           });
+
+          console.log("whole data for memories :---->", wholeData);
 
           dispatch(setHomeMemoriesContentWithApiCall(wholeData));
 
@@ -84,7 +106,7 @@ export const useGetMemoriesWithinAWeek = (requiredData) => {
         setAbnormalError(error?.response?.data?.message);
       },
       retryOnMount: false,
-      enabled: !!requiredData,
+      enabled: false,
       retry: 3,
       retryDelay: 2000,
     }
@@ -109,4 +131,17 @@ export const useGetAllTracks = (requiredData) => {
       },
     }
   );
+};
+
+export const useAddMemoryLike = () => {
+  return useMutation(add_like_of_memory, {
+    onSuccess: (data) => {
+      if (data?.status === 200) {
+        console.log("like added", data?.data?.data);
+      }
+    },
+    onError: (error) => {
+      console.log("error messages :::", error?.response?.data?.message);
+    },
+  });
 };

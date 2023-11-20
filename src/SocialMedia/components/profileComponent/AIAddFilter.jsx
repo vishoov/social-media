@@ -45,13 +45,11 @@ export const AIAddFilter = ({ updatedCroppedPic, upBarNext }) => {
   return (
     <>
       {nextStep ? (
-        // <div>
         <AIAddMemoryContent
           upBarNext1={newUpBarCom2}
           updatedCroppedPic={profilePicForFilter}
         />
       ) : (
-        // </div>
         <>
           <div>
             <Box display="flex" position="relative">
@@ -64,8 +62,7 @@ export const AIAddFilter = ({ updatedCroppedPic, upBarNext }) => {
                   height: 726,
                   maxWidth: 832,
                   maxHeight: 726,
-                  border: 1,
-                  borderRadius: 4,
+                  borderRadius: 2,
                 }}
               />
               <IconButton

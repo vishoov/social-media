@@ -7,13 +7,15 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 // import { useSearchTracksOnSpotify } from "../../APIs/SpotifyInterfaceApi";
 // import { useCookies } from "react-cookie";
 import { useSelector } from "react-redux";
 // import SpotifyWebPlayer from "react-spotify-web-playback";
 import { useGetAllTracks } from "../../APIs/SocialMediaHomeInterfaceAPI";
 import { useCookies } from "react-cookie";
+import axios from "axios";
+import { useStreamSongs } from "../../APIs/SpotifyInterfaceApi";
 
 export const Tracks = () => {
   // const { mutate } = useSearchTracksOnSpotify();
@@ -25,19 +27,77 @@ export const Tracks = () => {
 
   const NonPersistForHome = useSelector((state) => state.NonPersistForHome);
 
-  const { refetch } = useGetAllTracks({
-    Authorization: cookies?.avt_token,
-    pageNumber: 1,
-  });
+  const [requiredData, setRequiredData] = useState(null);
+
+  const { refetch } = useGetAllTracks(requiredData);
 
   useEffect(() => {
-    refetch();
+    if (requiredData) {
+      refetch();
+    } else {
+      setRequiredData({
+        Authorization: cookies?.avt_token,
+        pageNumber: 1,
+      });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const [audioUrl, setAudioUrl] = useState(null);
+
+  const { mutate } = useStreamSongs();
+
+  const handlePlay = async (audioUri) => {
+    // Make an HTTP request to your Spring Boot endpoint
+
+    console.log("audio uri ", audioUri);
+
+    mutate({
+      audioUri: audioUri,
+      Authorization: cookies?.avt_token,
+    });
+
+    // .then((response) => console.log("response body", response?.body))
+    // .then((body) => {
+    //   console.log("body:::::", body);
+    //   const reader = body?.getReader();
+    //   const stream = new ReadableStream({
+    //     start(controller) {
+    //       return pump();
+    //       function pump() {
+    //         return reader?.read().then(({ done, value }) => {
+    //           if (done) {
+    //             controller?.close();
+    //             return;
+    //           }
+    //           controller?.enqueue(value);
+    //           return pump();
+    //         });
+    //       }
+    //     },
+    //   });
+    //   return new Response(stream, {
+    //     headers: { "Content-Type": "audio/mpeg" },
+    //   });
+    // })
+    // .then((response) => response?.blob())
+    // .then((blob) => {
+    //   // Create a Blob URL from the audio data
+    //   const url = URL.createObjectURL(blob);
+    //   setAudioUrl(url);
+    // });
+
+    // return () => {
+    //   // Clean up resources when the component unmounts
+    //   if (audioUrl) {
+    //     URL.revokeObjectURL(audioUrl);
+    //   }
+    // };
+  };
+
   useEffect(() => {
-    console.log("NonPersistForHome", NonPersistForHome?.tracks);
-  }, [NonPersistForHome?.tracks]);
+    console.log("audio url ------>", audioUrl);
+  }, [audioUrl]);
 
   return (
     <>
@@ -68,7 +128,7 @@ export const Tracks = () => {
             return (
               <ListItem
                 key={track?.trackAudioUrl}
-                // onClick={() => setAudioUri(track.uri)}
+                onClick={() => handlePlay(track?.trackAudioUrl)}
               >
                 <ListItemIcon>
                   <Avatar
@@ -83,6 +143,12 @@ export const Tracks = () => {
                     ?.map((artist) => artist)
                     ?.join(", ")}
                 />
+                <ListItemIcon>
+                  <audio controls>
+                    <source src={audioUrl} type="audio/mpeg" />
+                    Your browser does not support the audio element.
+                  </audio>
+                </ListItemIcon>
               </ListItem>
             );
           })}

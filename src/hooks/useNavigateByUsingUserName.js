@@ -50,9 +50,7 @@ const useNavigateByUsingUserName = (username) => {
   };
 
   const callBack = useCallback(() => {
-    console.log("reached!!!!");
     if (username) {
-      console.log("reached!!!!124");
       handleNavigate(username);
     }
     // eslint-disable-next-line

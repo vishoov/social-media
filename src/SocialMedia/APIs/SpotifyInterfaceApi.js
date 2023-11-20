@@ -22,6 +22,12 @@ const spotify_auth = () => {
   );
 };
 
+const stream_songs_url = () => {
+  return axios.create({
+    baseURL: "http://localhost:9982/ai/socialmedia/api/v1/private/tracks",
+  });
+};
+
 const search_tracks_on_spotify = (query) => {
   if (query?.query && query?.offset && query?.Authorization) {
     return spotify_auth_base_url().get(
@@ -33,6 +39,20 @@ const search_tracks_on_spotify = (query) => {
         },
       }
     );
+  }
+};
+
+const stream_songs = (query) => {
+  if (query?.audioUri && query?.Authorization) {
+    return stream_songs_url().get("/stream/music", {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${query?.Authorization}`,
+      },
+      params: {
+        audioUri: query?.audioUri,
+      },
+    });
   }
 };
 
@@ -77,6 +97,19 @@ export const useSearchTracksOnSpotify = (query) => {
         dispatch(setTracksFromSpotify(whole_data));
       } else {
         dispatch(setTracksFromSpotify(null));
+      }
+    },
+    onError: (error) => {
+      console.log("something went wrong!!!", error);
+    },
+  });
+};
+
+export const useStreamSongs = () => {
+  return useMutation(stream_songs, {
+    onSuccess: (data) => {
+      if (data?.status === 200) {
+        console.log("proxy url :", data?.data);
       }
     },
     onError: (error) => {

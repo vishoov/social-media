@@ -1,7 +1,7 @@
 import {
   FavoriteBorderRounded,
+  FavoriteRounded,
   SendRounded,
-  TvRounded,
 } from "@mui/icons-material";
 import {
   Avatar,
@@ -10,27 +10,62 @@ import {
   ListItem,
   Stack,
   TextField,
-  Tooltip,
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import useNavigateByUsingUserName from "../../../hooks/useNavigateByUsingUserName";
 import useGetMemoriesWithinAWeekHook from "../../../hooks/useGetMemoriesWithinAWeekHook";
+import { useCookies } from "react-cookie";
+import { useAddMemoryLike } from "../../APIs/SocialMediaHomeInterfaceAPI";
 
 export const HomeMemoriesTab = () => {
   const NonPersistForHome = useSelector((state) => state.NonPersistForHome);
 
   const [username, setUsername] = useState("");
 
+  const [cookies] = useCookies(["avt_token"]);
+
   const [isLoading, callBack] = useGetMemoriesWithinAWeekHook();
 
   useEffect(() => {
-    callBack();
+    if (NonPersistForHome?.HomeMemoriesContent?.length === 0) {
+      console.log("callBackOfUseCallBack");
+      callBack();
+    }
     // eslint-disable-next-line
   }, []);
 
   useNavigateByUsingUserName(username);
+
+  const { mutate } = useAddMemoryLike();
+
+  const [likedStates, setLikedStates] = useState([]);
+
+  const handleLikeClick = (likeData, index) => {
+    const newLikedStates = Array(
+      NonPersistForHome?.HomeMemoriesContent?.length
+    ).fill(false);
+
+    // Toggle the liked state for the clicked picture
+    newLikedStates[index] = !likedStates[index];
+
+    // Update the liked states
+    setLikedStates(newLikedStates);
+
+    var likes = {
+      likedata: {
+        creatorUserId: likeData?.userId,
+        memoryDetailsId: likeData?.memoryDetailsId,
+        likesInfo: {
+          likerUserId: parseInt(localStorage.getItem("sm_user_id")),
+        },
+      },
+      Authorization: cookies?.avt_token,
+    };
+
+    mutate(likes);
+  };
 
   return (
     <>
@@ -65,9 +100,9 @@ export const HomeMemoriesTab = () => {
       >
         <List>
           {NonPersistForHome?.HomeMemoriesContent?.length > 0 &&
-            NonPersistForHome?.HomeMemoriesContent?.map((memories) => {
+            NonPersistForHome?.HomeMemoriesContent?.map((memories, index) => {
               return (
-                <ListItem key={memories?.urls}>
+                <ListItem key={index}>
                   <Stack
                     sx={{
                       marginBottom: 5,
@@ -100,7 +135,6 @@ export const HomeMemoriesTab = () => {
                         </Typography>
                       </Box>
                     </Stack>
-
                     <Stack direction="row" spacing={3}>
                       <Box
                         sx={{
@@ -127,58 +161,43 @@ export const HomeMemoriesTab = () => {
                         paddingTop: 2,
                       }}
                     >
-                      <Stack direction="row" spacing={3}>
-                        <Box>
-                          <Tooltip
-                            disableFocusListener
-                            title={
-                              <React.Fragment>
-                                <Stack
-                                  spacing={2}
-                                  direction="row"
-                                  alignItems="center"
-                                >
-                                  <FavoriteBorderRounded />
-                                  <Typography>424,242 likes</Typography>
-                                </Stack>
-                              </React.Fragment>
-                            }
-                          >
+                      <Box>
+                        <Stack direction="row" spacing={2}>
+                          {memories?.likerUserIds?.includes(
+                            parseInt(localStorage.getItem("sm_user_id"))
+                          ) || likedStates[index] ? (
+                            <FavoriteRounded
+                              sx={{
+                                color: "#FF4B91",
+                                height: 25,
+                                width: 25,
+                                cursor: "pointer",
+                              }}
+                            />
+                          ) : (
                             <FavoriteBorderRounded
                               sx={{
                                 cursor: "pointer",
                                 height: 25,
                                 width: 25,
+                                transition:
+                                  "background-color 0.3s ease-in-out, color 0.3s ease-in-out",
+                                borderRadius: "100%",
+                                // Add a custom CSS style to change the background color of the heart icon
                               }}
+                              onClick={() => handleLikeClick(memories, index)}
                             />
-                          </Tooltip>
-                        </Box>
-                        <Box>
-                          <Tooltip
-                            disableFocusListener
-                            title={
-                              <React.Fragment>
-                                <Stack
-                                  spacing={2}
-                                  direction="row"
-                                  alignItems="center"
-                                >
-                                  <TvRounded />
-                                  <Typography>Glance</Typography>
-                                </Stack>
-                              </React.Fragment>
-                            }
+                          )}
+                          <Typography
+                            sx={{
+                              fontFamily: "sans-serif",
+                            }}
                           >
-                            <TvRounded
-                              sx={{
-                                height: 25,
-                                width: 25,
-                                cursor: "pointer",
-                              }}
-                            />
-                          </Tooltip>
-                        </Box>
-                      </Stack>
+                            {memories?.totalLikes ? memories?.totalLikes : 0}
+                            likes
+                          </Typography>
+                        </Stack>
+                      </Box>
                     </Stack>
                     <Box>
                       {/* <Typography
@@ -186,6 +205,7 @@ export const HomeMemoriesTab = () => {
                         sx={{
                           fontWeight: 550,
                           paddingTop: 1,
+                          fontFamily: "sans-serif",
                         }}
                       >
                         {memories?.userName}
@@ -196,6 +216,7 @@ export const HomeMemoriesTab = () => {
                           maxHeight: 200, // Set a maximum height for the text
                           overflowY: "auto", // Enable vertical scrolling when text exceeds maxHeight
                           fontWeight: 400, // Adjust as needed
+                          fontFamily: "sans-serif",
                         }}
                       >
                         {memories?.feelings}
@@ -203,7 +224,7 @@ export const HomeMemoriesTab = () => {
                     </Box>
                     <Stack
                       direction="row"
-                      spacing={3}
+                      spacing={2}
                       sx={{
                         paddingTop: 2,
                       }}
@@ -218,11 +239,7 @@ export const HomeMemoriesTab = () => {
                       />
                       <Box
                         sx={{
-                          // backgroundColor: "rgb(55, 151, 240,1)",
-                          backgroundColor: "#EEEEEE",
-                          "&:hover": {
-                            backgroundColor: "rgb(55, 151, 240,1)",
-                          },
+                          backgroundColor: "rgb(55, 151, 240,1)",
                           p: 1,
                           borderRadius: "50%",
                           cursor: "pointer",

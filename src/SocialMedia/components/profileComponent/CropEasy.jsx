@@ -1,9 +1,10 @@
 import {
   Box,
-  Button,
   DialogActions,
   DialogContent,
+  IconButton,
   MenuItem,
+  Modal,
   Select,
   Slider,
   Stack,
@@ -13,6 +14,10 @@ import React, { cloneElement, useCallback, useEffect, useState } from "react";
 import Cropper from "react-easy-crop";
 import getCroppedImg from "../profileComponent/Utils/cropImage";
 import { AIAddFilter } from "./AIAddFilter";
+import {
+  AutoAwesomeMotionRounded,
+  NavigateNextRounded,
+} from "@mui/icons-material";
 
 export const CropEasy = ({ uploadedFile, upBar }) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -70,6 +75,14 @@ export const CropEasy = ({ uploadedFile, upBar }) => {
     setProfileUrl(URL.createObjectURL(uploadedFile));
   }, [uploadedFile, upBar, handleUpBarClick]);
 
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <>
       {next ? (
@@ -84,14 +97,15 @@ export const CropEasy = ({ uploadedFile, upBar }) => {
             <DialogContent
               dividers
               sx={{
-                marginTop: 4,
+                marginTop: 5,
                 background: "#333",
                 position: "relative",
-                height: 490,
+                height: 700,
                 width: "auto",
                 border: 1,
-                borderRadius: 3,
-                minWidth: { sm: 785 },
+                borderRadius: 2,
+                minWidth: { sm: 780 },
+                p: 0.5,
               }}
             >
               <Cropper
@@ -107,57 +121,103 @@ export const CropEasy = ({ uploadedFile, upBar }) => {
                 onCropComplete={cropComplete}
                 showGrid={false}
               />
+              <IconButton
+                sx={{
+                  position: "absolute",
+                  bottom: 650,
+                  right: 0,
+                  width: 40,
+                  height: 40,
+                  color: "white",
+                }}
+                onClick={() => handleOpen()}
+              >
+                <AutoAwesomeMotionRounded />
+              </IconButton>
+              <IconButton
+                sx={{
+                  position: "absolute",
+                  bottom: 0,
+                  right: 0,
+                  width: 40,
+                  height: 40,
+                  color: "white",
+                }}
+                onClick={cropImage}
+              >
+                <NavigateNextRounded />
+              </IconButton>
             </DialogContent>
-            <DialogActions sx={{ flexDirection: "column", mx: 3, my: 2 }}>
-              <Box sx={{ width: "100%" }}>
-                <Box>
-                  <Typography>Zoom: {zoomPercent(zoom)}</Typography>
-                  <Slider
-                    valueLabelDisplay="auto"
-                    min={1}
-                    max={3}
-                    step={0.1}
-                    value={zoom}
-                    onChange={(e, zoom) => setZoom(zoom)}
-                  />
-                </Box>
-                <Box>
-                  <Typography>Rotation: {rotation + "°"}</Typography>
-                  <Slider
-                    valueLabelDisplay="auto"
-                    min={0}
-                    max={360}
-                    value={rotation}
-                    onChange={(e, rotation) => setRotation(rotation)}
-                  />
-                </Box>
-              </Box>
-              <Stack direction="row" spacing={10}>
-                <Box>
-                  <Select
-                    value={selectValue}
-                    onChange={(event) => setSelectValue(event.target.value)}
-                    autoWidth
+            <Modal open={open} onClose={handleClose}>
+              <Box
+                sx={{
+                  backgroundColor: "white",
+                  position: "absolute",
+                  top: "50%",
+                  left: "85%",
+                  transform: "translate(-50%, -50%)",
+                  width: 400,
+                  height: 200,
+                  border: 1,
+                  borderRadius: 2,
+                  p: 2,
+                }}
+              >
+                <DialogActions sx={{ flexDirection: "column" }}>
+                  <Box
+                    sx={{
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
                   >
-                    <MenuItem value={1}>original</MenuItem>
-                    <MenuItem value={1 / 1}>1:1</MenuItem>
-                    <MenuItem value={4 / 5}>4:5</MenuItem>
-                    <MenuItem value={14 / 9}>14:9</MenuItem>
-                    <MenuItem value={16 / 9}>16:9</MenuItem>
-                  </Select>
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <Button variant="outlined" onClick={cropImage}>
-                    Next
-                  </Button>
-                </Box>
-              </Stack>
-            </DialogActions>
+                    <Box>
+                      <Typography>Zoom: {zoomPercent(zoom)}</Typography>
+                      <Slider
+                        valueLabelDisplay="auto"
+                        min={1}
+                        max={3}
+                        step={0.1}
+                        value={zoom}
+                        onChange={(e, zoom) => setZoom(zoom)}
+                        sx={{
+                          width: "80%",
+                        }}
+                      />
+                    </Box>
+                    <Box>
+                      <Typography>Rotation: {rotation + "°"}</Typography>
+                      <Slider
+                        valueLabelDisplay="auto"
+                        min={0}
+                        max={360}
+                        value={rotation}
+                        onChange={(e, rotation) => setRotation(rotation)}
+                        sx={{
+                          width: "80%",
+                        }}
+                      />
+                    </Box>
+                  </Box>
+                  <Stack direction="row" spacing={10}>
+                    <Box>
+                      <Select
+                        value={selectValue}
+                        onChange={(event) => setSelectValue(event.target.value)}
+                        autoWidth
+                      >
+                        <MenuItem value={1}>original</MenuItem>
+                        <MenuItem value={1 / 1}>1:1</MenuItem>
+                        <MenuItem value={4 / 5}>4:5</MenuItem>
+                        <MenuItem value={14 / 9}>14:9</MenuItem>
+                        <MenuItem value={16 / 9}>16:9</MenuItem>
+                      </Select>
+                    </Box>
+                  </Stack>
+                </DialogActions>
+              </Box>
+            </Modal>
           </div>
         </>
       )}

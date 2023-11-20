@@ -1,6 +1,8 @@
 import {
   Avatar,
   Box,
+  Button,
+  Divider,
   Modal,
   Stack,
   TextField,
@@ -8,7 +10,10 @@ import {
 } from "@mui/material";
 import React from "react";
 import jen from "../../../static/images/avatar/jen.jpeg";
-import { MoreHorizRounded } from "@mui/icons-material";
+import {
+  BookmarkBorderRounded,
+  FavoriteBorderRounded,
+} from "@mui/icons-material";
 
 export const ShowMemoryModel = ({ open, onClose, item, username, other }) => {
   return (
@@ -30,28 +35,22 @@ export const ShowMemoryModel = ({ open, onClose, item, username, other }) => {
           width: 1500,
           height: 900,
           bgcolor: "background.paper",
-          boxShadow: 24,
           p: 1,
           borderRadius: 2,
         }}
       >
         <Stack
+          direction="row"
           sx={{
-            borderBottom: 1,
-            borderRadius: 2,
-            borderBottomStyle: "solid",
-            borderBottomColor: "lightBlue",
-            width: 1500,
+            height: 40,
             display: "flex",
-            justifyContent: "space-between",
             alignItems: "center",
           }}
-          direction="row"
+          spacing={158}
         >
-          <Stack
-            direction="row"
-            sx={{
-              height: 40,
+          <div
+            style={{
+              direction: "row",
               display: "flex",
               alignItems: "center",
             }}
@@ -74,13 +73,30 @@ export const ShowMemoryModel = ({ open, onClose, item, username, other }) => {
             >
               {username}
             </Typography>
+          </div>
+          <Stack direction="row" spacing={2}>
+            <FavoriteBorderRounded
+              sx={{
+                cursor: "pointer",
+                height: 30,
+                width: 30,
+              }}
+            />
+            <BookmarkBorderRounded
+              sx={{
+                cursor: "pointer",
+                height: 30,
+                width: 30,
+              }}
+            />
           </Stack>
-          <MoreHorizRounded
-            onClick={() => {
-              alert("Not implemented yet");
-            }}
-          />
         </Stack>
+        <Divider
+          sx={{
+            width: "100%",
+            bgcolor: "lightblue",
+          }}
+        />
         <Stack
           sx={{
             alignItems: "end",
@@ -116,7 +132,8 @@ export const ShowMemoryModel = ({ open, onClose, item, username, other }) => {
                 marginTop: 4,
                 maxHeight: "none",
                 overflowY: "auto",
-                fontWeight: 550,
+                // fontWeight: 550,
+                fontFamily: "sans-serif",
                 height: 140,
               }}
             >
@@ -129,14 +146,28 @@ export const ShowMemoryModel = ({ open, onClose, item, username, other }) => {
               bottom: 0,
               left: 0,
               width: 590,
-              p: 3,
+              p: 3.5,
             }}
           >
-            <Stack direction="row" spacing={1} alignItems="center">
-              <TextField label="Share your thoughts..." fullWidth />
-              <Typography onClick={() => alert("not implemented yet...")}>
-                Share
-              </Typography>
+            <Stack
+              direction="row"
+              spacing={1}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <TextField
+                placeholder="share your thoughts..."
+                fullWidth
+                variant="standard"
+              />
+              <Button
+                sx={{
+                  textTransform: "lowercase",
+                }}
+              >
+                share
+              </Button>
             </Stack>
           </Box>
         </Stack>
