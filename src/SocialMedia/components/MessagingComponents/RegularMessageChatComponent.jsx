@@ -117,19 +117,6 @@ export const RegularMessageChatComponent = ({
               messages
             </Typography>
             <Stack direction="row" spacing={3}>
-              {/* <Tooltip title="create new groups">
-                <img
-                  src={group}
-                  srcSet={group}
-                  alt="not found!"
-                  style={{
-                    width: "25px",
-                    height: "25px",
-                    cursor: "pointer",
-                  }}
-                  onClick={handleOpenForGroup}
-                />
-              </Tooltip> */}
               <Tooltip title="groups">
                 <img
                   src={group}
@@ -344,65 +331,6 @@ export const RegularMessageChatComponent = ({
         />
         <Grid>
           <div>
-            {/* <Stack direction="row" margin={1} spacing={5}>
-              <Box alignItems="center" display="flex" flexDirection="column">
-                <Avatar
-                  alt="Jenna"
-                  src={jen23}
-                  sx={{
-                    width: 100,
-                    height: 100,
-                  }}
-                  // style={{
-                  //   marginTop: 12,
-                  // }}
-                />
-              </Box>
-              <Box alignItems="center" display="flex" flexDirection="column">
-                <Avatar
-                  alt="Jenna"
-                  src={jen24}
-                  sx={{
-                    width: 100,
-                    height: 100,
-                  }}
-                  // style={{
-                  //   marginTop: 12,
-                  // }}
-                />
-              </Box>
-              <Box alignItems="center" display="flex" flexDirection="column">
-                <Avatar
-                  alt="Jenna"
-                  src={jen25}
-                  sx={{
-                    width: 100,
-                    height: 100,
-                  }}
-                  // style={{
-                  //   marginTop: 12,
-                  // }}
-                />
-              </Box>
-              <Box alignItems="center" display="flex" flexDirection="column">
-                <Avatar
-                  alt="Jenna"
-                  src={jen26}
-                  sx={{
-                    width: 100,
-                    height: 100,
-                  }}
-                  // style={{
-                  //   marginTop: 12,
-                  // }}
-                />
-              </Box>
-            </Stack> */}
-            {/* <Divider
-              sx={{
-                width: 1050,
-              }}
-            /> */}
             <Stack
               marginTop={40}
               marginLeft={45}

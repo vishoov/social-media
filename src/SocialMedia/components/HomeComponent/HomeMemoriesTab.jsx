@@ -16,21 +16,17 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import useNavigateByUsingUserName from "../../../hooks/useNavigateByUsingUserName";
 import useGetMemoriesWithinAWeekHook from "../../../hooks/useGetMemoriesWithinAWeekHook";
-import { useCookies } from "react-cookie";
-import { useAddMemoryLike } from "../../APIs/SocialMediaHomeInterfaceAPI";
+import useAddMemoryLikeHook from "../../../hooks/useAddMemoryLikeHook";
 
 export const HomeMemoriesTab = () => {
   const NonPersistForHome = useSelector((state) => state.NonPersistForHome);
 
   const [username, setUsername] = useState("");
 
-  const [cookies] = useCookies(["avt_token"]);
-
   const [isLoading, callBack] = useGetMemoriesWithinAWeekHook();
 
   useEffect(() => {
     if (NonPersistForHome?.HomeMemoriesContent?.length === 0) {
-      console.log("callBackOfUseCallBack");
       callBack();
     }
     // eslint-disable-next-line
@@ -38,34 +34,7 @@ export const HomeMemoriesTab = () => {
 
   useNavigateByUsingUserName(username);
 
-  const { mutate } = useAddMemoryLike();
-
-  const [likedStates, setLikedStates] = useState([]);
-
-  const handleLikeClick = (likeData, index) => {
-    const newLikedStates = Array(
-      NonPersistForHome?.HomeMemoriesContent?.length
-    ).fill(false);
-
-    // Toggle the liked state for the clicked picture
-    newLikedStates[index] = !likedStates[index];
-
-    // Update the liked states
-    setLikedStates(newLikedStates);
-
-    var likes = {
-      likedata: {
-        creatorUserId: likeData?.userId,
-        memoryDetailsId: likeData?.memoryDetailsId,
-        likesInfo: {
-          likerUserId: parseInt(localStorage.getItem("sm_user_id")),
-        },
-      },
-      Authorization: cookies?.avt_token,
-    };
-
-    mutate(likes);
-  };
+  const { handleLikeClick, likedStates } = useAddMemoryLikeHook();
 
   return (
     <>
@@ -163,9 +132,11 @@ export const HomeMemoriesTab = () => {
                     >
                       <Box>
                         <Stack direction="row" spacing={2}>
-                          {memories?.likerUserIds?.includes(
-                            parseInt(localStorage.getItem("sm_user_id"))
-                          ) || likedStates[index] ? (
+                          {likedStates[index] ||
+                          (memories?.isLiked[0] &&
+                            memories?.likerUserIds?.includes(
+                              parseInt(localStorage.getItem("sm_user_id"))
+                            )) ? (
                             <FavoriteRounded
                               sx={{
                                 color: "#FF4B91",
@@ -173,6 +144,7 @@ export const HomeMemoriesTab = () => {
                                 width: 25,
                                 cursor: "pointer",
                               }}
+                              onClick={() => handleLikeClick(memories, index)}
                             />
                           ) : (
                             <FavoriteBorderRounded
@@ -193,7 +165,7 @@ export const HomeMemoriesTab = () => {
                               fontFamily: "sans-serif",
                             }}
                           >
-                            {memories?.totalLikes ? memories?.totalLikes : 0}
+                            {memories?.totalLikes ? memories?.totalLikes : 0}{" "}
                             likes
                           </Typography>
                         </Stack>

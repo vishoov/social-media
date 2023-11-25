@@ -39,22 +39,20 @@ export const MemoryImages = () => {
           }}
         >
           {NonPersistMemories?.socialMediaMemories !== undefined &&
-            NonPersistMemories?.socialMediaMemories.map((images) => {
-              return (
-                <img
-                  src={images?.urls}
-                  srcSet={images?.urls}
-                  alt="imageNotFound"
-                  loading="lazy"
-                  style={{
-                    margin: 1.5,
-                    width: 320,
-                    height: 320,
-                  }}
-                  onClick={() => openModel(images)}
-                />
-              );
-            })}
+            NonPersistMemories?.socialMediaMemories.map((images) => (
+              <img
+                src={images?.urls}
+                srcSet={images?.urls}
+                alt="imageNotFound"
+                loading="lazy"
+                style={{
+                  margin: 1.5,
+                  width: 320,
+                  height: 320,
+                }}
+                onClick={() => openModel(images)}
+              />
+            ))}
         </Grid>
       </Grid>
       {isModalOpen && (

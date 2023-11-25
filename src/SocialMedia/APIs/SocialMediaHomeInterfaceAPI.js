@@ -89,6 +89,7 @@ export const useGetMemoriesWithinAWeek = (requiredData) => {
               userId: item?.userId,
               totalLikes: item?.memory_details?.totalLikes,
               likerUserIds: item?.likerUserId,
+              isLiked: item?.isLiked,
             };
           });
 
