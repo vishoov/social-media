@@ -14,7 +14,6 @@ import { useSelector } from "react-redux";
 // import SpotifyWebPlayer from "react-spotify-web-playback";
 import { useGetAllTracks } from "../../APIs/SocialMediaHomeInterfaceAPI";
 import { useCookies } from "react-cookie";
-import axios from "axios";
 import { useStreamSongs } from "../../APIs/SpotifyInterfaceApi";
 
 export const Tracks = () => {
@@ -43,7 +42,7 @@ export const Tracks = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const [audioUrl, setAudioUrl] = useState(null);
+  const [audioUrl] = useState(null);
 
   const { mutate } = useStreamSongs();
 
