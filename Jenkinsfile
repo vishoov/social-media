@@ -1,7 +1,7 @@
 pipeline{
     agent any
     tools{
-        maven 'node'
+        node 'node'
     }
     stages{
         stage('clone github repository'){
