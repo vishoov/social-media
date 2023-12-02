@@ -10,6 +10,8 @@ COPY package.json package.json
 
 # copy all needed packages
 COPY ./src ./src
+COPY ./public ./public
+COPY service-worker.js service-worker.js
 COPY .env .env
 
 RUN npm install && npm install -g nodemon
