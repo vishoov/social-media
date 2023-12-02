@@ -14,6 +14,7 @@ pipeline{
         stage('build'){
             steps{
                 script{
+                    sh 'npm install --save-dev react-scripts'
                     sh 'npm run build'
                 }
             }
