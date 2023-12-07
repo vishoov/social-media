@@ -1,0 +1,34 @@
+pipeline{
+    agent any
+    tools{
+        nodejs 'node'
+    }
+    stages{
+        stage('clone github repository'){
+            steps{
+                script{
+                    checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'github', url: 'https://github.com/ompatel0408/AI-USER-INTERFACE-REACT.git']])
+                }
+            }
+        }
+        stage('build docker image'){
+            steps{
+                script{
+                    sh 'docker build -t ompatel0408/ai-social-media-user-interface-react:v1.0 .'
+                }
+            }
+        }
+        stage('run docker build'){
+            steps{
+                script{
+                    sh 'docker run -p 3000:3000 -d  --restart unless-stopped ompatel0408/ai-social-media-user-interface-react:v1.0'
+                }
+            }
+        }
+        stage('clean up workspace') {
+            steps {
+                deleteDir()
+            }
+        }
+    }
+}

@@ -11,14 +11,6 @@ pipeline{
                 }
             }
         }
-        // stage('build'){
-        //     steps{
-        //         script{
-        //             sh 'npm install --save-dev react-scripts'
-        //             sh 'npm run build'
-        //         }
-        //     }
-        // }
         stage('build docker image'){
             steps{
                 script{
@@ -50,7 +42,7 @@ pipeline{
                 }
             }
         }
-        stage('restart ai social media message notification interface pod'){
+        stage('restart ai social media  user interface react pod'){
             steps{
                 script{
                     sh 'kubectl rollout restart deployment ai-social-media-user-interface-react'
