@@ -21,7 +21,7 @@ pipeline{
         stage('run docker build'){
             steps{
                 script{
-                    sh 'docker run -p 3000:3000 -d  --restart unless-stopped ompatel0408/ai-social-media-user-interface-react:v1.0'
+                    sh 'docker run -p 3000:3000 -d --restart unless-stopped ompatel0408/ai-social-media-user-interface-react:v1.0'
                 }
             }
         }

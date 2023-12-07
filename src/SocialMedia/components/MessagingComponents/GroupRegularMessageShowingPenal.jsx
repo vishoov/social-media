@@ -33,7 +33,9 @@ const RealMessageShowingPenalHandler = () => {
   return <GroupRealMessageShowingPenal />;
 };
 
-const socketForSendMessage = new SockJS("http://localhost:9988/websocket");
+const socketForSendMessage = new SockJS(
+  `${process.env.REACT_APP_WEBSOCKET_FOR_RECEIVING_SEAMLESS_MESSAGES}`
+);
 
 // Create a Stomp client over the SockJS WebSocket connection
 const stompClientForSendMessage = Stomp.over(socketForSendMessage);
