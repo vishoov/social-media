@@ -1,0 +1,52 @@
+# deployment object
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  labels:
+    app: ai-social-media-user-interface-react
+  name: ai-social-media-user-interface-react
+
+spec:
+  replicas: 1 # number of pods needs to be managed
+  selector:
+    matchLabels:
+      app: ai-social-media-user-interface-react
+  template:
+    metadata:
+      labels:
+        app: ai-social-media-user-interface-react
+
+    spec:
+      containers:
+        - name: ai-social-media-user-interface-react-container
+          image: ompatel0408/ai-social-media-user-interface-react:v1.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+              name: http
+              protocol: TCP
+      nodeSelector:
+        app: AI-USER-INTERFACE-FEATURE
+
+# service object
+---
+apiVersion: v1
+kind: Service
+
+metadata:
+  labels:
+    app: ai-social-media-user-interface-react
+    k8s-app: ai-social-media-user-interface-react
+  name: ai-social-media-user-interface-react
+
+spec:
+  ports:
+    - port: 3000
+      name: http
+      protocol: TCP
+      targetPort: 3000
+
+  type: LoadBalancer
+  selector:
+    app: ai-social-media-user-interface-react

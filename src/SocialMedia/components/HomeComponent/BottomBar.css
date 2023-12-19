@@ -1,0 +1,15 @@
+
+.MuiBottomNavigation-root {
+    position: fixed;
+
+    width: 100%;
+    z-index: 9999999; 
+  }
+  
+  
+  @media (max-width: 600px) {
+    .MuiBottomNavigation-root {
+      font-size: 0.8rem; 
+    }
+  }
+  

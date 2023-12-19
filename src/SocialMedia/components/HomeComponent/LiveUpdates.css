@@ -1,0 +1,135 @@
+/* LiveUpdates.css */
+
+/* Grid container and items */
+.grid-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-left: 25%;
+    /* Add some padding around the content */
+  }
+  
+  .grid-item-left {
+    width: 100%;
+    /* Other styles */
+  }
+  
+  .grid-item-right {
+    height: 100%;
+    
+    margin-left: 10%;
+  }
+  
+  /* Banner styles */
+  .banner {
+    max-height: 50%; /* Set maximum height */
+    max-width: 55%; /* Set maximum width */
+  
+    border-radius: 12px;
+  }
+  
+  /* Stack icons container */
+  .stack-icons {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Avatar container and avatar styles */
+  .avatar-container {
+    display: flex;
+    flex-direction: row;
+    padding: 2px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .avatar-container .MuiAvatar-root {
+    width: 100px;
+    height: 100px;
+    transition: transform 0.2s;
+  }
+  
+  .avatar-container:hover {
+    background-color: #EEEEEE;
+  }
+  
+  .avatar-container .MuiAvatar-root:hover {
+    transform: scale(1.05);
+  }
+  
+  /* Media queries for responsiveness */
+  @media screen and (max-width: 1260px) {
+    .avatar-container {
+      flex-direction: column; /* Change direction to stack items vertically */
+    }
+    
+    .grid-container {
+      margin-left: 30%;
+    }
+  }
+  
+  @media screen and (max-width: 1024px) {
+    .grid-item-left {
+      max-width: 100%;
+    }
+  
+    .grid-item-right {
+      height: 100%;
+      width: auto;
+      margin-left: 5%;
+    }
+  
+    .grid-container {
+      padding: 10px;
+      margin-left: 8%; /* Adjust padding for smaller screens */
+    }
+  
+    .avatar-container .MuiAvatar-root {
+      width: 80px; /* Adjust size for smaller screens */
+      height: 80px;
+    }
+  
+    .banner {
+        margin-left: 5%;
+      max-width: 55%; /* Adjust for smaller screens */
+      max-height: 80%; /* Adjust for smaller screens */
+    }
+    .stack-icons {
+        display: flex;
+        flex-direction:row;
+        align-items: center;
+      }
+  }
+  
+  @media screen and (max-width: 450px) {
+   
+  
+    .stack-icons {
+        flex-direction: row !important; /* Change direction to row */
+        align-items: center; /* Align items horizontally */
+        overflow-x: scroll; /* Enable horizontal scrolling */
+        overflow-y: hidden; /* Hide vertical scrolling */
+        white-space: nowrap; /* Prevent items from wrapping */
+        margin-left: 20px;
+        
+    }
+   
+    .stack-icons > * {
+        margin-right: 20px; /* Add space between items */
+      }
+    .banner {
+      margin-top: 40%;
+      max-width: 90%; /* Adjust for smaller screens */
+      max-height: 80%; /* Adjust for smaller screens */
+    }
+    .grid-item-right {
+        height: 100%;
+        width: auto;
+        margin-left: 0%;
+      }
+      
+    .grid-container{
+      margin-left: 0%;
+    }
+  }
+  
