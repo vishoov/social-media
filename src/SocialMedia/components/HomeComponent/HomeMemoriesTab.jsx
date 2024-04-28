@@ -6,7 +6,10 @@ import {
 import {
   Avatar,
   Box,
+<<<<<<< HEAD
   
+=======
+>>>>>>> a5458831a434594ea3dd2605bba2d4ab77282be8
   List,
   ListItem,
   Stack,
@@ -18,7 +21,11 @@ import { useSelector } from "react-redux";
 import useNavigateByUsingUserName from "../../../hooks/useNavigateByUsingUserName";
 import useGetMemoriesWithinAWeekHook from "../../../hooks/useGetMemoriesWithinAWeekHook";
 import useAddMemoryLikeHook from "../../../hooks/useAddMemoryLikeHook";
+<<<<<<< HEAD
 import "./Memories.css"
+=======
+
+>>>>>>> a5458831a434594ea3dd2605bba2d4ab77282be8
 export const HomeMemoriesTab = () => {
   const NonPersistForHome = useSelector((state) => state.NonPersistForHome);
 
@@ -39,6 +46,7 @@ export const HomeMemoriesTab = () => {
 
   return (
     <>
+<<<<<<< HEAD
   
 
 
@@ -52,6 +60,36 @@ export const HomeMemoriesTab = () => {
       <Stack
         direction="column"
         className="stackContainer"
+=======
+      {isLoading && (
+        <Typography
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "75vh",
+            fontSize: "1.5rem",
+          }}
+        >
+          Loading...
+        </Typography>
+      )}
+      <Stack
+        sx={{
+          marginLeft: 85,
+          height: "calc(100vh - 60px)", // Calculate the remaining height for the content
+          overflowY: "scroll", // Add a scroll bar if content overflows
+          position: "fixed",
+          scrollbarWidth: "none",
+          "&::-webkit-scrollbar": {
+            width: "0.4em", // Adjust the width as needed
+          },
+          "&::-webkit-scrollbar-thumb": {
+            backgroundColor: "transparent", // Hide the scrollbar thumb
+          },
+        }}
+        direction="column"
+>>>>>>> a5458831a434594ea3dd2605bba2d4ab77282be8
       >
         <List>
           {NonPersistForHome?.HomeMemoriesContent?.length > 0 &&
@@ -70,8 +108,13 @@ export const HomeMemoriesTab = () => {
                           srcSet={memories?.profileUrl}
                           alt="nothing"
                           sx={{
+<<<<<<< HEAD
                             width: 40,
                             height: 40,
+=======
+                            width: 25,
+                            height: 25,
+>>>>>>> a5458831a434594ea3dd2605bba2d4ab77282be8
                           }}
                         />
                       </Box>
@@ -92,6 +135,7 @@ export const HomeMemoriesTab = () => {
                     </Stack>
                     <Stack direction="row" spacing={3}>
                       <Box
+<<<<<<< HEAD
                        className="imgContainer"
                         sx={{
                           paddingTop: 1,
@@ -103,6 +147,22 @@ export const HomeMemoriesTab = () => {
                           alt="nothing"
                           srcSet={memories?.urls}
                          
+=======
+                        sx={{
+                          paddingTop: 3,
+                        }}
+                      >
+                        <img
+                          src={memories?.urls}
+                          alt="nothing"
+                          srcSet={memories?.urls}
+                          style={{
+                            width: 600,
+                            height: 900,
+                            borderRadius: 12,
+                            cursor: "pointer",
+                          }}
+>>>>>>> a5458831a434594ea3dd2605bba2d4ab77282be8
                         />
                       </Box>
                     </Stack>
@@ -179,21 +239,38 @@ export const HomeMemoriesTab = () => {
                     </Box>
                     <Stack
                       direction="row"
+<<<<<<< HEAD
                       spacing={1}
                       sx={{
                         paddingTop: 1.5,
+=======
+                      spacing={2}
+                      sx={{
+                        paddingTop: 2,
+>>>>>>> a5458831a434594ea3dd2605bba2d4ab77282be8
                       }}
                       alignItems="center"
                     >
                       <TextField
                         variant="standard"
+<<<<<<< HEAD
                         placeholder="Share your thoughts..."
                         className="textfield"
+=======
+                        placeholder="share your thoughts..."
+                        sx={{
+                          width: 550,
+                        }}
+>>>>>>> a5458831a434594ea3dd2605bba2d4ab77282be8
                       />
                       <Box
                         sx={{
                           backgroundColor: "rgb(55, 151, 240,1)",
+<<<<<<< HEAD
                           p: 0.8,
+=======
+                          p: 1,
+>>>>>>> a5458831a434594ea3dd2605bba2d4ab77282be8
                           borderRadius: "50%",
                           cursor: "pointer",
                           display: "flex",

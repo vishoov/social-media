@@ -16,14 +16,22 @@ import {
   Typography,
   createTheme,
 } from "@mui/material";
+<<<<<<< HEAD
 
+=======
+>>>>>>> a5458831a434594ea3dd2605bba2d4ab77282be8
 import {
   AppsRounded,
   AutoAwesomeMotionRounded,
   AutoAwesomeRounded,
+<<<<<<< HEAD
   Route
 } from "@mui/icons-material";
 import { useMediaQuery } from '@mui/material';  
+=======
+  FavoriteRounded,
+} from "@mui/icons-material";
+>>>>>>> a5458831a434594ea3dd2605bba2d4ab77282be8
 import useMemoriesSubscribeHook from "../../../hooks/useMemoriesSubscribeHook";
 import { HomeMemoriesTab } from "./HomeMemoriesTab";
 import { HomeLiveUpdatesTab } from "./HomeLiveUpdatesTab";
@@ -31,6 +39,7 @@ import LiveUpdateWebCam from "./LiveUpdateWebCam";
 import share from "../../../static/images/utils/share.png";
 import frame from "../../../static/images/utils/frame.png";
 import { UpdateModificationModel } from "./UpdateModificationModel";
+<<<<<<< HEAD
 import HomeJourneyTab from './HomeJourneyTab';
 import BottomBar from "./BottomBar";
 
@@ -39,6 +48,11 @@ export const SocialMediaHome = () => {
 
   const isMobile = useMediaQuery('(max-width: 431px)');
 
+=======
+
+export const SocialMediaHome = () => {
+  // live memories updates
+>>>>>>> a5458831a434594ea3dd2605bba2d4ab77282be8
   const { snackbarMessage, snackbarOpen } = useMemoriesSubscribeHook();
 
   const handleSnackbarClose = () => {};
@@ -52,7 +66,10 @@ export const SocialMediaHome = () => {
   const theme = createTheme({
     palette: {
       primary: {
+<<<<<<< HEAD
        
+=======
+>>>>>>> a5458831a434594ea3dd2605bba2d4ab77282be8
         main: "#000000", // Set the primary color to black
       },
     },
@@ -73,6 +90,7 @@ export const SocialMediaHome = () => {
 
   return (
     <>
+<<<<<<< HEAD
     
       <Box>
       {isMobile ? (
@@ -104,11 +122,27 @@ export const SocialMediaHome = () => {
 
         direction="row"
         spacing={180}
+=======
+      <Box>
+        <AISideBar />
+      </Box>
+      <Stack
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "7vh",
+          marginLeft: 100,
+        }}
+        direction="row"
+        spacing={190}
+>>>>>>> a5458831a434594ea3dd2605bba2d4ab77282be8
       >
         <Stack
           direction="row"
           spacing={4}
           sx={{
+<<<<<<< HEAD
             height: "62px",
             display: "flex",
             alignItems: "flex-start",
@@ -118,13 +152,26 @@ export const SocialMediaHome = () => {
         >
           <ThemeProvider theme={theme}>
           <Tabs
+=======
+            height: "12vh",
+            display: "flex",
+            alignItems: "center",
+            position: "fixed",
+          }}
+        >
+          <ThemeProvider theme={theme}>
+            <Tabs
+>>>>>>> a5458831a434594ea3dd2605bba2d4ab77282be8
               value={selectedTab}
               onChange={handleTabChange}
               textColor="inherit"
               indicatorColor="primary"
+<<<<<<< HEAD
               sx={{
                 height: "60px", // Adjust the height as needed
               }}
+=======
+>>>>>>> a5458831a434594ea3dd2605bba2d4ab77282be8
             >
               <Tab
                 label="Memories"
@@ -137,7 +184,10 @@ export const SocialMediaHome = () => {
                     borderRadius: "7px",
                     textTransform: "capitalize",
                   },
+<<<<<<< HEAD
                   height:"100%",
+=======
+>>>>>>> a5458831a434594ea3dd2605bba2d4ab77282be8
                   textTransform: "capitalize",
                 }}
               />
@@ -155,8 +205,13 @@ export const SocialMediaHome = () => {
                 }}
               />
               <Tab
+<<<<<<< HEAD
                 label="Journeys"
                 icon={<Route />}
+=======
+                label="Saved"
+                icon={<FavoriteRounded />}
+>>>>>>> a5458831a434594ea3dd2605bba2d4ab77282be8
                 iconPosition="top"
                 sx={{
                   color: "black",
@@ -171,6 +226,7 @@ export const SocialMediaHome = () => {
           </ThemeProvider>
         </Stack>
         <Stack
+<<<<<<< HEAD
          direction={{ xs: 'column', md: 'row' }}
          spacing={1}
          sx={{ //responsive //
@@ -188,6 +244,16 @@ export const SocialMediaHome = () => {
         >
  
 
+=======
+          direction="row"
+          spacing={3}
+          sx={{
+            position: "fixed",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+>>>>>>> a5458831a434594ea3dd2605bba2d4ab77282be8
           <Tooltip title="More">
             <Box
               sx={{
@@ -233,7 +299,10 @@ export const SocialMediaHome = () => {
       />
       {selectedTab === 0 && <HomeMemoriesTab />}
       {selectedTab === 1 && <HomeLiveUpdatesTab />}
+<<<<<<< HEAD
       {selectedTab === 2 && <HomeJourneyTab/>}
+=======
+>>>>>>> a5458831a434594ea3dd2605bba2d4ab77282be8
 
       <Box
         sx={{
@@ -254,7 +323,11 @@ export const SocialMediaHome = () => {
         <Modal open={open} onClose={handleClose}>
           <Grid
             container
+<<<<<<< HEAD
             sx={{ 
+=======
+            sx={{
+>>>>>>> a5458831a434594ea3dd2605bba2d4ab77282be8
               position: "absolute",
               top: "50%",
               left: "55%",

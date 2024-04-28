@@ -1,5 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
+<<<<<<< HEAD
 import "./Profile.css"
+=======
+
+>>>>>>> a5458831a434594ea3dd2605bba2d4ab77282be8
 import { AISideBar } from "../../../ReuseableComponents/AISideBar";
 import { AIUpBar } from "../../../ReuseableComponents/AIUpBar";
 import {
@@ -103,12 +107,19 @@ export const AISocialMediaProfileInterface = () => {
     <>
       <AISideBar />
       <div
+<<<<<<< HEAD
       className="main-div"
         onScroll={handleScroll}
        
       >
         <AIUpBar
          
+=======
+        onScroll={handleScroll}
+        style={{ height: "100vh", overflowY: "auto" }}
+      >
+        <AIUpBar
+>>>>>>> a5458831a434594ea3dd2605bba2d4ab77282be8
           editProfile={true}
           settingsSuggested={true}
           shareMemory={true}

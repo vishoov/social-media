@@ -6,10 +6,15 @@
     "@babel/plugin-transform-private-property-in-object": "^7.21.11",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+<<<<<<< HEAD
     "@material-ui/core": "^4.12.4",
     "@material-ui/icons": "^4.11.3",
     "@mui/icons-material": "^5.14.3",
     "@mui/material": "^5.14.20",
+=======
+    "@mui/icons-material": "^5.14.3",
+    "@mui/material": "^5.14.6",
+>>>>>>> a5458831a434594ea3dd2605bba2d4ab77282be8
     "@mui/styled-engine-sc": "^6.0.0-alpha.7",
     "@pqina/pintura": "^8.63.0",
     "@pqina/react-pintura": "^9.0.1",
